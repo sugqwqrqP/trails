@@ -9,4 +9,11 @@ class ApplicationController < ActionController::Base
   def logged_in?
     current_user.present?
   end
+
+  private
+
+  def require_login
+    redirect_to new_login_path, alert: "ログインが必要です"
+  end
+  
 end
