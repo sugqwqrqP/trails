@@ -1,0 +1,14 @@
+<h1>予約確認</h1>
+
+<p>
+  <%= @run.name %><br>
+  <%= @car_id %>号車 / <%= @seat %>
+</p>
+
+<%= form_with url: reservations_path, method: :post, local: true do %>
+  <%= hidden_field_tag :run_id, @run.id %>
+  <%= hidden_field_tag :car_id, @car_id %>
+  <%= hidden_field_tag :seat, @seat %>
+
+  <%= submit_tag "確定する（仮）" %>
+<% end %>
