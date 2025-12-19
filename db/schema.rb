@@ -10,11 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_12_19_094857) do
+ActiveRecord::Schema[7.0].define(version: 2025_12_19_134255) do
   create_table "runs", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "run_number", null: false
+    t.date "run_on", null: false
+    t.boolean "is_up", null: false
+    t.string "departure_station_name", null: false
+    t.string "arrival_station_name", null: false
+    t.time "departure_time", null: false
+    t.time "arrival_time", null: false
   end
 
 end
