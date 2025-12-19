@@ -1,0 +1,18 @@
+<h1>号車選択</h1>
+
+<p>
+  <strong><%= @run.name %></strong>
+</p>
+
+<ul>
+  <% @cars.each do |car_no| %>
+    <li>
+      <%= link_to "#{car_no}号車",
+          run_car_seats_path(@run, car_id: car_no) %>
+    </li>
+  <% end %>
+</ul>
+
+<p>
+  <%= link_to "検索結果に戻る", runs_path %>
+</p>
