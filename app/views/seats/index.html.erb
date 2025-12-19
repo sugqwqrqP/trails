@@ -1,0 +1,23 @@
+<h1>座席選択</h1>
+
+<p>
+  <%= @run.name %> /
+  <%= @car_id %>号車
+</p>
+
+<ul>
+  <% @seats.each do |seat| %>
+    <li>
+      <%= link_to seat,
+          confirm_reservations_path(
+            run_id: @run.id,
+            car_id: @car_id,
+            seat: seat
+          ) %>
+    </li>
+  <% end %>
+</ul>
+
+<p>
+  <%= link_to "号車選択に戻る", run_cars_path(@run) %>
+</p>
