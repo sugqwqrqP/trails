@@ -1,2 +1,7 @@
 <h1>Runs#index</h1>
 <p>便一覧</p>
+<% @runs.each do |run| %>
+  <div>
+    <%= run.name %>
+  </div>
+<% end %>
