@@ -60,10 +60,23 @@
 
 <% end %>
 
+<h1>検索結果</h1>
 
-<h2>検索結果</h2>
 <% @runs.each do |run| %>
-  <div>
-    <%= run.name %>
+  <div style="margin-bottom: 12px; padding: 8px; border: 1px solid #ddd;">
+    <div>
+      <strong><%= run.name %></strong>
+      （<%= run.run_on %> <%= run.departure_time&.strftime("%H:%M") %> → <%= run.arrival_time&.strftime("%H:%M") %>）
+    </div>
+
+    <!-- 空席状況（ダミー） -->
+    <div>
+      指定席: ○　グリーン: ◎  ファビュラスルーム: ○
+    </div>
+
+    <!-- 号車マップへ -->
+    <div>
+      <%= link_to "座席選択へ", run_cars_path(run) %>
+    </div>
   </div>
 <% end %>
