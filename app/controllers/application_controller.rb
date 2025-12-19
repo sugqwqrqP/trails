@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   private
 
   def require_login
-    redirect_to new_login_path, alert: "ログインが必要です"
+    redirect_to new_login_path, alert: "ログインが必要です" unless logged_in?
   end
-  
+
 end
