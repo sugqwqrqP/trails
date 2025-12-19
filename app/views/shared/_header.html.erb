@@ -4,7 +4,16 @@
   </div>
 
   <nav>
-    <%= link_to "ログイン", new_login_path %>
-    <%= link_to "新規登録", new_user_path %>
+    <% if logged_in? %>
+      <span>
+        <%= link_to current_user.user_fullname, user_path(current_user) %>
+      </span>
+      |
+      <%= link_to "ログアウト", login_path, method: :delete %>
+    <% else %>
+      <%= link_to "ログイン", new_login_path %>
+      |
+      <%= link_to "新規登録", new_user_path %>
+    <% end %>
   </nav>
 </header>
