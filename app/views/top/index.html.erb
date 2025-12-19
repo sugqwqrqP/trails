@@ -1,0 +1,12 @@
+<h1>新幹線予約TOPページ</h1>
+
+<div class="banner">
+  バナーとかお知らせ
+</div>
+
+<%= form_with url: runs_path, method: :get, local: true do |f| %>
+  <%= f.date_field :date %>
+  <%= f.select :from, [] %>
+  <%= f.select :to, [] %>
+  <%= f.submit "検索" %>
+<% end %>
