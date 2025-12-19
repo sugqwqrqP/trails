@@ -31,3 +31,11 @@ Run.create!(
   departure_time: "10:10",
   arrival_time: "13:30"
 )
+
+User.create!(
+  login_id: "test_taro",
+  user_fullname: "テスト太郎",
+  password: "Abc123!",
+  password_confirmation: "Abc123!",
+  role: 0
+)
