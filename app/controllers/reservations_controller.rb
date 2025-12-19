@@ -1,4 +1,5 @@
 class ReservationsController < ApplicationController
+  before_action :require_login #ログイン要求
   def confirm
     @run = Run.find(params[:run_id])
     @car_id = params[:car_id]
