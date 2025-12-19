@@ -1,17 +1,19 @@
 <h1>ログイン</h1>
 
-<form>
+<% if flash[:alert] %>
+  <p class="alert"><%= flash[:alert] %></p>
+<% end %>
+
+<%= form_with url: login_path, method: :post, local: true do |f| %>
   <div>
-    <label>ログインID</label>
-    <input type="text">
+    <%= f.label :login_id, "ログインID" %>
+    <%= f.text_field :login_id %>
   </div>
 
   <div>
-    <label>パスワード</label>
-    <input type="password">
+    <%= f.label :password, "パスワード" %>
+    <%= f.password_field :password %>
   </div>
 
-  <button>ログイン</button>
-
-  <p><%= link_to "トップページに戻る", root_path %></p>
-</form>
+  <%= f.submit "ログイン" %>
+<% end %>
