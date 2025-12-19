@@ -1,7 +1,13 @@
 <h1>新幹線予約TOPページ</h1>
 
+<nav>
+  <ul>
+    <li><%= link_to "ログイン", new_login_path %></li>
+    <li><%= link_to "新規登録", new_user_path %></li>
+  </ul>
+</nav>
+
 <div class="banner">
-  バナーとかお知らせ
 </div>
 
 <%= form_with url: runs_path, method: :get, local: true do |f| %>
