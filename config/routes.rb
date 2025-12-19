@@ -9,9 +9,6 @@ Rails.application.routes.draw do
 
   # 便
   resources :runs, only: [] do
-    collection do
-      get :search
-    end
 
     resources :cars, only: [:index] do
       resources :seats, only: [:index]
