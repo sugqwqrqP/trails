@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   end
 
   # 利用者
-  resources :users, only: [:new, :create, :show, :edit, :update] do
+  resources :users, except: [:index] do
     resources :reservations, only: [:show, :destroy]
   end
 
