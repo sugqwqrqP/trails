@@ -8,8 +8,7 @@ Rails.application.routes.draw do
   root "top#index"
 
   # 便
-  resources :runs, only: [] do
-
+  resources :runs, only: [:index] do
     resources :cars, only: [:index] do
       resources :seats, only: [:index]
     end
