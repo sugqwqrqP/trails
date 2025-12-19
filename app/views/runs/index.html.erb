@@ -1,5 +1,67 @@
 <h1>Runs#index</h1>
-<p>便一覧</p>
+
+<nav>
+  <ul>
+    <li><%= link_to "ログイン", new_login_path %></li>
+    <li><%= link_to "新規登録", new_user_path %></li>
+  </ul>
+</nav>
+
+<div class="banner">
+</div>
+
+<%= form_with url: runs_path, method: :get, local: true do |f| %>
+
+  <!-- 乗車駅の入力欄（のちのちプルダウンに変更予定） -->
+  <div>
+    <%= f.label :from_station, "乗車駅" %>
+    <%= f.text_field :from_station %>
+  </div>
+
+  <!-- 降車駅の入力欄 -->
+  <div>
+    <%= f.label :to_station, "降車駅" %>
+    <%= f.text_field :to_station %>
+  </div>
+
+  <!--
+    日付選択
+    ・year / month / day が params として送信される
+    ・use_month_numbers により月を数字表示にしている
+  -->
+  <div>
+    <%= f.label :date, "日付" %>
+    <%= f.date_select :date, use_month_numbers: true %>
+  </div>
+
+  <!--
+    時刻選択
+    ・出発時間または到着時間の基準となる時刻
+    ・どちらの基準かは time_type で判定する
+  -->
+  <div>
+    <%= f.label :time, "時間" %>
+    <%= f.time_field :time %>
+  </div>
+
+  <!--
+    時刻の基準選択
+    ・departure : 出発時間基準
+    ・arrival   : 到着時間基準
+  -->
+  <div>
+    <%= f.label :time_type, "基準" %>
+    <%= f.select :time_type,
+          [["出発時間", "departure"], ["到着時間", "arrival"]] %>
+  </div>
+
+  <!-- 検索実行（/runs へGETリクエスト） -->
+  <%= f.submit "検索" %>
+
+<% end %>
+
+
+<h2>検索結果</h2>
 <% @runs.each do |run| %>
   <div>
     <%= run.name %>
