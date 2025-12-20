@@ -1,0 +1,2 @@
+class RunType < ApplicationRecord
+end
