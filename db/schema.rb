@@ -60,7 +60,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_12_20_074310) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "sections", "from_stations"
   add_foreign_key "sections", "run_types"
-  add_foreign_key "sections", "to_stations"
+  add_foreign_key "sections", "stations", column: "from_station_id"
+  add_foreign_key "sections", "stations", column: "to_station_id"
 end
