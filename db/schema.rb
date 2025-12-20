@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_12_20_072520) do
+ActiveRecord::Schema[7.0].define(version: 2025_12_20_074310) do
   create_table "run_types", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -30,6 +30,20 @@ ActiveRecord::Schema[7.0].define(version: 2025_12_20_072520) do
     t.time "arrival_time", null: false
   end
 
+  create_table "sections", force: :cascade do |t|
+    t.integer "run_type_id", null: false
+    t.integer "from_station_id", null: false
+    t.integer "to_station_id", null: false
+    t.integer "section_order"
+    t.integer "required_time"
+    t.integer "fee"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["from_station_id"], name: "index_sections_on_from_station_id"
+    t.index ["run_type_id"], name: "index_sections_on_run_type_id"
+    t.index ["to_station_id"], name: "index_sections_on_to_station_id"
+  end
+
   create_table "stations", force: :cascade do |t|
     t.string "station_name", null: false
     t.integer "station_order", null: false
@@ -46,4 +60,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_12_20_072520) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "sections", "from_stations"
+  add_foreign_key "sections", "run_types"
+  add_foreign_key "sections", "to_stations"
 end
