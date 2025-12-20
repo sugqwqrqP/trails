@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_12_20_074310) do
+ActiveRecord::Schema[7.0].define(version: 2025_12_20_093800) do
   create_table "run_types", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -24,10 +24,10 @@ ActiveRecord::Schema[7.0].define(version: 2025_12_20_074310) do
     t.integer "run_number", null: false
     t.date "run_on", null: false
     t.boolean "is_up", null: false
-    t.string "departure_station_name", null: false
-    t.string "arrival_station_name", null: false
     t.time "departure_time", null: false
     t.time "arrival_time", null: false
+    t.integer "run_type_id", null: false
+    t.index ["run_type_id"], name: "index_runs_on_run_type_id"
   end
 
   create_table "sections", force: :cascade do |t|
@@ -60,6 +60,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_12_20_074310) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "runs", "run_types"
   add_foreign_key "sections", "run_types"
   add_foreign_key "sections", "stations", column: "from_station_id"
   add_foreign_key "sections", "stations", column: "to_station_id"
