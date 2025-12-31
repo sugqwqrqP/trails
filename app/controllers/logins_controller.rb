@@ -7,7 +7,7 @@ class LoginsController < ApplicationController
 
     if user&.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect_to root_path
+      redirect_to session.delete(:return_to) || root_path
     else
       flash.now[:alert] = "ログインIDまたはパスワードが違います"
       render :new
