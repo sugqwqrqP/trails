@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   # ＜利用者＞
 
   # トップ
-  root "top#index"
+  root "runs#index"
 
   # 便
   resources :runs, only: [:index,:show] do
