@@ -5,66 +5,74 @@
 
 <%= form_with url: runs_path, method: :get, local: true do |f| %>
 
-  <!-- 乗車駅の入力欄（のちのちプルダウンに変更予定） -->
+  <!-- 乗車駅 -->
   <div>
-    <%= f.label :from_station, "乗車駅" %>
-    <%= f.text_field :from_station %>
+    <%= f.label :from_station_id, "乗車駅" %>
+    <%= f.collection_select :from_station_id,
+          Station.order(:station_order),
+          :id,
+          :station_name,
+          {
+            prompt: "選択してください",
+            selected: params[:from_station_id]
+          } %>
   </div>
 
-  <!-- 降車駅の入力欄 -->
+  <!-- 降車駅 -->
   <div>
-    <%= f.label :to_station, "降車駅" %>
-    <%= f.text_field :to_station %>
+    <%= f.label :to_station_id, "降車駅" %>
+    <%= f.collection_select :to_station_id,
+          Station.order(:station_order),
+          :id,
+          :station_name,
+          {
+            prompt: "選択してください",
+            selected: params[:to_station_id]
+          } %>
   </div>
 
-  <!--
-    日付選択
-    ・year / month / day が params として送信される
-    ・use_month_numbers により月を数字表示にしている
-  -->
+  <!-- 日付 -->
   <div>
-    <%= f.label :date, "日付" %>
-    <%= f.date_select :date, use_month_numbers: true %>
+    <%= f.label :run_on, "日付" %>
+    <%= f.date_field :run_on, value: params[:run_on] %>
   </div>
 
-  <!--
-    時刻選択
-    ・出発時間または到着時間の基準となる時刻
-    ・どちらの基準かは time_type で判定する
-  -->
+  <!-- 時刻 -->
   <div>
     <%= f.label :time, "時間" %>
-    <%= f.time_field :time %>
+    <%= f.time_field :time, value: params[:time] %>
   </div>
 
-  <!--
-    時刻の基準選択
-    ・departure : 出発時間基準
-    ・arrival   : 到着時間基準
-  -->
+  <!-- 時刻基準 -->
   <div>
-    <%= f.label :time_type, "基準" %>
-    <%= f.select :time_type,
-          [["出発時間", "departure"], ["到着時間", "arrival"]] %>
+    <%= f.label :time_basis, "基準" %>
+    <%= f.select :time_basis,
+          [["出発時間", "departure"], ["到着時間", "arrival"]],
+          selected: params[:time_basis] %>
   </div>
 
-  <!-- 検索実行（/runs へGETリクエスト） -->
   <%= f.submit "検索" %>
 
 <% end %>
 
-<h1>検索結果</h1>
+<% @results.each do |result| %>
+  <% run = result[:run] %>
 
-<% @runs.each do |run| %>
   <div style="margin-bottom: 12px; padding: 8px; border: 1px solid #ddd;">
     <div>
       <strong><%= run.name %></strong>
-      （<%= run.run_on %> <%= run.departure_time&.strftime("%H:%M") %> → <%= run.arrival_time&.strftime("%H:%M") %>）
+      （
+        <%= run.run_on %>
+        <%= result[:departure_time].strftime("%H:%M") %>
+        →
+        <%= result[:arrival_time].strftime("%H:%M") %>
+        ／ 所要 <%= result[:travel_min] %>分
+      ）
     </div>
 
     <!-- 空席状況（ダミー） -->
     <div>
-      指定席: ○　グリーン: ◎  ファビュラスルーム: ○
+      指定席: ○　グリーン: ◎　ファビュラスルーム: ○
     </div>
 
     <!-- 号車マップへ -->
