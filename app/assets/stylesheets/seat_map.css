@@ -1,0 +1,27 @@
+.seat-map {
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.seat-map th,
+.seat-map td {
+  border: 1px solid #ccc;
+  padding: 6px;
+  text-align: center;
+}
+
+.seat {
+  width: 48px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.seat.selected {
+  background-color: #4caf50;
+  color: white;
+}
+
+.seat:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
