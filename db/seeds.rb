@@ -4,6 +4,7 @@
 
 load Rails.root.join("db/seeds/stations.rb")
 load Rails.root.join("db/seeds/run_types.rb")
+load Rails.root.join("db/seeds/car_types.rb")
 load Rails.root.join("db/seeds/sections.rb")
 load Rails.root.join("db/seeds/users.rb")
 load Rails.root.join("db/seeds/runs.rb")
