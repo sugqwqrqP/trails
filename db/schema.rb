@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_01_05_071958) do
+ActiveRecord::Schema[7.0].define(version: 2026_01_05_072413) do
   create_table "car_types", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -46,6 +46,16 @@ ActiveRecord::Schema[7.0].define(version: 2026_01_05_071958) do
     t.index ["run_type_id"], name: "index_runs_on_run_type_id"
   end
 
+  create_table "seats", force: :cascade do |t|
+    t.integer "car_id", null: false
+    t.integer "row", null: false
+    t.string "column", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["car_id", "row", "column"], name: "index_seats_on_car_id_and_row_and_column", unique: true
+    t.index ["car_id"], name: "index_seats_on_car_id"
+  end
+
   create_table "sections", force: :cascade do |t|
     t.integer "run_type_id", null: false
     t.integer "from_station_id", null: false
@@ -79,6 +89,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_01_05_071958) do
   add_foreign_key "cars", "car_types"
   add_foreign_key "cars", "runs"
   add_foreign_key "runs", "run_types"
+  add_foreign_key "seats", "cars"
   add_foreign_key "sections", "run_types"
   add_foreign_key "sections", "stations", column: "from_station_id"
   add_foreign_key "sections", "stations", column: "to_station_id"
