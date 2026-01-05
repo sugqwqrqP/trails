@@ -1,44 +1,30 @@
 <h1>座席選択</h1>
 
 <p>
-  <strong><%= @run.name %></strong> /
-  <%= @car_number %>号車
+  <strong><%= @run.name %></strong><br>
+  <%= @car.number %>号車（<%= @car.car_type.name %>）
 </p>
 
-<table class="seat-map">
-  <tr>
-    <th></th>
-    <% @cols.each do |col| %>
-      <th><%= col %></th>
-    <% end %>
-  </tr>
+<div
+  id="seat-map"
+  data-car-type="<%= @car.car_type.name %>">
 
-  <% @rows.each do |row| %>
-    <tr>
-      <th><%= row %></th>
-      <% @cols.each do |col| %>
-        <% seat_code = "#{col}#{row}" %>
-        <td>
-          <button
-            type="button"
-            class="seat"
-            data-seat="<%= seat_code %>">
-            <%= seat_code %>
-          </button>
-        </td>
-      <% end %>
-    </tr>
+  <% @seats.each do |seat| %>
+    <button
+      type="button"
+      class="seat"
+      data-seat="<%= seat.id %>">
+      <%= seat.row %><%= seat.column %>
+    </button>
   <% end %>
-</table>
+</div>
 
 <form action="/reservations/confirm" method="get">
-  <input type="hidden" name="seats" id="selected-seats">
+  <input type="hidden" name="seat_ids" id="selected-seats">
   <input type="hidden" name="run_id" value="<%= @run.id %>">
-  <input type="hidden" name="car_id" value="<%= @car_number %>">
+  <input type="hidden" name="car_id" value="<%= @car.id %>">
 
   <button id="confirm-btn" style="display:none;">
     予約確認へ
   </button>
 </form>
-
-<%= link_to "号車選択に戻る", run_cars_path(@run) %>

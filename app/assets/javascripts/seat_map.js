@@ -1,5 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const MAX = 6;
+  const seatMap = document.getElementById("seat-map");
+  if (!seatMap) return;
+
+  const carType = seatMap.dataset.carType;
+
+  // 上限決定
+  let MAX;
+  if (carType === "fabulous") {
+    MAX = 1;
+  } else {
+    MAX = 6; // reserved / green
+  }
+
   const selectedSeats = new Set();
   const hiddenInput = document.getElementById("selected-seats");
   const confirmBtn = document.getElementById("confirm-btn");
@@ -7,20 +19,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
   seats.forEach(function (btn) {
     btn.addEventListener("click", function () {
-      const seat = btn.dataset.seat;
+      const seatId = btn.dataset.seat;
 
-      // すでに選択済み → 解除
-      if (selectedSeats.has(seat)) {
-        selectedSeats.delete(seat);
+      // 解除
+      if (selectedSeats.has(seatId)) {
+        selectedSeats.delete(seatId);
         btn.classList.remove("selected");
       } else {
-        // 6席制限
         if (selectedSeats.size >= MAX) {
-          alert("1回の予約で選択できるのは6席までです");
+          alert(
+            carType === "fabulous"
+              ? "ファビュラスルームは1室のみ選択できます"
+              : "1回の予約で選択できるのは6席までです"
+          );
           return;
         }
 
-        selectedSeats.add(seat);
+        selectedSeats.add(seatId);
         btn.classList.add("selected");
       }
 
@@ -39,12 +54,6 @@ function updateDisabled(seats, selectedSeats, MAX) {
 }
 
 function updateForm(hiddenInput, confirmBtn, selectedSeats) {
-  if (hiddenInput) {
-    hiddenInput.value = Array.from(selectedSeats).join(",");
-  }
-
-  if (confirmBtn) {
-    confirmBtn.style.display =
-      selectedSeats.size > 0 ? "block" : "none";
-  }
+  hiddenInput.value = Array.from(selectedSeats).join(",");
+  confirmBtn.style.display = selectedSeats.size > 0 ? "block" : "none";
 }

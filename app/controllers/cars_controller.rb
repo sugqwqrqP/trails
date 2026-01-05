@@ -3,7 +3,8 @@ class CarsController < ApplicationController
   def index
     @run = Run.find(params[:run_id])
 
-    # 仮データ：1〜8号車
-    @cars = (1..8).to_a
+    @cars = @run.cars
+                .includes(:car_type)
+                .order(:number)
   end
 end
