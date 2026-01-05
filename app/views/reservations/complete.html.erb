@@ -5,9 +5,10 @@
 </p>
 
 <p>
-  <%= @run.name %> /
-  <%= @car_id %>号車 /
-  <%= @seat %>
+  <strong><%= @run.name %></strong><br>
+  <%= @car.number %>号車（<%= @car.car_type.name %>）<br>
+  座席：
+  <%= @seats.map { |s| "#{s.row}#{s.column}" }.join(", ") %>
 </p>
 
 <p>
