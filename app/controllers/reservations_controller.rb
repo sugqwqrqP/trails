@@ -1,23 +1,35 @@
 class ReservationsController < ApplicationController
   before_action :require_login #ログイン要求
 
-  def confirm
-    @run = Run.find(params[:run_id])
-    @car = Car.find(params[:car_id])
-    @departure_station = Station.find(params[:departure_station_id])
-    @arrival_station   = Station.find(params[:arrival_station_id])
+def confirm
+  @run = Run.find(params[:run_id])
+  @car = Car.find(params[:car_id])
 
-    seat_ids =
-      case params[:seat_ids]
-      when String
-        params[:seat_ids].split(",")
-      else
-        params[:seat_ids]
-      end
+  @departure_station = Station.find(params[:departure_station_id])
+  @arrival_station   = Station.find(params[:arrival_station_id])
 
-    @seats = Seat.where(id: seat_ids)
-  end
+  seat_ids =
+    case params[:seat_ids]
+    when String
+      params[:seat_ids].split(",")
+    else
+      params[:seat_ids]
+    end
 
+  @seats = Seat.where(id: seat_ids)
+
+  @departure_time = @run.departure_time_at(@departure_station)
+  @arrival_time   = @run.arrival_time_at(@arrival_station)
+
+  # 料金計算
+  @fee_per_seat = @run.fee_per_seat(
+    departure_station: @departure_station,
+    arrival_station:   @arrival_station,
+    car_type:          @car.car_type
+  )
+
+  @total_fee = @fee_per_seat * @seats.size
+end
   def create
   run = Run.find(params[:run_id])
   departure_station = Station.find(params[:departure_station_id])

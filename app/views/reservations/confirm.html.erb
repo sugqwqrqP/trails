@@ -2,22 +2,27 @@
 
 <p>
   <strong><%= @run.display_name %></strong><br>
-  <%= @car.number %>号車（<%= @car.car_type.name %>）<br>
+  <%= @run.run_on %><br>
+  <%= @departure_station.station_name %> →
+  <%= @arrival_station.station_name %><br>
+  <%= @departure_time.strftime("%H:%M") %> →
+  <%= @arrival_time.strftime("%H:%M") %>
+</p>
+
+<p>
+  <%= @car.number %>号車（<%= @car.car_type.name %>）
+</p>
+
+<p>
   座席：
   <%= @seats.map { |s| "#{s.row}#{s.column}" }.join(", ") %>
 </p>
 
-<% fee_per_seat =
-  @run.fee_per_seat(
-    departure_station: @departure_station,
-    arrival_station:   @arrival_station,
-    car_type:          @car.car_type
-  )
-%>
+<hr>
 
 <p>
   1席あたり料金：
-  <strong><%= number_to_currency(fee_per_seat, unit: "¥", precision: 0) %></strong>
+  <strong><%= number_to_currency(@fee_per_seat, unit: "¥", precision: 0) %></strong>
 </p>
 
 <p>
@@ -26,27 +31,19 @@
 
 <p>
   合計料金：
-  <strong>
-    <%= number_to_currency(
-      fee_per_seat * @seats.size,
-      unit: "¥",
-      precision: 0
-    ) %>
-  </strong>
+  <strong><%= number_to_currency(@total_fee, unit: "¥", precision: 0) %></strong>
 </p>
 
-
+<hr>
 
 <%= form_with url: reservations_path, method: :post, local: true do %>
   <%= hidden_field_tag :run_id, @run.id %>
   <%= hidden_field_tag :car_id, @car.id %>
-  <%= hidden_field_tag :departure_station_id, params[:departure_station_id] %>
-  <%= hidden_field_tag :arrival_station_id, params[:arrival_station_id] %>
-
+  <%= hidden_field_tag :departure_station_id, @departure_station.id %>
+  <%= hidden_field_tag :arrival_station_id, @arrival_station.id %>
 
   <% @seats.each do |seat| %>
     <%= hidden_field_tag "seat_ids[]", seat.id %>
-    
   <% end %>
 
   <%= submit_tag "確定する" %>
@@ -56,8 +53,8 @@
   run_car_seats_path(
     @run,
     car_id: @car.id,
-    departure_station_id: params[:departure_station_id],
-    arrival_station_id:   params[:arrival_station_id],
+    departure_station_id: @departure_station.id,
+    arrival_station_id:   @arrival_station.id,
     run_on:               params[:run_on],
     time:                 params[:time],
     time_basis:           params[:time_basis]
