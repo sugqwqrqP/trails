@@ -19,6 +19,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   seats.forEach(function (btn) {
     btn.addEventListener("click", function () {
+      if (
+        btn.classList.contains("unavailable") ||
+        btn.classList.contains("limit-disabled")
+      ) {
+        return;
+      }
       const seatId = btn.dataset.seat;
 
       // 解除
@@ -47,8 +53,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function updateDisabled(seats, selectedSeats, MAX) {
   seats.forEach(function (btn) {
+    // 予約済み席は触らない
+    if (btn.classList.contains("unavailable")) return;
+
     if (!btn.classList.contains("selected")) {
-      btn.disabled = selectedSeats.size >= MAX;
+      if (selectedSeats.size >= MAX) {
+        btn.classList.add("limit-disabled");
+      } else {
+        btn.classList.remove("limit-disabled");
+      }
     }
   });
 }

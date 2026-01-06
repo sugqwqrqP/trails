@@ -20,12 +20,23 @@
   background: #fff;
 }
 
+.seat.unavailable {
+  background: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
 .seat.selected {
   background-color: #4caf50;
   color: #fff;
 }
 
 .seat:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.seat.limit-disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
@@ -37,10 +48,4 @@
 
 .fabulous-seat {
   width: 90px;
-}
-
-.seat.unavailable {
-  background: #ccc;
-  color: #666;
-  cursor: not-allowed;
 }
