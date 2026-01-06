@@ -3,17 +3,25 @@
     <%= link_to "新幹線予約", root_path %>
   </div>
 
-  <nav>
-    <% if logged_in? %>
+<nav>
+  <% if logged_in? %>
+    <% if current_user.staff? %>
+      <span>
+        <%= link_to "駅員トップ", staff_root_path %>
+      </span>
+      |
+      <%= link_to "ログアウト", login_path, method: :delete %>
+    <% else %>
       <span>
         <%= link_to current_user.user_fullname, user_path(current_user) %>
       </span>
       |
       <%= link_to "ログアウト", login_path, method: :delete %>
-    <% else %>
-      <%= link_to "ログイン", new_login_path %>
-      |
-      <%= link_to "新規登録", new_user_path %>
     <% end %>
-  </nav>
+  <% else %>
+    <%= link_to "ログイン", new_login_path %>
+    |
+    <%= link_to "新規登録", new_user_path %>
+  <% end %>
+</nav>
 </header>
