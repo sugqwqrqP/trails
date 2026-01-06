@@ -17,33 +17,59 @@ class ReservationsController < ApplicationController
   end
 
   def create
-    @reservation = Reservation.create!(
-      user: current_user,
-      run_id: params[:run_id],
-      departure_station_id: params[:departure_station_id],
-      arrival_station_id: params[:arrival_station_id],
-      holder_name: current_user.user_fullname
-    )
+  run = Run.find(params[:run_id])
+  departure_station = Station.find(params[:departure_station_id])
+  arrival_station   = Station.find(params[:arrival_station_id])
 
-    seat_ids =
-      case params[:seat_ids]
-      when String
-        params[:seat_ids].split(",")
-      else
-        params[:seat_ids]
-      end
-
-    seat_ids.each do |seat_id|
-      ReservationSeat.create!(
-        reservation: @reservation,
-        seat_id: seat_id
-      )
+  seat_ids =
+    case params[:seat_ids]
+    when String
+      params[:seat_ids].split(",")
+    else
+      params[:seat_ids]
     end
 
-    redirect_to complete_reservations_path(
-      reservation_id: @reservation.id
+  seats = Seat.where(id: seat_ids)
+
+  # ===== 空席再チェック =====
+  unavailable_seats = seats.reject do |seat|
+    seat.available_for?(
+      run: run,
+      departure_station: departure_station,
+      arrival_station: arrival_station
     )
   end
+
+  if unavailable_seats.any?
+    redirect_to run_car_seats_path(
+      run,
+      car_id: seats.first.car_id,
+      departure_station_id: params[:departure_station_id],
+      arrival_station_id: params[:arrival_station_id]
+    ), alert: "申し訳ありません。選択された席は既に予約されています。"
+    return
+  end
+  # ===================================
+
+  @reservation = Reservation.create!(
+    user: current_user,
+    run: run,
+    departure_station: departure_station,
+    arrival_station: arrival_station,
+    holder_name: current_user.user_fullname
+  )
+
+  seats.each do |seat|
+    ReservationSeat.create!(
+      reservation: @reservation,
+      seat: seat
+    )
+  end
+
+  redirect_to complete_reservations_path(
+    reservation_id: @reservation.id
+  )
+end
 
   def complete
     @reservation = Reservation
