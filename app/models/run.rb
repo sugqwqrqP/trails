@@ -3,6 +3,40 @@ class Run < ApplicationRecord
   has_many :cars
   has_many :reservations, dependent: :destroy
 
+  def display_name
+    "#{run_type.name} #{run_number}号"
+  end
+
+  def first_station
+    if is_up
+      Station.find_by!(station_name: "新大阪")
+    else
+      Station.find_by!(station_name: "東京")
+    end
+  end
+
+  def departure_time_at(station)
+    base_time = Time.zone.local(
+      run_on.year,
+      run_on.month,
+      run_on.day,
+      first_station_departure_time.hour,
+      first_station_departure_time.min
+    )
+
+    offset_minutes =
+      run_type.required_travel_time(
+        from_station: first_station,
+        to_station: station
+      )
+
+    base_time + offset_minutes.minutes
+  end
+
+  def arrival_time_at(station)
+    departure_time_at(station)
+  end
+
 
   def available_count(
     car_type_name:,

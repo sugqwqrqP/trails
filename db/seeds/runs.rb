@@ -52,7 +52,6 @@ base_numbers = {
 
   schedule.each do |time_str, run_type|
     Run.create!(
-      name: "#{run_type.name} #{counters_down[run_type.name]}号",
       run_number: counters_down[run_type.name],
       run_on: run_on,
       is_up: false,
@@ -67,7 +66,6 @@ base_numbers = {
 
   schedule.each do |time_str, run_type|
     Run.create!(
-      name: "#{run_type.name} #{counters_up[run_type.name]}号",
       run_number: counters_up[run_type.name],
       run_on: run_on,
       is_up: true,

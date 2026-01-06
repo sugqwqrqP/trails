@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :require_login
-  
+
   def new
   end
 
@@ -15,9 +15,12 @@ class UsersController < ApplicationController
       return
     end
 
-    @reservations = @user.reservations
-      .includes(:run, :departure_station, :arrival_station)
-      .order(created_at: :desc)
+    @reservations = @user.reservations.includes(
+      :run,
+      :departure_station,
+      :arrival_station,
+      reservation_seats: :seat
+    )
   end
 
   def edit
