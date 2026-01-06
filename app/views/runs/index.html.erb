@@ -3,6 +3,21 @@
 <div class="banner">
 </div>
 
+<!-- デフォルト値の設定 -->
+
+<% default_departure =
+    params[:departure_station_id] ||
+    Station.find_by(station_name: "東京")&.id %>
+
+<% default_arrival =
+    params[:arrival_station_id] ||
+    Station.find_by(station_name: "新大阪")&.id %>
+
+<% default_run_on = params[:run_on] || Date.current %>
+<% default_time   = params[:time]   || Time.current.strftime("%H:%M") %>
+
+<!-- 検索フォーム -->
+
 <%= form_with url: runs_path, method: :get, local: true do |f| %>
 
   <!-- 乗車駅 -->
@@ -13,7 +28,7 @@
           :id,
           :station_name,
           prompt: "選択してください",
-          selected: params[:departure_station_id] %>
+          selected: default_departure %>
   </div>
 
   <!-- 降車駅 -->
@@ -24,19 +39,23 @@
           :id,
           :station_name,
           prompt: "選択してください",
-          selected: params[:arrival_station_id] %>
+          selected: default_arrival %>
   </div>
+
+  <button type="button" id="swap-stations">
+    発着を入れ替え
+  </button>
 
   <!-- 日付 -->
   <div>
     <%= f.label :run_on, "日付" %>
-    <%= f.date_field :run_on, value: params[:run_on] %>
+    <%= f.date_field :run_on, value: default_run_on %>
   </div>
 
   <!-- 時刻 -->
   <div>
     <%= f.label :time, "時間" %>
-    <%= f.time_field :time, value: params[:time] %>
+    <%= f.time_field :time, value: default_time %>
   </div>
 
   <!-- 時刻基準 -->
@@ -80,3 +99,22 @@
     </div>
   </div>
 <% end %>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const swapBtn = document.getElementById("swap-stations");
+    if (!swapBtn) return;
+
+    swapBtn.addEventListener("click", () => {
+      const dep = document.querySelector("[name='departure_station_id']");
+      const arr = document.querySelector("[name='arrival_station_id']");
+
+      if (!dep || !arr) return;
+
+      const tmp = dep.value;
+      dep.value = arr.value;
+      arr.value = tmp;
+    });
+  });
+</script>
