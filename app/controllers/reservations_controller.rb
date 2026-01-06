@@ -40,24 +40,17 @@ class ReservationsController < ApplicationController
     end
 
     redirect_to complete_reservations_path(
-      run_id: @reservation.run_id,
-      car_id: params[:car_id],
-      seat_ids: seat_ids
+      reservation_id: @reservation.id
     )
   end
 
-  def complete
-    @run = Run.find(params[:run_id])
-    @car = Car.find(params[:car_id])
+    def complete
+      @reservation = Reservation
+                      .includes(:run, :seats, :departure_station, :arrival_station)
+                      .find(params[:reservation_id])
 
-    seat_ids =
-      case params[:seat_ids]
-      when String
-        params[:seat_ids].split(",")
-      else
-        params[:seat_ids]
-      end
-
-    @seats = Seat.where(id: seat_ids)
-  end
+      @run   = @reservation.run
+      @seats = @reservation.seats
+      @car   = @seats.first.car
+    end
 end

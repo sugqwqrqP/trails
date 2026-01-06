@@ -1,15 +1,39 @@
 <h1>予約完了</h1>
 
+<p class="notice">
+  予約が正常に完了しました。
+</p>
+
+<hr>
+
 <p>
-  ※ 保存されてないよ
+  <strong>予約番号：</strong>
+  <%= @reservation.id %>
 </p>
 
 <p>
-  <strong><%= @run.name %></strong><br>
-  <%= @car.number %>号車（<%= @car.car_type.name %>）<br>
-  座席：
-  <%= @seats.map { |s| "#{s.row}#{s.column}" }.join(", ") %>
+  <strong>予約者：</strong>
+  <%= @reservation.holder_name %>
 </p>
+
+<p>
+  <strong>区間：</strong>
+  <%= @reservation.departure_station.station_name %>
+  →
+  <%= @reservation.arrival_station.station_name %>
+</p>
+
+<p>
+  <strong>列車：</strong>
+  <%= @reservation.run.name %>
+</p>
+
+<p>
+  <strong>座席：</strong>
+  <%= @reservation.seats.map { |s| "#{s.row}#{s.column}" }.join(", ") %>
+</p>
+
+<hr>
 
 <p>
   <%= link_to "トップに戻る", root_path %>
