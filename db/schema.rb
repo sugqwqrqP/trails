@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_01_06_070134) do
+ActiveRecord::Schema[7.0].define(version: 2026_01_06_070849) do
   create_table "car_types", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -26,6 +26,15 @@ ActiveRecord::Schema[7.0].define(version: 2026_01_06_070134) do
     t.index ["car_type_id"], name: "index_cars_on_car_type_id"
     t.index ["run_id", "number"], name: "index_cars_on_run_id_and_number", unique: true
     t.index ["run_id"], name: "index_cars_on_run_id"
+  end
+
+  create_table "reservation_seats", force: :cascade do |t|
+    t.integer "reservation_id", null: false
+    t.integer "seat_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reservation_id"], name: "index_reservation_seats_on_reservation_id"
+    t.index ["seat_id"], name: "index_reservation_seats_on_seat_id"
   end
 
   create_table "reservations", force: :cascade do |t|
@@ -103,6 +112,8 @@ ActiveRecord::Schema[7.0].define(version: 2026_01_06_070134) do
 
   add_foreign_key "cars", "car_types"
   add_foreign_key "cars", "runs"
+  add_foreign_key "reservation_seats", "reservations"
+  add_foreign_key "reservation_seats", "seats"
   add_foreign_key "reservations", "runs"
   add_foreign_key "reservations", "stations", column: "arrival_station_id"
   add_foreign_key "reservations", "stations", column: "departure_station_id"
