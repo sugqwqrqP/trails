@@ -1,2 +1,25 @@
-<h1>Users#show</h1>
-<p>Find me in app/views/users/show.html.erb</p>
+<h1><%= @user.user_fullname %>さんのマイページ</h1>
+
+<p>
+  ログインID: <%= @user.login_id %>
+</p>
+
+<h2>予約一覧</h2>
+
+<% if @reservations.any? %>
+  <ul>
+    <% @reservations.each do |r| %>
+      <li>
+        <%= r.run.name %>
+        （<%= r.departure_station.station_name %> →
+        <%= r.arrival_station.station_name %>）
+
+        <%= link_to "詳細",
+          user_reservation_path(@user, r)
+        %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>予約はありません。</p>
+<% end %>
