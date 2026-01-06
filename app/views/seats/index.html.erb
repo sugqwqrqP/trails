@@ -5,17 +5,62 @@
   <%= @car.number %>号車（<%= @car.car_type.name %>）
 </p>
 
+<% seat_map = @seats.index_by { |s| [s.row, s.column] } %>
+
 <div
   id="seat-map"
   data-car-type="<%= @car.car_type.name %>">
 
-  <% @seats.each do |seat| %>
-    <button
-      type="button"
-      class="seat"
-      data-seat="<%= seat.id %>">
-      <%= seat.row %><%= seat.column %>
-    </button>
+  <% if @car.car_type.name == "fabulous" %>
+
+    <!-- ファビュラスルーム -->
+    <div class="fabulous">
+      <% @seats.each do |seat| %>
+        <button
+          type="button"
+          class="seat fabulous-seat"
+          data-seat="<%= seat.id %>">
+          ROOM <%= seat.row %>
+        </button>
+      <% end %>
+    </div>
+
+  <% else %>
+
+    <% rows = (1..8).to_a %>
+    <% cols =
+      case @car.car_type.name
+      when "reserved" then %w[A B C D E]
+      when "green"    then %w[A B C D]
+      end
+    %>
+
+    <table class="seat-map">
+      <% rows.each do |row| %>
+        <tr>
+          <% cols.each do |col| %>
+            <% seat = seat_map[[row, col]] %>
+
+            <td>
+              <% if seat %>
+                <button
+                  type="button"
+                  class="seat"
+                  data-seat="<%= seat.id %>">
+                  <%= row %><%= col %>
+                </button>
+              <% end %>
+            </td>
+
+            <%# 通路 %>
+            <% if col == "C" && @car.car_type.name == "reserved" %>
+              <td class="aisle"></td>
+            <% end %>
+          <% end %>
+        </tr>
+      <% end %>
+    </table>
+
   <% end %>
 </div>
 
@@ -28,3 +73,7 @@
     予約確認へ
   </button>
 </form>
+
+<p>
+  <%= link_to "号車選択に戻る", run_cars_path(@run) %>
+</p>

@@ -3,25 +3,38 @@
   margin-bottom: 20px;
 }
 
-.seat-map th,
 .seat-map td {
-  border: 1px solid #ccc;
-  padding: 6px;
+  padding: 4px;
   text-align: center;
+}
+
+.aisle {
+  width: 24px;
 }
 
 .seat {
   width: 48px;
   height: 32px;
   cursor: pointer;
+  border: 1px solid #999;
+  background: #fff;
 }
 
 .seat.selected {
   background-color: #4caf50;
-  color: white;
+  color: #fff;
 }
 
 .seat:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+.fabulous {
+  display: flex;
+  gap: 16px;
+}
+
+.fabulous-seat {
+  width: 90px;
 }
