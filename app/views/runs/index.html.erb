@@ -99,19 +99,21 @@
     </div>
 
     <% seat_types = {
-      "reserved"  => "指定席",
-      "green"     => "グリーン車",
-      "fabulous"  => "ファビュラスルーム"
+      reserved:  "指定席",
+      green:     "グリーン車",
+      fabulous:  "ファビュラスルーム"
     } %>
 
     <% seat_types.each do |key, label| %>
+      <% car_type = CarType.find_by!(name: key.to_s) %>
+
       <div>
         <%= label %>：
         <%= number_to_currency(
           run.fee_per_seat(
             departure_station: @departure_station,
             arrival_station:   @arrival_station,
-            car_type_name:     key
+            car_type:          car_type
           ),
           unit: "¥",
           precision: 0
