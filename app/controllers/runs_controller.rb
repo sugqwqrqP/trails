@@ -82,14 +82,47 @@ class RunsController < ApplicationController
       departure_time = first_time + dep_offset_min.minutes
       arrival_time   = first_time + arr_offset_min.minutes
 
+      reserved_count = run.available_count(
+        car_type_name: "reserved",
+        departure_station: departure_station,
+        arrival_station: arrival_station
+      )
+
+      green_count = run.available_count(
+        car_type_name: "green",
+        departure_station: departure_station,
+        arrival_station: arrival_station
+      )
+
+      fabulous_count = run.available_count(
+        car_type_name: "fabulous",
+        departure_station: departure_station,
+        arrival_station: arrival_station
+      )
+
       {
         run: run,
         departure_time: departure_time,
         arrival_time: arrival_time,
-        travel_min: travel_min
+        travel_min: travel_min,
+
+        availability: {
+          reserved: {
+            count: reserved_count,
+            mark: run.availability_mark("reserved", reserved_count)
+          },
+          green: {
+            count: green_count,
+            mark: run.availability_mark("green", green_count)
+          },
+          fabulous: {
+            count: fabulous_count,
+            mark: run.availability_mark("fabulous", fabulous_count)
+          }
+        }
       }
     end
-
+    
     # ==========
     # 5) 指定時刻に近い順にソート
     #   - time_basis が arrival なら arrival 基準

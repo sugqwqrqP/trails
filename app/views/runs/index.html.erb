@@ -85,8 +85,17 @@
       ）
     </div>
 
+    <% availability = result[:availability] %>
+
     <div>
-      指定席: ○　グリーン: ◎　ファビュラスルーム: ○
+      指定席:
+      <strong><%= availability[:reserved][:mark] %></strong>
+      　
+      グリーン:
+      <strong><%= availability[:green][:mark] %></strong>
+      　
+      ファビュラス:
+      <strong><%= availability[:fabulous][:mark] %></strong>
     </div>
 
     <div>
