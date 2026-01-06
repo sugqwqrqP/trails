@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_01_05_072413) do
+ActiveRecord::Schema[7.0].define(version: 2026_01_06_070134) do
   create_table "car_types", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -26,6 +26,21 @@ ActiveRecord::Schema[7.0].define(version: 2026_01_05_072413) do
     t.index ["car_type_id"], name: "index_cars_on_car_type_id"
     t.index ["run_id", "number"], name: "index_cars_on_run_id_and_number", unique: true
     t.index ["run_id"], name: "index_cars_on_run_id"
+  end
+
+  create_table "reservations", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "run_id", null: false
+    t.integer "departure_station_id", null: false
+    t.integer "arrival_station_id", null: false
+    t.string "holder_name", null: false
+    t.boolean "is_issued", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["arrival_station_id"], name: "index_reservations_on_arrival_station_id"
+    t.index ["departure_station_id"], name: "index_reservations_on_departure_station_id"
+    t.index ["run_id"], name: "index_reservations_on_run_id"
+    t.index ["user_id"], name: "index_reservations_on_user_id"
   end
 
   create_table "run_types", force: :cascade do |t|
@@ -88,6 +103,10 @@ ActiveRecord::Schema[7.0].define(version: 2026_01_05_072413) do
 
   add_foreign_key "cars", "car_types"
   add_foreign_key "cars", "runs"
+  add_foreign_key "reservations", "runs"
+  add_foreign_key "reservations", "stations", column: "arrival_station_id"
+  add_foreign_key "reservations", "stations", column: "departure_station_id"
+  add_foreign_key "reservations", "users"
   add_foreign_key "runs", "run_types"
   add_foreign_key "seats", "cars"
   add_foreign_key "sections", "run_types"

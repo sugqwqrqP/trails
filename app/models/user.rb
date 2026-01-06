@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   has_secure_password
 
+  has_many :reservations, dependent: :destroy
+
   enum role: { user: 0, staff: 1, operator: 2 }
 
   # ログインID
