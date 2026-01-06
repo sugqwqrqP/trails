@@ -6,20 +6,60 @@
 
 <h2>予約一覧</h2>
 
-<% if @reservations.any? %>
-  <ul>
-    <% @reservations.each do |r| %>
-      <li>
-        <%= r.run.name %>
-        （<%= r.departure_station.station_name %> →
-        <%= r.arrival_station.station_name %>）
+<% seat_type_label = {
+  "reserved"  => "指定席",
+  "green"     => "グリーン車",
+  "fabulous"  => "ファビュラスルーム"
+} %>
 
-        <%= link_to "詳細",
-          user_reservation_path(@user, r)
-        %>
-      </li>
-    <% end %>
-  </ul>
+<% if @reservations.any? %>
+  <table border="1" cellpadding="6" cellspacing="0">
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>列車</th>
+        <th>区間</th>
+        <th>時刻</th>
+        <th>席種</th>
+        <th>人数</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @reservations.each do |r| %>
+        <% run = r.run %>
+        <% seats = r.reservation_seats.map(&:seat) %>
+        <% car_type_keys = seats.map { |s| s.car.car_type.name }.uniq %>
+        <% car_type_names = car_type_keys.map { |k| seat_type_label[k] } %>
+
+        <tr>
+          <td><%= run.run_on %></td>
+
+          <td><%= run.display_name %></td>
+
+          <td>
+            <%= r.departure_station.station_name %> →
+            <%= r.arrival_station.station_name %>
+          </td>
+
+          <td>
+            <%= run.departure_time_at(r.departure_station).strftime("%H:%M") %>
+            →
+            <%= run.arrival_time_at(r.arrival_station).strftime("%H:%M") %>
+          </td>
+
+          <td><%= car_type_names.join(" / ") %></td>
+
+          <td><%= seats.count %>人</td>
+
+          <td>
+            <%= link_to "詳細", user_reservation_path(@user, r) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 <% else %>
   <p>予約はありません。</p>
 <% end %>
