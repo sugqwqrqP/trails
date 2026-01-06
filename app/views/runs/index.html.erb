@@ -98,6 +98,27 @@
       <strong><%= availability[:fabulous][:mark] %></strong>
     </div>
 
+    <% seat_types = {
+      "reserved"  => "指定席",
+      "green"     => "グリーン車",
+      "fabulous"  => "ファビュラスルーム"
+    } %>
+
+    <% seat_types.each do |key, label| %>
+      <div>
+        <%= label %>：
+        <%= number_to_currency(
+          run.fee_per_seat(
+            departure_station: @departure_station,
+            arrival_station:   @arrival_station,
+            car_type_name:     key
+          ),
+          unit: "¥",
+          precision: 0
+        ) %>
+      </div>
+    <% end %>
+
     <div>
       <%= link_to "号車選択へ",
         run_cars_path(

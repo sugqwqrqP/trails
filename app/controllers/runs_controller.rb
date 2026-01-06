@@ -18,6 +18,9 @@ class RunsController < ApplicationController
 
     departure_station = Station.find(departure_station_id)
     arrival_station   = Station.find(arrival_station_id)
+    @departure_station = departure_station
+    @arrival_station   = arrival_station
+    
     run_on       = Date.parse(run_on_str)
 
     # ==========

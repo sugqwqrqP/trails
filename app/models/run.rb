@@ -6,14 +6,13 @@ class Run < ApplicationRecord
   def display_name
     "#{run_type.name} #{run_number}号"
   end
-  
+
   def first_station
     is_up ?
       Station.find_by!(station_name: "新大阪") :
       Station.find_by!(station_name: "東京")
   end
 
-  # ★ その日の始発駅出発時刻を正しく作る
   def first_departure_datetime
     Time.zone.local(
       run_on.year,
@@ -38,7 +37,6 @@ class Run < ApplicationRecord
     departure_time_at(station)
   end
 
-
   def available_count(
     car_type_name:,
     departure_station:,
@@ -57,7 +55,7 @@ class Run < ApplicationRecord
       end
   end
 
-    def availability_mark(car_type_name, count)
+  def availability_mark(car_type_name, count)
     case car_type_name
     when "fabulous"
       case count
@@ -66,7 +64,7 @@ class Run < ApplicationRecord
       when 1..2 then "△ (残り#{count})"
       else "×"
       end
-    else # reserved / green
+    else
       case count
       when 20.. then "◎"
       when 7..19 then "◯"
@@ -76,4 +74,24 @@ class Run < ApplicationRecord
     end
   end
 
+  def base_fee(departure_station:, arrival_station:)
+    start_order = [departure_station.station_order, arrival_station.station_order].min
+    end_order   = [departure_station.station_order, arrival_station.station_order].max
+
+    run_type.sections
+      .joins(:from_station, :to_station)
+      .where(stations: { station_order: start_order...end_order })
+      .sum(:fee)
+  end
+
+  def fee_per_seat(
+    departure_station:,
+    arrival_station:,
+    car_type:
+  )
+    base_fee(
+      departure_station: departure_station,
+      arrival_station: arrival_station
+    ) + car_type.extra_fee
+  end
 end

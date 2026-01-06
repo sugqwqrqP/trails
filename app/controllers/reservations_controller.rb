@@ -4,6 +4,8 @@ class ReservationsController < ApplicationController
   def confirm
     @run = Run.find(params[:run_id])
     @car = Car.find(params[:car_id])
+    @departure_station = Station.find(params[:departure_station_id])
+    @arrival_station   = Station.find(params[:arrival_station_id])
 
     seat_ids =
       case params[:seat_ids]

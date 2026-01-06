@@ -21,4 +21,23 @@ class RunType < ApplicationRecord
       .where(section_order: start_section.section_order..end_section.section_order)
       .sum(:required_time)
   end
+
+  def required_fee(from_station:, to_station:)
+    return 0 if from_station.id == to_station.id
+
+    start_order = [from_station.station_order, to_station.station_order].min
+    end_order   = [from_station.station_order, to_station.station_order].max
+
+    start_section = sections
+      .joins(:from_station)
+      .find_by!(stations: { station_order: start_order })
+
+    end_section = sections
+      .joins(:to_station)
+      .find_by!(stations: { station_order: end_order })
+
+    sections
+      .where(section_order: start_section.section_order..end_section.section_order)
+      .sum(:fee)
+  end
 end

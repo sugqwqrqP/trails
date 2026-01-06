@@ -7,6 +7,35 @@
   <%= @seats.map { |s| "#{s.row}#{s.column}" }.join(", ") %>
 </p>
 
+<% fee_per_seat =
+  @run.fee_per_seat(
+    departure_station: @departure_station,
+    arrival_station:   @arrival_station,
+    car_type:          @car.car_type
+  )
+%>
+
+<p>
+  1席あたり料金：
+  <strong><%= number_to_currency(fee_per_seat, unit: "¥", precision: 0) %></strong>
+</p>
+
+<p>
+  人数：<%= @seats.size %>名
+</p>
+
+<p>
+  合計料金：
+  <strong>
+    <%= number_to_currency(
+      fee_per_seat * @seats.size,
+      unit: "¥",
+      precision: 0
+    ) %>
+  </strong>
+</p>
+
+
 
 <%= form_with url: reservations_path, method: :post, local: true do %>
   <%= hidden_field_tag :run_id, @run.id %>
