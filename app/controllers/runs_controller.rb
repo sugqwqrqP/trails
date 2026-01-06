@@ -77,8 +77,9 @@ class RunsController < ApplicationController
         to_station: arrival_station
       )
 
-      first_time = Time.zone.parse("#{run.run_on} #{run.first_station_departure_time.strftime('%H:%M')}")
-
+      first_time = Time.zone.parse(
+        "#{run.run_on} #{run.first_station_departure_time.in_time_zone('UTC').strftime('%H:%M')}"
+      )
       departure_time = first_time + dep_offset_min.minutes
       arrival_time   = first_time + arr_offset_min.minutes
 
@@ -122,7 +123,7 @@ class RunsController < ApplicationController
         }
       }
     end
-    
+
     # ==========
     # 5) 指定時刻に近い順にソート
     #   - time_basis が arrival なら arrival 基準
