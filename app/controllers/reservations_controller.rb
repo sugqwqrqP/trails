@@ -16,10 +16,33 @@ class ReservationsController < ApplicationController
   end
 
   def create
-    redirect_to complete_reservations_path(
+    @reservation = Reservation.create!(
+      user: current_user,
       run_id: params[:run_id],
+      departure_station_id: params[:departure_station_id],
+      arrival_station_id: params[:arrival_station_id],
+      holder_name: current_user.user_fullname
+    )
+
+    seat_ids =
+      case params[:seat_ids]
+      when String
+        params[:seat_ids].split(",")
+      else
+        params[:seat_ids]
+      end
+
+    seat_ids.each do |seat_id|
+      ReservationSeat.create!(
+        reservation: @reservation,
+        seat_id: seat_id
+      )
+    end
+
+    redirect_to complete_reservations_path(
+      run_id: @reservation.run_id,
       car_id: params[:car_id],
-      seat_ids: params[:seat_ids]
+      seat_ids: seat_ids
     )
   end
 

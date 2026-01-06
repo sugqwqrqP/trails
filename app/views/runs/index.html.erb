@@ -7,28 +7,24 @@
 
   <!-- 乗車駅 -->
   <div>
-    <%= f.label :from_station_id, "乗車駅" %>
-    <%= f.collection_select :from_station_id,
+    <%= f.label :departure_station_id, "乗車駅" %>
+    <%= f.collection_select :departure_station_id,
           Station.order(:station_order),
           :id,
           :station_name,
-          {
-            prompt: "選択してください",
-            selected: params[:from_station_id]
-          } %>
+          prompt: "選択してください",
+          selected: params[:departure_station_id] %>
   </div>
 
   <!-- 降車駅 -->
   <div>
-    <%= f.label :to_station_id, "降車駅" %>
-    <%= f.collection_select :to_station_id,
+    <%= f.label :arrival_station_id, "降車駅" %>
+    <%= f.collection_select :arrival_station_id,
           Station.order(:station_order),
           :id,
           :station_name,
-          {
-            prompt: "選択してください",
-            selected: params[:to_station_id]
-          } %>
+          prompt: "選択してください",
+          selected: params[:arrival_station_id] %>
   </div>
 
   <!-- 日付 -->
@@ -70,14 +66,17 @@
       ）
     </div>
 
-    <!-- 空席状況（ダミー） -->
     <div>
       指定席: ○　グリーン: ◎　ファビュラスルーム: ○
     </div>
 
-    <!-- 号車マップへ -->
     <div>
-      <%= link_to "号車選択へ", run_cars_path(run) %>
+      <%= link_to "号車選択へ",
+        run_cars_path(
+          run,
+          departure_station_id: params[:departure_station_id],
+          arrival_station_id:   params[:arrival_station_id]
+        ) %>
     </div>
   </div>
 <% end %>

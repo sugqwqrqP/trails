@@ -4,20 +4,20 @@ class RunsController < ApplicationController
     # ==========
     # 0) パラメータ取得（フォーム側のnameに合わせて変えてOK）
     # ==========
-    from_station_id = params[:from_station_id].presence
-    to_station_id   = params[:to_station_id].presence
+    departure_station_id = params[:departure_station_id].presence
+    arrival_station_id   = params[:arrival_station_id].presence
     run_on_str      = params[:run_on].presence # "2025-12-20" みたいな想定
     time_str        = params[:time].presence   # "10:30" みたいな想定
     time_basis      = params[:time_basis].presence # "departure" or "arrival"
 
     # 入力が揃ってないなら全便表示（とりあえず落とさない）
-    unless from_station_id && to_station_id && run_on_str
+    unless departure_station_id && arrival_station_id && run_on_str
       @runs = Run.all
       return
     end
 
-    from_station = Station.find(from_station_id)
-    to_station   = Station.find(to_station_id)
+    departure_station = Station.find(departure_station_id)
+    arrival_station   = Station.find(arrival_station_id)
     run_on       = Date.parse(run_on_str)
 
     # ==========
@@ -25,7 +25,7 @@ class RunsController < ApplicationController
     #   - seeds: 東京→新大阪は is_up=false, 新大阪→東京は is_up=true
     #   - station_order が大きい方から小さい方へ向かう = 上り = is_up=true
     # ==========
-    desired_is_up = (from_station.station_order > to_station.station_order)
+    desired_is_up = (departure_station.station_order > arrival_station.station_order)
 
     # ==========
     # 2) run_on と is_up でまず絞る
@@ -40,7 +40,10 @@ class RunsController < ApplicationController
     # ==========
     runs = runs.select do |run|
       begin
-        run.run_type.required_travel_time(from_station: from_station, to_station: to_station) > 0
+        run.run_type.required_travel_time(
+          from_station: departure_station,
+          to_station: arrival_station
+        )
       rescue ActiveRecord::RecordNotFound
         false
       end
@@ -60,18 +63,18 @@ class RunsController < ApplicationController
       # 始発駅→乗車駅 のオフセット（分）
       dep_offset_min = run.run_type.required_travel_time(
         from_station: first_station,
-        to_station: from_station
+        to_station: departure_station
       )
 
       # 始発駅→降車駅 のオフセット（分）
       arr_offset_min = run.run_type.required_travel_time(
         from_station: first_station,
-        to_station: to_station
+        to_station: arrival_station
       )
 
       travel_min = run.run_type.required_travel_time(
-        from_station: from_station,
-        to_station: to_station
+        from_station: departure_station,
+        to_station: arrival_station
       )
 
       first_time = Time.zone.parse("#{run.run_on} #{run.first_station_departure_time.strftime('%H:%M')}")

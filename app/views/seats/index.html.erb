@@ -1,5 +1,7 @@
 <h1>座席選択</h1>
 
+  <pre><%= params.inspect %></pre>
+
 <p>
   <strong><%= @run.name %></strong><br>
   <%= @car.number %>号車（<%= @car.car_type.name %>）
@@ -68,6 +70,8 @@
   <input type="hidden" name="seat_ids" id="selected-seats">
   <input type="hidden" name="run_id" value="<%= @run.id %>">
   <input type="hidden" name="car_id" value="<%= @car.id %>">
+  <input type="hidden" name="departure_station_id" value="<%= params[:departure_station_id] %>">
+  <input type="hidden" name="arrival_station_id"   value="<%= params[:arrival_station_id] %>">
 
   <button id="confirm-btn" style="display:none;">
     予約確認へ

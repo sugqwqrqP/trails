@@ -1,5 +1,7 @@
 <h1>予約確認</h1>
 
+  <pre><%= params.inspect %></pre>
+
 <p>
   <strong><%= @run.name %></strong><br>
   <%= @car.number %>号車（<%= @car.car_type.name %>）<br>
@@ -7,12 +9,17 @@
   <%= @seats.map { |s| "#{s.row}#{s.column}" }.join(", ") %>
 </p>
 
+
 <%= form_with url: reservations_path, method: :post, local: true do %>
   <%= hidden_field_tag :run_id, @run.id %>
   <%= hidden_field_tag :car_id, @car.id %>
+  <%= hidden_field_tag :departure_station_id, params[:departure_station_id] %>
+  <%= hidden_field_tag :arrival_station_id, params[:arrival_station_id] %>
+
 
   <% @seats.each do |seat| %>
     <%= hidden_field_tag "seat_ids[]", seat.id %>
+    
   <% end %>
 
   <%= submit_tag "確定する（仮）" %>

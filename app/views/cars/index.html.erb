@@ -1,5 +1,7 @@
 <h1>号車選択</h1>
 
+  <pre><%= params.inspect %></pre>
+
 <p>
   <strong><%= @run.name %></strong>
 </p>
@@ -8,7 +10,12 @@
   <% @cars.each do |car| %>
     <li>
       <%= link_to "#{car.number}号車（#{car.car_type.name}）",
-          run_car_seats_path(@run, car_id: car.id) %>
+          run_car_seats_path(
+            @run,
+            car_id: car.id,
+            departure_station_id: params[:departure_station_id],
+            arrival_station_id:   params[:arrival_station_id]
+          ) %>
     </li>
   <% end %>
 </ul>
