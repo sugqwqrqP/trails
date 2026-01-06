@@ -54,51 +54,14 @@ class RunsController < ApplicationController
     #   - first_station_departure_time は「始発駅の時刻」
     #   - 始発駅は is_up により東京/新大阪で決定
     # ==========
-    tokyo      = Station.find_by!(station_name: "東京")
-    shin_osaka = Station.find_by!(station_name: "新大阪")
 
     results = runs.map do |run|
-      first_station = run.is_up ? shin_osaka : tokyo
-
-      # 始発駅→乗車駅 のオフセット（分）
-      dep_offset_min = run.run_type.required_travel_time(
-        from_station: first_station,
-        to_station: departure_station
-      )
-
-      # 始発駅→降車駅 のオフセット（分）
-      arr_offset_min = run.run_type.required_travel_time(
-        from_station: first_station,
-        to_station: arrival_station
-      )
+      departure_time = run.departure_time_at(departure_station)
+      arrival_time   = run.arrival_time_at(arrival_station)
 
       travel_min = run.run_type.required_travel_time(
         from_station: departure_station,
         to_station: arrival_station
-      )
-
-      first_time = Time.zone.parse(
-        "#{run.run_on} #{run.first_station_departure_time.in_time_zone('UTC').strftime('%H:%M')}"
-      )
-      departure_time = first_time + dep_offset_min.minutes
-      arrival_time   = first_time + arr_offset_min.minutes
-
-      reserved_count = run.available_count(
-        car_type_name: "reserved",
-        departure_station: departure_station,
-        arrival_station: arrival_station
-      )
-
-      green_count = run.available_count(
-        car_type_name: "green",
-        departure_station: departure_station,
-        arrival_station: arrival_station
-      )
-
-      fabulous_count = run.available_count(
-        car_type_name: "fabulous",
-        departure_station: departure_station,
-        arrival_station: arrival_station
       )
 
       {
@@ -109,21 +72,54 @@ class RunsController < ApplicationController
 
         availability: {
           reserved: {
-            count: reserved_count,
-            mark: run.availability_mark("reserved", reserved_count)
+            count: run.available_count(
+              car_type_name: "reserved",
+              departure_station: departure_station,
+              arrival_station: arrival_station
+            ),
+            mark: run.availability_mark(
+              "reserved",
+              run.available_count(
+                car_type_name: "reserved",
+                departure_station: departure_station,
+                arrival_station: arrival_station
+              )
+            )
           },
           green: {
-            count: green_count,
-            mark: run.availability_mark("green", green_count)
+            count: run.available_count(
+              car_type_name: "green",
+              departure_station: departure_station,
+              arrival_station: arrival_station
+            ),
+            mark: run.availability_mark(
+              "green",
+              run.available_count(
+                car_type_name: "green",
+                departure_station: departure_station,
+                arrival_station: arrival_station
+              )
+            )
           },
           fabulous: {
-            count: fabulous_count,
-            mark: run.availability_mark("fabulous", fabulous_count)
+            count: run.available_count(
+              car_type_name: "fabulous",
+              departure_station: departure_station,
+              arrival_station: arrival_station
+            ),
+            mark: run.availability_mark(
+              "fabulous",
+              run.available_count(
+                car_type_name: "fabulous",
+                departure_station: departure_station,
+                arrival_station: arrival_station
+              )
+            )
           }
         }
       }
     end
-
+    
     # ==========
     # 5) 指定時刻に近い順にソート
     #   - time_basis が arrival なら arrival 基準

@@ -6,31 +6,32 @@ class Run < ApplicationRecord
   def display_name
     "#{run_type.name} #{run_number}号"
   end
-
+  
   def first_station
-    if is_up
-      Station.find_by!(station_name: "新大阪")
-    else
+    is_up ?
+      Station.find_by!(station_name: "新大阪") :
       Station.find_by!(station_name: "東京")
-    end
   end
 
-  def departure_time_at(station)
-    base_time = Time.zone.local(
+  # ★ その日の始発駅出発時刻を正しく作る
+  def first_departure_datetime
+    Time.zone.local(
       run_on.year,
       run_on.month,
       run_on.day,
       first_station_departure_time.hour,
       first_station_departure_time.min
     )
+  end
 
-    offset_minutes =
+  def departure_time_at(station)
+    offset =
       run_type.required_travel_time(
         from_station: first_station,
         to_station: station
       )
 
-    base_time + offset_minutes.minutes
+    first_departure_datetime + offset.minutes
   end
 
   def arrival_time_at(station)
