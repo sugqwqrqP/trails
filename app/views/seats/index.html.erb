@@ -15,19 +15,23 @@
 
   <% if @car.car_type.name == "fabulous" %>
 
+
     <!-- ファビュラスルーム -->
     <div class="fabulous">
       <% @seats.each do |seat| %>
+        <% unavailable = @unavailable_seat_ids.include?(seat.id) %>
         <button
           type="button"
-          class="seat fabulous-seat"
-          data-seat="<%= seat.id %>">
+          class="seat fabulous-seat <%= 'unavailable' if unavailable %>"
+          data-seat="<%= seat.id %>"
+          <%= 'disabled' if unavailable %>>
           ROOM <%= seat.row %>
         </button>
       <% end %>
     </div>
 
   <% else %>
+  
 
     <% rows = (1..8).to_a %>
     <% cols =
@@ -39,16 +43,19 @@
 
     <table class="seat-map">
       <% rows.each do |row| %>
+      
         <tr>
           <% cols.each do |col| %>
             <% seat = seat_map[[row, col]] %>
+            <% unavailable = @unavailable_seat_ids.include?(seat.id) %>
 
             <td>
               <% if seat %>
                 <button
                   type="button"
-                  class="seat"
-                  data-seat="<%= seat.id %>">
+                  class="seat <%= 'unavailable' if unavailable %>"
+                  data-seat="<%= seat.id %>"
+                  <%= 'disabled' if unavailable %>>
                   <%= row %><%= col %>
                 </button>
               <% end %>

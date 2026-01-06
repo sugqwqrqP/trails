@@ -38,3 +38,9 @@
 .fabulous-seat {
   width: 90px;
 }
+
+.seat.unavailable {
+  background: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
