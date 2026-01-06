@@ -10,16 +10,26 @@
   <% @cars.each do |car| %>
     <li>
       <%= link_to "#{car.number}号車（#{car.car_type.name}）",
-          run_car_seats_path(
-            @run,
-            car_id: car.id,
-            departure_station_id: params[:departure_station_id],
-            arrival_station_id:   params[:arrival_station_id]
-          ) %>
+        run_car_seats_path(
+          @run,
+          car_id: car.id,
+          departure_station_id: params[:departure_station_id],
+          arrival_station_id:   params[:arrival_station_id],
+          run_on:               params[:run_on],
+          time:                 params[:time],
+          time_basis:           params[:time_basis]
+        )
+      %>
     </li>
   <% end %>
 </ul>
 
-<p>
-  <%= link_to "検索結果に戻る", runs_path %>
-</p>
+<%= link_to "検索結果に戻る",
+  runs_path(
+    departure_station_id: params[:departure_station_id],
+    arrival_station_id:   params[:arrival_station_id],
+    run_on:               params[:run_on],
+    time:                 params[:time],
+    time_basis:           params[:time_basis]
+  )
+%>

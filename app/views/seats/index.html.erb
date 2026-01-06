@@ -79,12 +79,22 @@
   <input type="hidden" name="car_id" value="<%= @car.id %>">
   <input type="hidden" name="departure_station_id" value="<%= params[:departure_station_id] %>">
   <input type="hidden" name="arrival_station_id"   value="<%= params[:arrival_station_id] %>">
+  <input type="hidden" name="run_on"     value="<%= params[:run_on] %>">
+  <input type="hidden" name="time"       value="<%= params[:time] %>">
+  <input type="hidden" name="time_basis" value="<%= params[:time_basis] %>">
 
   <button id="confirm-btn" style="display:none;">
     予約確認へ
   </button>
 </form>
 
-<p>
-  <%= link_to "号車選択に戻る", run_cars_path(@run) %>
-</p>
+<%= link_to "号車選択に戻る",
+  run_cars_path(
+    @run,
+    departure_station_id: params[:departure_station_id],
+    arrival_station_id:   params[:arrival_station_id],
+    run_on:               params[:run_on],
+    time:                 params[:time],
+    time_basis:           params[:time_basis]
+  )
+%>

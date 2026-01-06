@@ -103,8 +103,12 @@
         run_cars_path(
           run,
           departure_station_id: params[:departure_station_id],
-          arrival_station_id:   params[:arrival_station_id]
-        ) %>
+          arrival_station_id:   params[:arrival_station_id],
+          run_on:               params[:run_on],
+          time:                 params[:time],
+          time_basis:           params[:time_basis]
+        )
+      %>
     </div>
   </div>
 <% end %>
