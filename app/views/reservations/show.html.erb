@@ -1,0 +1,22 @@
+<h1>予約詳細</h1>
+
+<p>
+  <strong><%= @reservation.run.name %></strong><br>
+  <%= @reservation.departure_station.station_name %> →
+  <%= @reservation.arrival_station.station_name %>
+</p>
+
+<p>
+  発券状況:
+  <%= @reservation.is_issued? ? "発券済み" : "未発券" %>
+</p>
+
+<% unless @reservation.is_issued? %>
+  <%= button_to "予約を削除",
+    user_reservation_path(@user, @reservation),
+    method: :delete,
+    data: { confirm: "本当に削除しますか？" }
+  %>
+<% end %>
+
+<%= link_to "マイページに戻る", user_path(@user) %>
