@@ -151,6 +151,11 @@ class Staff::RunsController < Staff::BaseController
 
   def show
     @run = Run.find(params[:id])
+
+
+    @departure_station = Station.find(params[:departure_station_id])
+    @arrival_station   = Station.find(params[:arrival_station_id])
+    
     @reservations = @run.reservations
                         .includes(:seats, :departure_station, :arrival_station)
                         .order(created_at: :desc)

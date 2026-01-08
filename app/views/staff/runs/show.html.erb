@@ -6,6 +6,14 @@
 
 <h2>予約一覧</h2>
 
+<%= link_to "この便で予約を作成",
+  run_cars_path(
+    @run,
+    departure_station_id: @departure_station.id,
+    arrival_station_id:   @arrival_station.id
+  )
+%>
+
 <table>
   <tr>
     <th>ID</th>
