@@ -1,0 +1,21 @@
+<h1>利用者一覧</h1>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>ログインID</th>
+    <th>氏名</th>
+    <th>操作</th>
+  </tr>
+
+  <% @users.each do |user| %>
+    <tr>
+      <td><%= user.id %></td>
+      <td><%= user.login_id %></td>
+      <td><%= user.user_fullname %></td>
+      <td>
+        <%= link_to "詳細", staff_user_path(user) %>
+      </td>
+    </tr>
+  <% end %>
+</table>

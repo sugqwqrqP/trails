@@ -1,0 +1,51 @@
+<h1>利用者詳細</h1>
+
+<p>ID：<%= @user.id %></p>
+<p>氏名：<%= @user.user_fullname %></p>
+
+<hr>
+
+<h2>予約一覧</h2>
+
+<table>
+  <tr>
+    <th>予約ID</th>
+    <th>便名</th>
+    <th>運行日</th>
+    <th>区間</th>
+    <th>人数</th>
+    <th>発券</th>
+    <th>操作</th>
+  </tr>
+
+  <% @reservations.each do |r| %>
+    <tr>
+      <td><%= r.id %></td>
+
+      <td>
+        <%= r.run.display_name %>
+      </td>
+
+      <td>
+        <%= r.run.run_on %>
+      </td>
+
+      <td>
+        <%= r.departure_station.station_name %> →
+        <%= r.arrival_station.station_name %>
+      </td>
+
+      <td>
+        <%= r.seats.size %>名
+      </td>
+
+      <td>
+        <%= r.is_issued? ? "済" : "未" %>
+      </td>
+
+      <td>
+        <%= link_to "詳細", staff_reservation_path(r) %>
+      </td>
+    </tr>
+  <% end %>
+</table>
