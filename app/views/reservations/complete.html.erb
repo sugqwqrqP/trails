@@ -36,5 +36,9 @@
 <hr>
 
 <p>
-  <%= link_to "トップに戻る", root_path %>
+  <% if current_user.staff? %>
+    <%= link_to "駅員トップに戻る", staff_root_path %>
+  <% else %>
+    <%= link_to "トップに戻る", root_path %>
+  <% end %>
 </p>
