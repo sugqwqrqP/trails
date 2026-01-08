@@ -11,13 +11,26 @@ class Staff::ReservationsController < Staff::BaseController
 
     if reservation.is_issued?
       redirect_to staff_reservation_path(reservation),
-        alert: "すでに発券済みです"
+                  alert: "すでに発券済みです"
       return
     end
 
     reservation.update!(is_issued: true)
 
     redirect_to staff_reservation_path(reservation),
-      notice: "発券しました"
+                notice: "発券しました"
+  end
+
+  def destroy
+    reservation = Reservation.find(params[:id])
+
+    if reservation.is_issued?
+      redirect_to staff_reservation_path(reservation),
+                  alert: "発券済みの予約は削除できません"
+    else
+      reservation.destroy
+      redirect_to staff_root_path,
+                  notice: "予約を削除しました"
+    end
   end
 end

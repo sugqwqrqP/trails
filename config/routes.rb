@@ -57,7 +57,7 @@ Rails.application.routes.draw do
     end
 
     #予約単体のネスト
-    resources :reservations, only: [:index, :show, :create] do
+    resources :reservations, only: [:index, :show, :create,:destroy] do
       get :confirm,  on: :collection
       get :complete, on: :collection
       patch :issue, on: :member
