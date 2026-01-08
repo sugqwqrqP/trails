@@ -81,6 +81,18 @@
   <input type="hidden" name="time"       value="<%= params[:time] %>">
   <input type="hidden" name="time_basis" value="<%= params[:time_basis] %>">
 
+  <% if current_user.staff? %>
+    <div class="holder-name">
+      <label>予約者名義</label><br>
+      <input type="text" name="holder_name" required>
+    </div>
+  <% else %>
+    <input
+      type="hidden"
+      name="holder_name"
+      value="<%= current_user.user_fullname %>">
+  <% end %>
+
   <button id="confirm-btn" style="display:none;">
     予約確認へ
   </button>

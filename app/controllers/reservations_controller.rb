@@ -21,6 +21,8 @@ class ReservationsController < ApplicationController
     @departure_time = @run.departure_time_at(@departure_station)
     @arrival_time   = @run.arrival_time_at(@arrival_station)
 
+    @holder_name = params[:holder_name]
+
     # 料金計算
     @fee_per_seat = @run.fee_per_seat(
       departure_station: @departure_station,
@@ -30,7 +32,7 @@ class ReservationsController < ApplicationController
 
     @total_fee = @fee_per_seat * @seats.size
   end
-  
+
   def create
   run = Run.find(params[:run_id])
   departure_station = Station.find(params[:departure_station_id])
@@ -66,12 +68,20 @@ class ReservationsController < ApplicationController
   end
   # ===================================
 
+  # 利用者か駅員かで分ける
+  holder_name =
+    if current_user.staff?
+      params[:holder_name]
+    else
+      current_user.user_fullname
+    end
+
   @reservation = Reservation.create!(
     user: current_user,
     run: run,
     departure_station: departure_station,
     arrival_station: arrival_station,
-    holder_name: current_user.user_fullname
+    holder_name: holder_name
   )
 
   seats.each do |seat|

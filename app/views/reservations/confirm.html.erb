@@ -21,6 +21,11 @@
 <hr>
 
 <p>
+  予約者名義：
+  <strong><%= @holder_name %></strong>
+</p>
+
+<p>
   1席あたり料金：
   <strong><%= number_to_currency(@fee_per_seat, unit: "¥", precision: 0) %></strong>
 </p>
@@ -41,6 +46,7 @@
   <%= hidden_field_tag :car_id, @car.id %>
   <%= hidden_field_tag :departure_station_id, @departure_station.id %>
   <%= hidden_field_tag :arrival_station_id, @arrival_station.id %>
+  <%= hidden_field_tag :holder_name, @holder_name %>
 
   <% @seats.each do |seat| %>
     <%= hidden_field_tag "seat_ids[]", seat.id %>
