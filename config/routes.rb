@@ -60,6 +60,7 @@ Rails.application.routes.draw do
     resources :reservations, only: [:index, :show, :create] do
       get :confirm,  on: :collection
       get :complete, on: :collection
+      patch :issue, on: :member
     end
   end
 

@@ -1,0 +1,152 @@
+<h1>staff/Runs#index</h1>
+
+<div class="banner">
+</div>
+
+<!-- デフォルト値の設定 -->
+
+<% default_departure =
+    params[:departure_station_id] ||
+    Station.find_by(station_name: "東京")&.id %>
+
+<% default_arrival =
+    params[:arrival_station_id] ||
+    Station.find_by(station_name: "新大阪")&.id %>
+
+<% default_run_on = params[:run_on] || Date.current %>
+<% default_time   = params[:time]   || Time.current.strftime("%H:%M") %>
+
+<!-- 検索フォーム -->
+
+<%= form_with url: staff_runs_path, method: :get, local: true do |f| %>
+
+  <!-- 乗車駅 -->
+  <div>
+    <%= f.label :departure_station_id, "乗車駅" %>
+    <%= f.collection_select :departure_station_id,
+          Station.order(:station_order),
+          :id,
+          :station_name,
+          prompt: "選択してください",
+          selected: default_departure %>
+  </div>
+
+  <!-- 降車駅 -->
+  <div>
+    <%= f.label :arrival_station_id, "降車駅" %>
+    <%= f.collection_select :arrival_station_id,
+          Station.order(:station_order),
+          :id,
+          :station_name,
+          prompt: "選択してください",
+          selected: default_arrival %>
+  </div>
+
+  <button type="button" id="swap-stations">
+    発着を入れ替え
+  </button>
+
+  <!-- 日付 -->
+  <div>
+    <%= f.label :run_on, "日付" %>
+    <%= f.date_field :run_on, value: default_run_on %>
+  </div>
+
+  <!-- 時刻 -->
+  <div>
+    <%= f.label :time, "時間" %>
+    <%= f.time_field :time, value: default_time %>
+  </div>
+
+  <!-- 時刻基準 -->
+  <div>
+    <%= f.label :time_basis, "基準" %>
+    <%= f.select :time_basis,
+          [["出発時間", "departure"], ["到着時間", "arrival"]],
+          selected: params[:time_basis] %>
+  </div>
+
+  <%= f.submit "検索" %>
+
+<% end %>
+
+<% @results.each do |result| %>
+  <% run = result[:run] %>
+
+  <div style="margin-bottom: 12px; padding: 8px; border: 1px solid #ddd;">
+    <div>
+      <strong><%= run.display_name %></strong>
+      （
+        <%= run.run_on %>
+        <%= result[:departure_time].strftime("%H:%M") %>
+        →
+        <%= result[:arrival_time].strftime("%H:%M") %>
+        ／ 所要 <%= result[:travel_min] %>分
+      ）
+    </div>
+
+    <% availability = result[:availability] %>
+
+    <div>
+      指定席:
+      <strong><%= availability[:reserved][:mark] %></strong>
+      　
+      グリーン:
+      <strong><%= availability[:green][:mark] %></strong>
+      　
+      ファビュラス:
+      <strong><%= availability[:fabulous][:mark] %></strong>
+    </div>
+
+    <% seat_types = {
+      reserved:  "指定席",
+      green:     "グリーン車",
+      fabulous:  "ファビュラスルーム"
+    } %>
+
+    <% seat_types.each do |key, label| %>
+      <% car_type = CarType.find_by!(name: key.to_s) %>
+
+      <div>
+        <%= label %>：
+        <%= number_to_currency(
+          run.fee_per_seat(
+            departure_station: @departure_station,
+            arrival_station:   @arrival_station,
+            car_type:          car_type
+          ),
+          unit: "¥",
+          precision: 0
+        ) %>
+      </div>
+    <% end %>
+
+    <div>
+      <%= link_to "便詳細（駅員）",
+        staff_run_path(run,
+          departure_station_id: params[:departure_station_id],
+          arrival_station_id:   params[:arrival_station_id]
+        )
+      %>
+    </div>
+  </div>
+<% end %>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const swapBtn = document.getElementById("swap-stations");
+    if (!swapBtn) return;
+
+    swapBtn.addEventListener("click", () => {
+      const dep = document.querySelector("[name='departure_station_id']");
+      const arr = document.querySelector("[name='arrival_station_id']");
+
+      if (!dep || !arr) return;
+
+      const tmp = dep.value;
+      dep.value = arr.value;
+      arr.value = tmp;
+    });
+  });
+</script>
