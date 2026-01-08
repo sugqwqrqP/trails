@@ -1,6 +1,10 @@
 <header>
   <div>
-    <%= link_to "新幹線予約", root_path %>
+    <% if logged_in? && current_user.staff? %>
+      <%= link_to "新幹線予約", staff_root_path %>
+    <% else %>
+      <%= link_to "新幹線予約", root_path %>
+    <% end %>
   </div>
 
 <nav>
