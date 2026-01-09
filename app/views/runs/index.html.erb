@@ -1,6 +1,11 @@
 <h1>Runs#index</h1>
 
 <div class="banner">
+  <% if @search_error.present? %>
+    <div class="alert">
+      <%= @search_error %>
+    </div>
+  <% end %>
 </div>
 
 <!-- デフォルト値の設定 -->

@@ -8,6 +8,7 @@ class SeatsController < ApplicationController
     @arrival_station   = Station.find(params[:arrival_station_id])
 
     @seats = @car.seats.order(:row, :column)
+    @seat_error = params[:seat_error]
 
     @unavailable_seat_ids =
       @seats.reject { |seat|

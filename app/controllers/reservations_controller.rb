@@ -55,8 +55,9 @@ class ReservationsController < ApplicationController
         run,
         car_id: seats.first.car_id,
         departure_station_id: params[:departure_station_id],
-        arrival_station_id: params[:arrival_station_id]
-      ), alert: "申し訳ありません。選択した席は既に予約されています。"
+        arrival_station_id: params[:arrival_station_id],
+        seat_error: "申し訳ありません。選択した席は既に予約されています。再度選択してください。"
+      )
       return
     end
 
