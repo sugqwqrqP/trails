@@ -29,6 +29,6 @@ class LoginsController < ApplicationController
 
   def destroy
     reset_session #session.delete(:user_id)よりもこちらが定石らしい
-    redirect_to root_path
+    redirect_to root_path, notice: "ログアウトしました"
   end
 end
