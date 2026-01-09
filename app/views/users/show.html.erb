@@ -4,6 +4,10 @@
   ログインID: <%= @user.login_id %>
 </p>
 
+<p>
+  <%= link_to "会員情報を変更する", edit_user_path(@user) %>
+</p>
+
 <h2>予約一覧</h2>
 
 <% seat_type_label = {

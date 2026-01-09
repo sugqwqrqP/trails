@@ -1,2 +1,37 @@
-<h1>Users#edit</h1>
-<p>Find me in app/views/users/edit.html.erb</p>
+<h1>会員情報変更</h1>
+
+<%= form_with model: @user, local: true do |f| %>
+
+  <div>
+    <%= f.label :login_id, "ログインID" %><br>
+    <%= f.text_field :login_id, disabled: true %>
+  </div>
+
+  <div>
+    <%= f.label :user_fullname, "氏名" %><br>
+    <%= f.text_field :user_fullname %>
+    <% @user.errors.full_messages_for(:user_fullname).each do |msg| %>
+      <div class="field-error"><%= msg %></div>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.label :password, "新しいパスワード" %><br>
+    <%= f.password_field :password %>
+    <% @user.errors.full_messages_for(:password).each do |msg| %>
+      <div class="field-error"><%= msg %></div>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.label :password_confirmation, "パスワード（確認）" %><br>
+    <%= f.password_field :password_confirmation %>
+  </div>
+
+  <%= f.submit "更新する" %>
+
+<% end %>
+
+<p>
+  <%= link_to "マイページに戻る", user_path(@user) %>
+</p>
