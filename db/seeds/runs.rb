@@ -47,7 +47,7 @@ base_numbers = {
   "こだま" => 701
 }
 
-days = 10  # 1週間 + 予備3日
+days = 2  # 1週間 + 予備3日
 (0...days).each do |day_offset|
   run_on = Date.today + day_offset
 
