@@ -84,7 +84,11 @@
   <% if current_user.staff? %>
     <div class="holder-name">
       <label>予約者名義</label><br>
-      <input type="text" name="holder_name" required>
+      <input
+        type="text"
+        name="holder_name"
+        maxlength="20"
+        required>
     </div>
   <% else %>
     <input

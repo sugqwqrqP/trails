@@ -6,4 +6,12 @@ class Reservation < ApplicationRecord
   belongs_to :run
   belongs_to :departure_station, class_name: "Station"
   belongs_to :arrival_station,   class_name: "Station"
+
+  validates :holder_name,
+    presence: { message: "予約者名義を入力してください" },
+    length: {
+      maximum: 20,
+      message: "予約者名義は20文字以内で入力してください"
+    }
+
 end

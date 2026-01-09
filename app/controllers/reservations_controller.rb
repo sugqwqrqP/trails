@@ -34,67 +34,80 @@ class ReservationsController < ApplicationController
   end
 
   def create
-  run = Run.find(params[:run_id])
-  departure_station = Station.find(params[:departure_station_id])
-  arrival_station   = Station.find(params[:arrival_station_id])
+    run = Run.find(params[:run_id])
+    departure_station = Station.find(params[:departure_station_id])
+    arrival_station   = Station.find(params[:arrival_station_id])
 
-  seat_ids =
-    case params[:seat_ids]
-    when String
-      params[:seat_ids].split(",")
-    else
-      params[:seat_ids]
+    seat_ids = Array(params[:seat_ids])
+    seats = Seat.where(id: seat_ids)
+
+    # 空席チェック
+    unavailable_seats = seats.reject do |seat|
+      seat.available_for?(
+        run: run,
+        departure_station: departure_station,
+        arrival_station: arrival_station
+      )
     end
 
-  seats = Seat.where(id: seat_ids)
+    if unavailable_seats.any?
+      redirect_to run_car_seats_path(
+        run,
+        car_id: seats.first.car_id,
+        departure_station_id: params[:departure_station_id],
+        arrival_station_id: params[:arrival_station_id]
+      ), alert: "申し訳ありません。選択した席は既に予約されています。"
+      return
+    end
 
-  # ===== 空席再チェック =====
-  unavailable_seats = seats.reject do |seat|
-    seat.available_for?(
+    holder_name =
+      if current_user.staff?
+        params[:holder_name]
+      else
+        current_user.user_fullname
+      end
+
+    @reservation = Reservation.new(
+      user: current_user,
       run: run,
       departure_station: departure_station,
-      arrival_station: arrival_station
+      arrival_station: arrival_station,
+      holder_name: holder_name
     )
-  end
 
-  if unavailable_seats.any?
-    redirect_to run_car_seats_path(
-      run,
-      car_id: seats.first.car_id,
-      departure_station_id: params[:departure_station_id],
-      arrival_station_id: params[:arrival_station_id]
-    ), alert: "申し訳ありません。選択された席は既に予約されています。"
-    return
-  end
-  # ===================================
+    unless @reservation.save
+      # confirm で使う変数を必ず再セット
+      @run = run
+      @departure_station = departure_station
+      @arrival_station = arrival_station
+      @seats = seats
+      @car = seats.first.car
+      @holder_name = holder_name
+      @departure_time = run.departure_time_at(departure_station)
+      @arrival_time   = run.arrival_time_at(arrival_station)
+      @fee_per_seat = run.fee_per_seat(
+        departure_station: departure_station,
+        arrival_station: arrival_station,
+        car_type: @car.car_type
+      )
+      @total_fee = @fee_per_seat * seats.size
 
-  # 利用者か駅員かで分ける
-  holder_name =
-    if current_user.staff?
-      params[:holder_name]
-    else
-      current_user.user_fullname
+      flash.now[:alert] = @reservation.errors.full_messages.join(" / ")
+      render :confirm
+      return
     end
 
-  @reservation = Reservation.create!(
-    user: current_user,
-    run: run,
-    departure_station: departure_station,
-    arrival_station: arrival_station,
-    holder_name: holder_name
-  )
+    seats.each do |seat|
+      ReservationSeat.create!(
+        reservation: @reservation,
+        seat: seat
+      )
+    end
 
-  seats.each do |seat|
-    ReservationSeat.create!(
-      reservation: @reservation,
-      seat: seat
+    redirect_to complete_reservations_path(
+      reservation_id: @reservation.id
     )
   end
-
-  redirect_to complete_reservations_path(
-    reservation_id: @reservation.id
-  )
-end
 
   def complete
     @reservation = Reservation
