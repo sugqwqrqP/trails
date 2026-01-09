@@ -289,3 +289,48 @@ body {
     flex-wrap: wrap;
   }
 }
+
+
+.pager {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.pager-btn {
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  background: #ff9800;   /* オレンジ */
+  color: #fff;
+}
+
+/* 次だけある時は右寄せ */
+.pager:has(.next):not(:has(.prev)) {
+  justify-content: flex-end;
+}
+
+/* 前だけある時は左寄せ（ほぼ無いけど） */
+.pager:has(.prev):not(:has(.next)) {
+  justify-content: flex-start;
+}
+
+.pager-btn {
+  background: #fff3e0;
+  color: #ef6c00;
+  border: 1px solid #ffd8a8;
+}
+
+.pager-btn:hover {
+  background: #ffe0b2;
+}
+
+.pager-btn.prev {
+  justify-content: flex-start;
+}
+
+.pager-btn.next {
+  justify-content: flex-end;
+}

@@ -97,52 +97,24 @@
 
   <% end %>
 </div>
-
-<!-- 検索結果 -->
 <div class="results">
-  <% @results.each do |result| %>
-    <% run = result[:run] %>
-    <% availability = result[:availability] %>
+  <%= render partial: "run_cards", locals: { results: @results } %>
+</div>
 
-    <div class="run-card">
-      <div class="run-header">
-        <div class="run-name"><%= run.display_name %></div>
-        <div class="run-time">
-          <%= result[:departure_time].strftime("%H:%M") %>
-          →
-          <%= result[:arrival_time].strftime("%H:%M") %>
-          ／ 所要 <%= result[:travel_min] %>分
-        </div>
-      </div>
+<div class="pager">
+  <% if @has_prev %>
+    <%= link_to "← 前に戻る",
+      runs_path(params.permit!.merge(offset: @prev_offset)),
+      class: "pager-btn prev" %>
+  <% end %>
 
-      <!-- 席種ボタン -->
-      <div class="seat-type-buttons">
-        <% [:reserved, :green, :fabulous].each do |seat_type| %>
-          <%= link_to run_cars_path(
-                run,
-                seat_type: seat_type,
-                departure_station_id: params[:departure_station_id],
-                arrival_station_id:   params[:arrival_station_id],
-                run_on:               params[:run_on],
-                time:                 params[:time],
-                time_basis:           params[:time_basis]
-              ),
-              class: "seat-type-btn #{seat_type}" do %>
-
-            <span class="label">
-              <%= seat_type == :reserved ? "指定席" :
-                  seat_type == :green    ? "グリーン" :
-                                           "ファビュラス" %>
-            </span>
-            <span class="mark"><%= availability[seat_type][:mark] %></span>
-
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-
+  <% if @has_next %>
+    <%= link_to "次を検索 →",
+      runs_path(params.permit!.merge(offset: @next_offset)),
+      class: "pager-btn next" %>
   <% end %>
 </div>
+
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {

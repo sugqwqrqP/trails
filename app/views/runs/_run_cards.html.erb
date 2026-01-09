@@ -1,0 +1,26 @@
+<% results.each do |result| %>
+  <% run = result[:run] %>
+  <% availability = result[:availability] %>
+
+  <div class="run-card">
+    <div class="run-header">
+      <div class="run-name"><%= run.display_name %></div>
+      <div class="run-time">
+        <%= result[:departure_time].strftime("%H:%M") %>
+        →
+        <%= result[:arrival_time].strftime("%H:%M") %>
+        ／ 所要 <%= result[:travel_min] %>分
+      </div>
+    </div>
+
+    <div class="seat-type-buttons">
+      <% [:reserved, :green, :fabulous].each do |seat_type| %>
+        <span class="seat-type-btn <%= seat_type %>">
+          <%= seat_type == :reserved ? "指定席" :
+              seat_type == :green ? "グリーン" : "ファビュラス" %>
+          <%= availability[seat_type][:mark] %>
+        </span>
+      <% end %>
+    </div>
+  </div>
+<% end %>
