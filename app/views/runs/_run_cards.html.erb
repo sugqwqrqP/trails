@@ -1,26 +1,55 @@
 <% results.each do |result| %>
   <% run = result[:run] %>
-  <% availability = result[:availability] %>
 
   <div class="run-card">
-    <div class="run-header">
-      <div class="run-name"><%= run.display_name %></div>
-      <div class="run-time">
-        <%= result[:departure_time].strftime("%H:%M") %>
-        →
-        <%= result[:arrival_time].strftime("%H:%M") %>
-        ／ 所要 <%= result[:travel_min] %>分
-      </div>
-    </div>
+    <div class="run-main">
 
-    <div class="seat-type-buttons">
-      <% [:reserved, :green, :fabulous].each do |seat_type| %>
-        <span class="seat-type-btn <%= seat_type %>">
-          <%= seat_type == :reserved ? "指定席" :
-              seat_type == :green ? "グリーン" : "ファビュラス" %>
-          <%= availability[seat_type][:mark] %>
-        </span>
-      <% end %>
+      <!-- 左：列車情報 -->
+      <div class="run-info">
+        <div class="run-name">
+          <%= run.run_type.name %> <%= run.run_number %>号
+        </div>
+
+        <div class="run-time-big">
+          <%= result[:departure_time].strftime("%H:%M") %>
+          <span class="arrow">→</span>
+          <%= result[:arrival_time].strftime("%H:%M") %>
+        </div>
+
+        <div class="run-sub">
+          所要 <%= result[:travel_min] %>分
+        </div>
+      </div>
+
+      <!-- 右：空席案内（横並び） -->
+      <div class="seat-status">
+        <%= link_to run_cars_path(
+              run,
+              request.query_parameters.merge(seat_type: "reserved")
+            ),
+            class: "seat-type-btn reserved" do %>
+          <span class="seat-label">指定席</span>
+          <span class="seat-mark"><%= result[:availability][:reserved][:mark] %></span>
+        <% end %>
+
+        <%= link_to run_cars_path(
+              run,
+              request.query_parameters.merge(seat_type: "green")
+            ),
+            class: "seat-type-btn green" do %>
+          <span class="seat-label">グリーン</span>
+          <span class="seat-mark"><%= result[:availability][:green][:mark] %></span>
+        <% end %>
+
+        <%= link_to run_cars_path(
+              run,
+              request.query_parameters.merge(seat_type: "fabulous")
+            ),
+            class: "seat-type-btn fabulous" do %>
+          <span class="seat-label">ファビュラス</span>
+          <span class="seat-mark"><%= result[:availability][:fabulous][:mark] %></span>
+        <% end %>
+      </div>
     </div>
   </div>
 <% end %>

@@ -23,11 +23,5 @@
 </ul>
 
 <%= link_to "検索結果に戻る",
-  runs_path(
-    departure_station_id: params[:departure_station_id],
-    arrival_station_id:   params[:arrival_station_id],
-    run_on:               params[:run_on],
-    time:                 params[:time],
-    time_basis:           params[:time_basis]
-  )
+  runs_path(request.query_parameters)
 %>

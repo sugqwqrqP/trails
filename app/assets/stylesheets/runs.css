@@ -231,47 +231,158 @@ body {
 }
 
 /* =========================
-   席種ボタン
+   席種選択ボタン（再設計）
 ========================= */
 
 .seat-type-buttons {
   display: flex;
-  gap: 10px;
-  margin-top: 8px;
+  gap: 12px;
 }
 
 .seat-type-btn {
+  width: 120px;
+  height: 110px;
+
   display: flex;
+  flex-direction: column;
+  justify-content: center;   /* ← ここ重要 */
   align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border-radius: 14px;
-  font-weight: 600;
+  gap: 15px;                 /* ← 文字と記号の距離はこれで制御 */
+
+  padding: 12px 8px;
+  border-radius: 20px;
+  border: none;
+
+  font-family: inherit;
   text-decoration: none;
-  font-size: 14px;
-  border: 1px solid transparent;
+  cursor: pointer;
 }
 
-/* 指定席 */
+/* 上：席種名 */
+.seat-label {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+}
+
+/* 下：空席記号 */
+.seat-mark {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* =========================
+   色バリエーション
+========================= */
+
 .seat-type-btn.reserved {
   background: #e8f0fe;
   color: #1a73e8;
 }
 
-/* グリーン車 */
 .seat-type-btn.green {
   background: #e6f4ea;
   color: #137333;
 }
 
-/* ファビュラス */
 .seat-type-btn.fabulous {
   background: #fce8f3;
   color: #a61b4d;
 }
 
+/* =========================
+   hover
+========================= */
+
 .seat-type-btn:hover {
   filter: brightness(0.96);
+}
+
+/* カード全体 */
+.run-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 左側 */
+.run-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.run-name {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.run-time-big {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.run-time-big .arrow {
+  margin: 0 4px;
+}
+
+.run-sub {
+  font-size: 13px;
+  color: #666;
+}
+
+/* 右側：空席横並び */
+.seat-status {
+  display: flex;
+  gap: 10px;
+}
+
+/* 各席種 */
+.seat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* ◎ を強調 */
+.seat span {
+  font-size: 18px;
+}
+
+/* 色 */
+.seat.reserved {
+  background: #e8f0fe;
+  color: #1a73e8;
+}
+
+.seat.green {
+  background: #e6f4ea;
+  color: #137333;
+}
+
+.seat.fabulous {
+  background: #fce8f3;
+  color: #a61b4d;
+}
+
+/* モバイル時は下に回す */
+@media (max-width: 480px) {
+  .run-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .seat-status {
+    align-self: flex-end;
+  }
 }
 
 /* =========================
@@ -289,7 +400,6 @@ body {
     flex-wrap: wrap;
   }
 }
-
 
 .pager {
   display: flex;
