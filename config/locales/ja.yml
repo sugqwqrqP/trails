@@ -1,0 +1,11 @@
+ja:
+  activerecord:
+    attributes:
+      user:
+        login_id: ログインID
+        user_fullname: 氏名
+        password: パスワード
+        password_confirmation: パスワード（確認）
+  errors:
+    messages:
+      blank: を入力してください

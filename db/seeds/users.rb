@@ -23,25 +23,25 @@ User.create!(
 )
 
 User.create!(
-  login_id: "seed_saburou",
-  user_fullname: "シード三郎",
-  password: "Seed3!",
-  password_confirmation: "Seed3!",
+  login_id: "senshu_1",
+  user_fullname: "専修太郎",
+  password: "Senshu1!",
+  password_confirmation: "Senshu1!",
   role: 0
 )
 
 User.create!(
-  login_id: "seed_saburou2",
-  user_fullname: "シード三郎",
-  password: "Seed3!",
-  password_confirmation: "Seed3!",
+  login_id: "senshu_2",
+  user_fullname: "専修太郎",
+  password: "Senshu2!",
+  password_confirmation: "Senshu2!",
   role: 0
 )
 
 User.create!(
-  login_id: "seed_saburou3",
-  user_fullname: "シード三郎",
-  password: "Seed3!",
-  password_confirmation: "Seed3!",
+  login_id: "senshu_3",
+  user_fullname: "専修太郎",
+  password: "Senshu3!",
+  password_confirmation: "Senshu3!",
   role: 0
 )

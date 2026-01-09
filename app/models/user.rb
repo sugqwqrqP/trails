@@ -1,30 +1,44 @@
 class User < ApplicationRecord
-  has_secure_password
+
 
   has_many :reservations, dependent: :destroy
-
   enum role: { user: 0, staff: 1, operator: 2 }
 
   # ログインID
-  validates :login_id, presence: true
   validates :login_id,
-    length: { in: 6..20 },
-    format: { with: /\A[a-zA-Z0-9_]+\z/ },
-    uniqueness: true,
-    unless: -> { login_id.blank? }
+    presence: { message: "を入力してください" }
+
+  validates :login_id,
+    length: {
+      in: 6..20,
+      message: "は6文字以上20文字以下で入力してください"
+    },
+    format: {
+      with: /\A[a-zA-Z0-9_]+\z/,
+      message: "は英数字とアンダースコアのみ使用できます"
+    },
+    uniqueness: { message: "はすでに使用されています" },
+    if: -> { login_id.present? }
 
   # 氏名
-  validates :user_fullname, presence: true
   validates :user_fullname,
-    length: { maximum: 20 },
-    unless: -> { user_fullname.blank? }
+    presence: { message: "を入力してください" },
+    length: {
+      maximum: 20,
+      message: "は20文字以内で入力してください"
+    }
 
   # パスワード
-  validates :password, presence: true
+  has_secure_password
+
   validates :password,
-    length: { in: 6..20 },
+    length: {
+      in: 6..20,
+      message: "は6文字以上20文字以下で入力してください"
+    },
     format: {
-      with: /\A(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@¥!$&]).+\z/
+      with: /\A(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@¥!$&]).+\z/,
+      message: "は大文字・小文字・数字・記号(@¥!$&)を含めてください"
     },
     unless: -> { password.blank? }
 end
