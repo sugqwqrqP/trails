@@ -1,19 +1,23 @@
 <h1>ログイン</h1>
 
-<% if flash[:alert] %>
-  <p class="alert"><%= flash[:alert] %></p>
-<% end %>
-
 <%= form_with url: login_path, method: :post, local: true do |f| %>
-  <div>
+
+  <% if flash[:alert] %>
+    <div class="form-error">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+
+  <div class="form-group <%= 'has-error' if flash[:alert] %>">
     <%= f.label :login_id, "ログインID" %>
-    <%= f.text_field :login_id %>
+    <%= f.text_field :login_id, class: "form-control" %>
   </div>
 
-  <div>
+  <div class="form-group <%= 'has-error' if flash[:alert] %>">
     <%= f.label :password, "パスワード" %>
-    <%= f.password_field :password %>
+    <%= f.password_field :password, class: "form-control" %>
   </div>
 
   <%= f.submit "ログイン" %>
+
 <% end %>
