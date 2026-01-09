@@ -33,7 +33,7 @@ Rails.application.routes.draw do
   # ＜運行管理者＞
 
   namespace :operator do
-    root "top#index"
+    root "runs#index"
     resources :runs, only: [:index, :show, :new, :create]
   end
 
