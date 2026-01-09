@@ -1,0 +1,25 @@
+<h1>運行管理者｜トップ</h1>
+
+<p>
+  <%= link_to "便を追加", new_operator_run_path %>
+</p>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>便名</th>
+    <th>運行日</th>
+    <th>操作</th>
+  </tr>
+
+  <% @runs.each do |run| %>
+    <tr>
+      <td><%= run.id %></td>
+      <td><%= run.display_name %></td>
+      <td><%= run.run_on %></td>
+      <td>
+        <%= link_to "詳細", operator_run_path(run) %>
+      </td>
+    </tr>
+  <% end %>
+</table>

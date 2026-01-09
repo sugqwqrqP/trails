@@ -1,31 +1,41 @@
 <header>
   <div>
-    <% if logged_in? && current_user.staff? %>
-      <%= link_to "新幹線予約", staff_root_path %>
+    <% if logged_in? %>
+      <% case current_user.role %>
+      <% when "staff" %>
+        <%= link_to "新幹線予約", staff_root_path %>
+      <% when "operator" %>
+        <%= link_to "新幹線予約", operator_root_path %>
+      <% else %>
+        <%= link_to "新幹線予約", root_path %>
+      <% end %>
     <% else %>
       <%= link_to "新幹線予約", root_path %>
     <% end %>
   </div>
 
-<nav>
-  <% if logged_in? %>
-    <% if current_user.staff? %>
-      <span>
-        <%= link_to "駅員トップ", staff_root_path %>
-      </span>
-      |
-      <%= link_to "ログアウト", login_path, method: :delete %>
+  <nav>
+    <% if logged_in? %>
+      <% case current_user.role %>
+      <% when "staff" %>
+        <span><%= link_to "駅員トップ", staff_root_path %></span>
+        |
+        <%= link_to "ログアウト", login_path, method: :delete %>
+
+      <% when "operator" %>
+        <span><%= link_to "運行管理者トップ", operator_root_path %></span>
+        |
+        <%= link_to "ログアウト", login_path, method: :delete %>
+
+      <% else %>
+        <span><%= link_to current_user.user_fullname, user_path(current_user) %></span>
+        |
+        <%= link_to "ログアウト", login_path, method: :delete %>
+      <% end %>
     <% else %>
-      <span>
-        <%= link_to current_user.user_fullname, user_path(current_user) %>
-      </span>
+      <%= link_to "ログイン", new_login_path %>
       |
-      <%= link_to "ログアウト", login_path, method: :delete %>
+      <%= link_to "新規登録", new_user_path %>
     <% end %>
-  <% else %>
-    <%= link_to "ログイン", new_login_path %>
-    |
-    <%= link_to "新規登録", new_user_path %>
-  <% end %>
-</nav>
+  </nav>
 </header>
