@@ -8,12 +8,17 @@ class LoginsController < ApplicationController
     if user&.authenticate(params[:password])
       session[:user_id] = user.id
 
-      if user.staff?
-        # 駅員は必ず staff 名前空間へ
+      case user.role
+      when "staff"
         session.delete(:return_to)
         redirect_to staff_root_path
+
+      when "operator"
+        session.delete(:return_to)
+        redirect_to operator_root_path
+
       else
-        # 一般利用者のみ return_to を使う
+        # 一般利用者のみ return_to を考える
         redirect_to session.delete(:return_to) || root_path
       end
     else

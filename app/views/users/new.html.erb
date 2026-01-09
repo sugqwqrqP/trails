@@ -1,18 +1,27 @@
 <h1>新規登録</h1>
 
-<form>
+<%= form_with model: @user, local: true do |f| %>
   <div>
-    <label>ユーザー名</label>
-    <input type="text">
+    <%= f.label :login_id, "ログインID" %><br>
+    <%= f.text_field :login_id %>
   </div>
 
   <div>
-    <label>パスワード</label>
-    <input type="password">
+    <%= f.label :user_fullname, "氏名" %><br>
+    <%= f.text_field :user_fullname %>
   </div>
 
-  <button>登録</button>
+  <div>
+    <%= f.label :password, "パスワード" %><br>
+    <%= f.password_field :password %>
+  </div>
 
+  <div>
+    <%= f.label :password_confirmation, "パスワード（確認）" %><br>
+    <%= f.password_field :password_confirmation %>
+  </div>
+
+  <%= f.submit "登録" %>
 
   <p><%= link_to "トップページに戻る", root_path %></p>
-</form>
+<% end %>

@@ -1,26 +1,21 @@
 class UsersController < ApplicationController
-  before_action :require_login
+  before_action :require_login, except: [:new, :create]
 
   def new
+    @user = User.new
   end
 
   def create
   end
 
-  def show
-    @user = User.find(params[:id])
-
-    unless @user == current_user
-      redirect_to root_path, alert: "権限がありません"
-      return
+  def create
+    @user = User.new(user_params)
+    if @user.save
+      session[:user_id] = @user.id
+      redirect_to root_path
+    else
+      render :new
     end
-
-    @reservations = @user.reservations.includes(
-      :run,
-      :departure_station,
-      :arrival_station,
-      reservation_seats: :seat
-    )
   end
 
   def edit
@@ -31,4 +26,16 @@ class UsersController < ApplicationController
 
   def destroy
   end
+
+  private
+
+  def user_params
+    params.require(:user).permit(
+      :login_id,
+      :user_fullname,
+      :password,
+      :password_confirmation
+    )
+  end
+
 end
