@@ -1,4 +1,4 @@
-<h1>Runs#index</h1>
+<h1>新幹線検索</h1>
 
 <div class="banner">
   <% if @search_error.present? %>
@@ -9,7 +9,6 @@
 </div>
 
 <!-- デフォルト値の設定 -->
-
 <% default_departure =
     params[:departure_station_id] ||
     Station.find_by(station_name: "東京")&.id %>
@@ -21,126 +20,129 @@
 <% default_run_on = params[:run_on] || Date.current %>
 <% default_time   = params[:time]   || Time.current.strftime("%H:%M") %>
 
-<!-- 検索フォーム -->
+<div class="search-panel">
+  <%= form_with url: runs_path, method: :get, local: true do |f| %>
 
-<%= form_with url: runs_path, method: :get, local: true do |f| %>
-
-  <!-- 乗車駅 -->
-  <div>
-    <%= f.label :departure_station_id, "乗車駅" %>
-    <%= f.collection_select :departure_station_id,
+    <!-- 出発 -->
+    <div class="location-row">
+      <div class="location-label depart">出発</div>
+      <div class="location-input">
+        <%= f.collection_select :departure_station_id,
           Station.order(:station_order),
           :id,
           :station_name,
-          prompt: "選択してください",
-          selected: default_departure %>
-  </div>
-
-  <!-- 降車駅 -->
-  <div>
-    <%= f.label :arrival_station_id, "降車駅" %>
-    <%= f.collection_select :arrival_station_id,
-          Station.order(:station_order),
-          :id,
-          :station_name,
-          prompt: "選択してください",
-          selected: default_arrival %>
-  </div>
-
-  <button type="button" id="swap-stations">
-    発着を入れ替え
-  </button>
-
-  <!-- 日付 -->
-  <div>
-    <%= f.label :run_on, "日付" %>
-    <%= f.date_field :run_on, value: default_run_on %>
-  </div>
-
-  <!-- 時刻 -->
-  <div>
-    <%= f.label :time, "時間" %>
-    <%= f.time_field :time, value: default_time %>
-  </div>
-
-  <!-- 時刻基準 -->
-  <div>
-    <%= f.label :time_basis, "基準" %>
-    <%= f.select :time_basis,
-          [["出発時間", "departure"], ["到着時間", "arrival"]],
-          selected: params[:time_basis] %>
-  </div>
-
-  <%= f.submit "検索" %>
-
-<% end %>
-
-<% @results.each do |result| %>
-  <% run = result[:run] %>
-
-  <div style="margin-bottom: 12px; padding: 8px; border: 1px solid #ddd;">
-    <div>
-      <strong><%= run.display_name %></strong>
-      （
-        <%= run.run_on %>
-        <%= result[:departure_time].strftime("%H:%M") %>
-        →
-        <%= result[:arrival_time].strftime("%H:%M") %>
-        ／ 所要 <%= result[:travel_min] %>分
-      ）
+          { selected: default_departure },
+          { class: "station-select" } %>
+      </div>
     </div>
 
+    <!-- 入れ替え -->
+    <div class="route-tools">
+      <div class="route-icons">
+        <button type="button" id="swap-stations" class="icon-btn">⇅</button>
+      </div>
+    </div>
+
+    <!-- 到着 -->
+    <div class="location-row">
+      <div class="location-label arrive">到着</div>
+      <div class="location-input">
+        <%= f.collection_select :arrival_station_id,
+          Station.order(:station_order),
+          :id,
+          :station_name,
+          { selected: default_arrival },
+          { class: "station-select" } %>
+      </div>
+    </div>
+
+    <div class="datetime-box">
+      <% default_run_on =
+          params[:run_on].present? ? Date.parse(params[:run_on]) : Date.current %>
+
+      <div class="datetime-click" id="date-display">
+        📅
+        <span id="date-text"><%= default_run_on.strftime("%Y/%m/%d") %></span>
+      </div>
+
+      <%= f.date_field :run_on,
+        value: default_run_on,
+        class: "date-input" %>
+
+      <%= f.date_field :run_on,
+            value: default_run_on,
+            class: "date-input",
+            id: "date-input" %>
+
+      <!-- 時刻 -->
+      <div class="datetime-click" id="time-display">
+        🕒
+        <span id="time-text"><%= default_time %></span>
+      </div>
+
+      <%= f.time_field :time,
+            value: default_time,
+            class: "time-input",
+            id: "time-input" %>
+
+      <%= f.select :time_basis,
+            [["出発", "departure"], ["到着", "arrival"]],
+            {},
+            { class: "basis-select" } %>
+    </div>
+    
+
+    <!-- 検索 -->
+    <%= f.submit "検索", class: "search-btn" %>
+
+  <% end %>
+</div>
+
+<!-- 検索結果 -->
+<div class="results">
+  <% @results.each do |result| %>
+    <% run = result[:run] %>
     <% availability = result[:availability] %>
 
-    <div>
-      指定席:
-      <strong><%= availability[:reserved][:mark] %></strong>
-      　
-      グリーン:
-      <strong><%= availability[:green][:mark] %></strong>
-      　
-      ファビュラス:
-      <strong><%= availability[:fabulous][:mark] %></strong>
-    </div>
-
-    <% seat_types = {
-      reserved:  "指定席",
-      green:     "グリーン車",
-      fabulous:  "ファビュラスルーム"
-    } %>
-
-    <% seat_types.each do |key, label| %>
-      <% car_type = CarType.find_by!(name: key.to_s) %>
-
-      <div>
-        <%= label %>：
-        <%= number_to_currency(
-          run.fee_per_seat(
-            departure_station: @departure_station,
-            arrival_station:   @arrival_station,
-            car_type:          car_type
-          ),
-          unit: "¥",
-          precision: 0
-        ) %>
+    <div class="run-card">
+      <div class="run-header">
+        <div class="run-name"><%= run.display_name %></div>
+        <div class="run-time">
+          <%= result[:departure_time].strftime("%H:%M") %>
+          →
+          <%= result[:arrival_time].strftime("%H:%M") %>
+          ／ 所要 <%= result[:travel_min] %>分
+        </div>
       </div>
-    <% end %>
 
-    <div>
-      <%= link_to "号車選択へ",
-        run_cars_path(
-          run,
-          departure_station_id: params[:departure_station_id],
-          arrival_station_id:   params[:arrival_station_id],
-          run_on:               params[:run_on],
-          time:                 params[:time],
-          time_basis:           params[:time_basis]
-        )
-      %>
+      <!-- 席種ボタン -->
+      <div class="seat-type-buttons">
+        <% [:reserved, :green, :fabulous].each do |seat_type| %>
+          <%= link_to run_cars_path(
+                run,
+                seat_type: seat_type,
+                departure_station_id: params[:departure_station_id],
+                arrival_station_id:   params[:arrival_station_id],
+                run_on:               params[:run_on],
+                time:                 params[:time],
+                time_basis:           params[:time_basis]
+              ),
+              class: "seat-type-btn #{seat_type}" do %>
+
+            <span class="label">
+              <%= seat_type == :reserved ? "指定席" :
+                  seat_type == :green    ? "グリーン" :
+                                           "ファビュラス" %>
+            </span>
+            <span class="mark"><%= availability[seat_type][:mark] %></span>
+
+          <% end %>
+        <% end %>
+      </div>
     </div>
-  </div>
-<% end %>
 
+  <% end %>
+</div>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
@@ -150,7 +152,6 @@
     swapBtn.addEventListener("click", () => {
       const dep = document.querySelector("[name='departure_station_id']");
       const arr = document.querySelector("[name='arrival_station_id']");
-
       if (!dep || !arr) return;
 
       const tmp = dep.value;
@@ -158,4 +159,43 @@
       arr.value = tmp;
     });
   });
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const dateDisplay = document.getElementById("date-display");
+  const dateInput   = document.getElementById("date-input");
+  const dateText    = document.getElementById("date-text");
+
+  const timeDisplay = document.getElementById("time-display");
+  const timeInput   = document.getElementById("time-input");
+  const timeText    = document.getElementById("time-text");
+
+  // 日付：文字クリックでカレンダー
+  dateDisplay.addEventListener("click", () => {
+    if (dateInput.showPicker) {
+      dateInput.showPicker();
+    } else {
+      dateInput.focus();
+    }
+  });
+
+  // 時刻：文字クリックで時刻ピッカー
+  timeDisplay.addEventListener("click", () => {
+    if (timeInput.showPicker) {
+      timeInput.showPicker();
+    } else {
+      timeInput.focus();
+    }
+  });
+
+  // 値変更時に表示更新
+  dateInput.addEventListener("change", () => {
+    dateText.textContent = dateInput.value.replaceAll("-", "/");
+  });
+
+  timeInput.addEventListener("change", () => {
+    timeText.textContent = timeInput.value;
+  });
+});
 </script>
