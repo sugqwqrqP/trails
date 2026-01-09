@@ -10,9 +10,13 @@ class Operator::RunsController < Operator::BaseController
   def new
     @run = Run.new
   end
-
   def create
-    @run = Run.new(run_params)
+    @run = Run.new(
+      run_on: params[:run][:run_on],
+      first_station_departure_time: params[:run][:first_station_departure_time],
+      run_type_id: params[:run][:run_type_id],
+      is_up: params[:run][:is_up]
+    )
 
     if @run.save
       redirect_to operator_run_path(@run), notice: "便を作成しました"
@@ -22,13 +26,4 @@ class Operator::RunsController < Operator::BaseController
     end
   end
 
-  private
-
-  def run_params
-    params.require(:run).permit(
-      :display_name,
-      :run_on,
-      :run_type_id # ← 今のERに合わせて。なければ後で直す
-    )
-  end
 end

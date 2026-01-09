@@ -1,0 +1,9 @@
+<h1>便詳細（運行管理者）</h1>
+
+<p>日付：<%= @run.run_on %></p>
+<p>便番号：<%= @run.run_number %></p>
+<p>種別：<%= @run.run_type.name %></p>
+<p>方向：<%= @run.is_up ? "上り" : "下り" %></p>
+<p>始発時刻：<%= @run.first_station_departure_time.strftime("%H:%M") %></p>
+
+<%= link_to "一覧に戻る", operator_runs_path %>
