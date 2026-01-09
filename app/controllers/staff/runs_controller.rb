@@ -26,6 +26,47 @@ class Staff::RunsController < Staff::BaseController
     
     run_on       = Date.parse(run_on_str)
 
+    # ===== 検索条件バリデーション =====
+
+    # 発駅＝着駅
+    if departure_station_id.present? && arrival_station_id.present? &&
+      departure_station_id == arrival_station_id
+      @search_error = "発駅と着駅は異なる駅を指定してください"
+      @results = []
+      render :index
+      return
+    end
+
+    run_on = Date.parse(run_on_str)
+
+    # 過去日付
+    if run_on < Date.current
+      @search_error = "過去の日付は指定できません"
+      @results = []
+      render :index
+      return
+    end
+
+    # 15日以降
+    if run_on > Date.current + 14
+      @search_error = "2週間後以降の便は検索できません"
+      @results = []
+      render :index
+      return
+    end
+
+    # 本日の過去時刻
+    if run_on == Date.current && time_str.present?
+      target_time = Time.zone.parse("#{run_on} #{time_str}")
+
+      if target_time < Time.zone.now
+        @search_error = "過去の時刻は指定できません"
+        @results = []
+        render :index
+        return
+      end
+    end
+
     # ==========
     # 1) station_order を比較して上り/下りを決める
     #   - seeds: 東京→新大阪は is_up=false, 新大阪→東京は is_up=true
