@@ -8,9 +8,14 @@ hikari  = RunType.find_by!(name: "ひかり")
 kodama  = RunType.find_by!(name: "こだま")
 
 schedule = [
+  ["06:00", nozomi],
+  ["06:30", kodama],
   ["07:00", nozomi],
+  ["07:30", hikari],
   ["08:00", nozomi],
+  ["08:30", kodama],
   ["09:00", nozomi],
+  ["09:30", hikari],
   ["10:00", nozomi],
   ["10:30", kodama],
   ["11:00", nozomi],
@@ -33,9 +38,7 @@ schedule = [
   ["19:30", hikari],
   ["20:00", nozomi],
   ["20:30", kodama],
-  ["21:00", nozomi],
-  ["21:30", hikari],
-  ["22:00", nozomi],
+  ["21:00", nozomi]
 ]
 
 base_numbers = {
@@ -44,7 +47,8 @@ base_numbers = {
   "こだま" => 701
 }
 
-(0..2).each do |day_offset|
+days = 10  # 1週間 + 予備3日
+(0...days).each do |day_offset|
   run_on = Date.today + day_offset
 
   # 東京 → 新大阪（下り・奇数）
