@@ -44,7 +44,9 @@ class RunsController < ApplicationController
 
     if run_on == Date.current && time_str.present?
       target_time = Time.zone.parse("#{run_on} #{time_str}")
-      if target_time < Time.zone.now
+
+      # その時間まではOK
+      if target_time < Time.zone.now - 1.minute
         @search_error = "過去の時刻は指定できません"
         return
       end
