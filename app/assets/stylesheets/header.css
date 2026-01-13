@@ -1,0 +1,52 @@
+
+/* =========================
+   ヘッダー
+========================= */
+
+.app-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e0e5e0;
+}
+
+.app-header-inner {
+  max-width: 800px;          /* ← cards / form より少し広めでOK */
+  margin: 0 auto;
+  padding: 12px 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ロゴ */
+.app-logo .logo-link {
+  font-size: 18px;
+  font-weight: 800;
+  text-decoration: none;
+  color: #222;
+}
+
+/* 将来ロゴ画像にする時用 */
+.app-logo img {
+  height: 28px;
+}
+
+/* 右側ナビ */
+.app-nav {
+  font-size: 14px;
+}
+
+.app-nav a {
+  text-decoration: none;
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.app-nav a:hover {
+  text-decoration: underline;
+}
+
+.nav-sep {
+  margin: 0 6px;
+  color: #aaa;
+}
