@@ -3,7 +3,7 @@ class Run < ApplicationRecord
   has_many :cars
   has_many :reservations, dependent: :destroy
 
-  before_validation :assign_run_number, on: :create
+  before_create :assign_run_number
 
   validate :run_on_must_be_future, on: :manual_create
   validate :run_on_within_14_days, on: :manual_create
