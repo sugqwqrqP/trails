@@ -1,114 +1,115 @@
-<h1>座席選択</h1>
+<div class="app-main">
+  <div class="container">
 
-<% if @seat_error.present? %>
-  <div class="alert seat-alert">
-    <%= @seat_error %>
-  </div>
-<% end %>
-
-<p>
-  <strong><%= @run.display_name %></strong><br>
-  <%= @car.number %>号車（<%= @car.car_type.name %>）
-</p>
-
-<% seat_map = @seats.index_by { |s| [s.row, s.column] } %>
-
-<div
-  id="seat-map"
-  data-car-type="<%= @car.car_type.name %>">
-
-  <% if @car.car_type.name == "fabulous" %>
-
-
-    <!-- ファビュラスルーム -->
-    <div class="fabulous">
-      <% @seats.each do |seat| %>
-        <% unavailable = @unavailable_seat_ids.include?(seat.id) %>
-        <button
-          type="button"
-          class="seat fabulous-seat <%= 'unavailable' if unavailable %>"
-          data-seat="<%= seat.id %>"
-          <%= 'disabled' if unavailable %>>
-          ROOM <%= seat.row %>
-        </button>
-      <% end %>
+    <div class="page-header">
+      <h2>座席選択</h2>
+        <p class="run-summary run-inline">
+          <strong class="run-name"><%= @run.display_name %></strong>
+          <span class="run-car">
+            <%= @car.number %>号車（
+            <%=
+              case @car.car_type.name
+              when "reserved" then "指定席"
+              when "green"    then "グリーン車"
+              when "fabulous" then "ファビュラスルーム"
+              end
+            %>
+            ）
+          </span>
+        </p>
     </div>
 
-  <% else %>
-  
+    <div id="seat-message" class="seat-message"></div>
 
-    <% rows = (1..8).to_a %>
-    <% cols =
-      case @car.car_type.name
-      when "reserved" then %w[A B C D E]
-      when "green"    then %w[A B C D]
-      end
-    %>
+    <% seat_map = @seats.index_by { |s| [s.row, s.column] } %>
 
-    <table class="seat-map">
-      <% rows.each do |row| %>
-      
-        <tr>
-          <% cols.each do |col| %>
-            <% seat = seat_map[[row, col]] %>
+    <div
+      id="seat-map"
+      data-car-type="<%= @car.car_type.name %>">
+
+      <% if @car.car_type.name == "fabulous" %>
+        <div class="fabulous">
+          <% @seats.each do |seat| %>
             <% unavailable = @unavailable_seat_ids.include?(seat.id) %>
-
-            <td>
-              <% if seat %>
-                <button
-                  type="button"
-                  class="seat <%= 'unavailable' if unavailable %>"
-                  data-seat="<%= seat.id %>"
-                  <%= 'disabled' if unavailable %>>
-                  <%= row %><%= col %>
-                </button>
-              <% end %>
-            </td>
-
-            <%# 通路 %>
-            <% if col == "C" && @car.car_type.name == "reserved" %>
-              <td class="aisle"></td>
-            <% end %>
+            <button
+              type="button"
+              class="seat fabulous-seat <%= 'unavailable' if unavailable %>"
+              data-seat="<%= seat.id %>"
+              <%= 'disabled' if unavailable %>>
+              ROOM <%= seat.row %>
+            </button>
           <% end %>
-        </tr>
+        </div>
+      <% else %>
+
+        <% rows = (1..8).to_a %>
+        <% cols =
+          case @car.car_type.name
+          when "reserved" then %w[A B C D E]
+          when "green"    then %w[A B C D]
+          end
+        %>
+
+        <table class="seat-map">
+          <% rows.each do |row| %>
+            <tr>
+              <% cols.each do |col| %>
+                <% seat = seat_map[[row, col]] %>
+                <% unavailable = seat && @unavailable_seat_ids.include?(seat.id) %>
+
+                <td>
+                  <% if seat %>
+                    <button
+                      type="button"
+                      class="seat <%= 'unavailable' if unavailable %>"
+                      data-seat="<%= seat.id %>"
+                      <%= 'disabled' if unavailable %>>
+                      <%= row %><%= col %>
+                    </button>
+                  <% end %>
+                </td>
+
+                <% if col == "C" && @car.car_type.name == "reserved" %>
+                  <td class="aisle"></td>
+                <% end %>
+              <% end %>
+            </tr>
+          <% end %>
+        </table>
+
       <% end %>
-    </table>
-
-  <% end %>
-</div>
-
-<form action="/reservations/confirm" method="get">
-  <input type="hidden" name="seat_ids" id="selected-seats">
-  <input type="hidden" name="run_id" value="<%= @run.id %>">
-  <input type="hidden" name="car_id" value="<%= @car.id %>">
-  <input type="hidden" name="departure_station_id" value="<%= params[:departure_station_id] %>">
-  <input type="hidden" name="arrival_station_id"   value="<%= params[:arrival_station_id] %>">
-  <input type="hidden" name="run_on"     value="<%= params[:run_on] %>">
-  <input type="hidden" name="time"       value="<%= params[:time] %>">
-  <input type="hidden" name="time_basis" value="<%= params[:time_basis] %>">
-  <input type="hidden" name="seat_type" value="<%= @car.car_type.name %>">
-
-  <% if current_user.staff? %>
-    <div class="holder-name">
-      <label>予約者名義</label><br>
-      <input
-        type="text"
-        name="holder_name"
-        maxlength="20"
-        required>
     </div>
-  <% else %>
-    <input
-      type="hidden"
-      name="holder_name"
-      value="<%= current_user.user_fullname %>">
-  <% end %>
 
-  <button id="confirm-btn" style="display:none;">
-    予約確認へ
-  </button>
-</form>
+    <form action="/reservations/confirm" method="get">
+      <input type="hidden" name="seat_ids" id="selected-seats">
+      <input type="hidden" name="run_id" value="<%= @run.id %>">
+      <input type="hidden" name="car_id" value="<%= @car.id %>">
+      <input type="hidden" name="departure_station_id" value="<%= params[:departure_station_id] %>">
+      <input type="hidden" name="arrival_station_id" value="<%= params[:arrival_station_id] %>">
+      <input type="hidden" name="run_on" value="<%= params[:run_on] %>">
+      <input type="hidden" name="time" value="<%= params[:time] %>">
+      <input type="hidden" name="time_basis" value="<%= params[:time_basis] %>">
+      <input type="hidden" name="seat_type" value="<%= @car.car_type.name %>">
 
-<%= link_to "号車選択に戻る",
-  run_cars_path(@run, request.query_parameters),
-  class: "back-link" %>
+      <% if current_user.staff? %>
+        <div class="holder-name">
+          <label>予約者名義</label><br>
+          <input type="text" name="holder_name" maxlength="20" required>
+        </div>
+      <% else %>
+        <input type="hidden" name="holder_name" value="<%= current_user.user_fullname %>">
+      <% end %>
+
+      <button id="confirm-btn" disabled class="btn btn-primary">
+        予約確認へ
+      </button>
+    </form>
+
+    <div class="page-footer">
+      <%= link_to "号車選択に戻る",
+        run_cars_path(@run, request.query_parameters),
+        class: "back-link" %>
+    </div>
+
+  </div>
+</div>

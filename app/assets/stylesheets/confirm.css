@@ -1,0 +1,27 @@
+/* =========================
+   予約確認
+========================= */
+
+.confirm-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.confirm-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.confirm-row .label {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.confirm-row.total {
+  font-size: 16px;
+  font-weight: 800;
+}

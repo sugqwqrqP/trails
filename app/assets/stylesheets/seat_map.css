@@ -1,3 +1,7 @@
+/* =========================
+   座席選択：共通
+========================= */
+
 .seat-map {
   border-collapse: collapse;
   margin-bottom: 20px;
@@ -12,34 +16,50 @@
   width: 24px;
 }
 
+/* =========================
+   座席ボタン
+========================= */
+
 .seat {
   width: 48px;
   height: 32px;
   cursor: pointer;
-  border: 1px solid #999;
-  background: #fff;
+  border: 1px solid #c5c5c5;
+  background: #ffffff;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.15s, color 0.15s, border 0.15s;
 }
 
 .seat.unavailable {
-  background: #ccc;
-  color: #666;
+  background: #eeeeee;
+  color: #888;
+  border-color: #dddddd;
   cursor: not-allowed;
 }
 
 .seat.selected {
-  background-color: #4caf50;
-  color: #fff;
-}
-
-.seat:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+  background: #2e7d32;
+  color: #ffffff;
+  border-color: #256628;
 }
 
 .seat.limit-disabled {
-  opacity: 0.4;
+  background: #fafafa;
+  color: #bbb;
+  border-color: #e0e0e0;
   cursor: not-allowed;
 }
+
+.seat:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================
+   ファビュラス
+========================= */
 
 .fabulous {
   display: flex;
@@ -48,4 +68,85 @@
 
 .fabulous-seat {
   width: 90px;
+  height: 48px;
+  font-size: 14px;
+  border-radius: 10px;
+}
+
+/* =========================
+   メッセージ（alert代替）
+========================= */
+
+.seat-message {
+  max-width: 680px;
+  margin: 0 auto 16px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #fff3e0;
+  color: #ef6c00;
+  font-size: 14px;
+  font-weight: 600;
+  display: none;
+}
+
+/* =========================
+   確認ボタン
+========================= */
+
+#confirm-btn {
+  width: 100%;
+  max-width: 680px;
+  margin: 20px auto 0;
+  display: block;
+  padding: 16px;
+  border-radius: 18px;
+  background: #2e7d32;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+#confirm-btn:disabled {
+  background: #c8e6c9;
+  color: #666;
+  cursor: not-allowed;
+}
+
+/* =========================
+   戻るリンク
+========================= */
+
+.back-link {
+  display: block;
+  max-width: 680px;
+  margin: 16px auto 0;
+  text-align: left;
+  color: #2e7d32;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* 座席選択：列車情報 横並び */
+.run-inline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.run-inline .run-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.run-inline .run-car {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  background: #eeeeee;
+  padding: 4px 8px;
+  border-radius: 6px;
 }

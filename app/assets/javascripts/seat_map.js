@@ -9,13 +9,23 @@ document.addEventListener("DOMContentLoaded", function () {
   if (carType === "fabulous") {
     MAX = 1;
   } else {
-    MAX = 6; // reserved / green
+    MAX = 6;
   }
 
   const selectedSeats = new Set();
   const hiddenInput = document.getElementById("selected-seats");
   const confirmBtn = document.getElementById("confirm-btn");
   const seats = document.querySelectorAll(".seat");
+  const messageBox = document.getElementById("seat-message");
+
+  function showMessage(text) {
+    messageBox.textContent = text;
+    messageBox.style.display = "block";
+  }
+
+  function clearMessage() {
+    messageBox.style.display = "none";
+  }
 
   seats.forEach(function (btn) {
     btn.addEventListener("click", function () {
@@ -25,15 +35,17 @@ document.addEventListener("DOMContentLoaded", function () {
       ) {
         return;
       }
+
       const seatId = btn.dataset.seat;
 
       // 解除
       if (selectedSeats.has(seatId)) {
         selectedSeats.delete(seatId);
         btn.classList.remove("selected");
+        clearMessage();
       } else {
         if (selectedSeats.size >= MAX) {
-          alert(
+          showMessage(
             carType === "fabulous"
               ? "ファビュラスルームは1室のみ選択できます"
               : "1回の予約で選択できるのは6席までです"
@@ -43,6 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         selectedSeats.add(seatId);
         btn.classList.add("selected");
+        clearMessage();
       }
 
       updateDisabled(seats, selectedSeats, MAX);
@@ -53,7 +66,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function updateDisabled(seats, selectedSeats, MAX) {
   seats.forEach(function (btn) {
-    // 予約済み席は触らない
     if (btn.classList.contains("unavailable")) return;
 
     if (!btn.classList.contains("selected")) {
@@ -68,5 +80,5 @@ function updateDisabled(seats, selectedSeats, MAX) {
 
 function updateForm(hiddenInput, confirmBtn, selectedSeats) {
   hiddenInput.value = Array.from(selectedSeats).join(",");
-  confirmBtn.style.display = selectedSeats.size > 0 ? "block" : "none";
+  confirmBtn.disabled = selectedSeats.size === 0;
 }

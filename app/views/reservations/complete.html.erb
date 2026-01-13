@@ -1,44 +1,66 @@
-<h1>予約完了</h1>
+<div class="app-main">
+  <div class="container">   
+    <div class="page-header">
+      <h2>予約完了</h2>
+    </div>
 
-<p class="notice">
-  予約が正常に完了しました。
-</p>
+    <div class="panel complete-panel">
+      <!-- イラスト（仮：SVGやimgに差し替え） -->
+      <div class="complete-illustration">
+        🚄
+      </div>
 
-<hr>
+      <p class="complete-message">
+        予約が正常に完了しました。
+      </p>
 
-<p>
-  <strong>予約番号：</strong>
-  <%= @reservation.id %>
-</p>
+      <div class="complete-info">
+        <div class="confirm-row">
+          <span class="label">予約番号</span>
+          <strong><%= @reservation.id %></strong>
+        </div>
 
-<p>
-  <strong>予約者名義：</strong>
-  <%= @reservation.holder_name %>
-</p>
+        <div class="confirm-row">
+          <span class="label">予約者名義</span>
+          <span><%= @reservation.holder_name %></span>
+        </div>
 
-<p>
-  <strong>区間：</strong>
-  <%= @reservation.departure_station.station_name %>
-  →
-  <%= @reservation.arrival_station.station_name %>
-</p>
+        <div class="confirm-row">
+          <span class="label">区間</span>
+          <span>
+            <%= @reservation.departure_station.station_name %> →
+            <%= @reservation.arrival_station.station_name %>
+          </span>
+        </div>
 
-<p>
-  <strong>列車：</strong>
-  <%= @reservation.run.display_name %>
-</p>
+        <div class="confirm-row">
+          <span class="label">列車</span>
+          <span><%= @reservation.run.display_name %></span>
+        </div>
 
-<p>
-  <strong>座席：</strong>
-  <%= @reservation.seats.map { |s| "#{s.row}#{s.column}" }.join(", ") %>
-</p>
+        <div class="confirm-row">
+          <span class="label">座席</span>
+          <span>
+            <%= @reservation.seats.map { |s| "#{s.row}#{s.column}" }.join(", ") %>
+          </span>
+        </div>
+      </div>
 
-<hr>
+      <div class="complete-actions">
+        <%= link_to "予約詳細を見る",
+          user_reservation_path(current_user, @reservation),
+          class: "btn btn-primary" %>
 
-<p>
-  <% if current_user.staff? %>
-    <%= link_to "駅員トップに戻る", staff_root_path %>
-  <% else %>
-    <%= link_to "トップに戻る", root_path %>
-  <% end %>
-</p>
+        <% if current_user.staff? %>
+          <%= link_to "駅員トップに戻る",
+            staff_root_path,
+            class: "btn btn-ghost" %>
+        <% else %>
+          <%= link_to "トップに戻る",
+            root_path,
+            class: "btn btn-ghost" %>
+        <% end %>
+      </div>
+    </div>
+ </div>
+</div>

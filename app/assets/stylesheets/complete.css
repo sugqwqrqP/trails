@@ -1,0 +1,32 @@
+/* =========================
+   予約完了
+========================= */
+
+.complete-panel {
+  text-align: center;
+}
+
+.complete-illustration {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.complete-message {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.complete-info {
+  margin: 0 auto 20px;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.complete-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
