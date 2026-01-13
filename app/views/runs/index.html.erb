@@ -79,13 +79,20 @@
           <span id="time-text"><%= default_time %></span>
         </div>
 
+        <button
+          type="button"
+          id="now-time-btn"
+          class="now-btn">
+          現在時刻
+        </button>
+
         <%= f.time_field :time,
               value: default_time,
               class: "time-input",
               id: "time-input" %>
 
         <%= f.select :time_basis,
-              [["出発", "departure"], ["到着", "arrival"]],
+              [["出発時刻", "departure"], ["到着時刻", "arrival"]],
               {},
               { class: "basis-select" } %>
       </div>
@@ -146,6 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const timeDisplay = document.getElementById("time-display");
   const timeInput   = document.getElementById("time-input");
   const timeText    = document.getElementById("time-text");
+  const nowBtn      = document.getElementById("now-time-btn");
 
   // 日付：文字クリックでカレンダー
   dateDisplay.addEventListener("click", () => {
@@ -173,5 +181,18 @@ document.addEventListener("DOMContentLoaded", () => {
   timeInput.addEventListener("change", () => {
     timeText.textContent = timeInput.value;
   });
+  
+  // 現在時刻ボタン
+  if (nowBtn) {
+    nowBtn.addEventListener("click", () => {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, "0");
+      const mm = String(now.getMinutes()).padStart(2, "0");
+      const current = `${hh}:${mm}`;
+
+      timeInput.value = current;
+      timeText.textContent = current;
+    });
+  }
 });
 </script>
