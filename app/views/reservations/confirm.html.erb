@@ -56,13 +56,5 @@
 <% end %>
 
 <%= link_to "座席選択に戻る",
-  run_car_seats_path(
-    @run,
-    car_id: @car.id,
-    departure_station_id: @departure_station.id,
-    arrival_station_id:   @arrival_station.id,
-    run_on:               params[:run_on],
-    time:                 params[:time],
-    time_basis:           params[:time_basis]
-  )
-%>
+  run_car_seats_path(@run, @car, request.query_parameters),
+  class: "back-link" %>
