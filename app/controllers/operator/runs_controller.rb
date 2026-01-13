@@ -10,6 +10,7 @@ class Operator::RunsController < Operator::BaseController
   def new
     @run = Run.new
   end
+  
   def create
     @run = Run.new(
       run_on: params[:run][:run_on],
@@ -18,7 +19,7 @@ class Operator::RunsController < Operator::BaseController
       is_up: params[:run][:is_up]
     )
 
-    if @run.save
+    if @run.save(context: :manual_create)
       redirect_to operator_run_path(@run), notice: "便を作成しました"
     else
       flash.now[:alert] = @run.errors.full_messages.join(" / ")

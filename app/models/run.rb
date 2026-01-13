@@ -5,10 +5,10 @@ class Run < ApplicationRecord
 
   before_validation :assign_run_number, on: :create
 
-  validate :run_on_must_be_future
-  validate :run_on_within_14_days
-  validate :departure_time_not_too_early
-  validate :departure_time_not_too_late
+  validate :run_on_must_be_future, on: :manual_create
+  validate :run_on_within_14_days, on: :manual_create
+  validate :departure_time_not_too_early, on: :manual_create
+  validate :departure_time_not_too_late, on: :manual_create
   validate :no_duplicate_run
 
   # ---- バリデーション ----
