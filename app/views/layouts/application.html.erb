@@ -10,11 +10,17 @@
   </head>
   <body>
     <%= render "shared/header" %>
+
+    <main class="app-main">
       <% if flash[:notice] %>
-        <div class="flash notice">
-          <%= flash[:notice] %>
+        <div class="container">
+          <div class="alert alert-notice">
+            <%= flash[:notice] %>
+          </div>
         </div>
       <% end %>
-    <%= yield %>
+
+      <%= yield %>
+    </main>
   </body>
 </html>

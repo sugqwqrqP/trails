@@ -1,6 +1,6 @@
-<div class="banner">
+<div class="container">
   <% if @search_error.present? %>
-    <div class="alert">
+    <div class="alert alert-error">
       <%= @search_error %>
     </div>
   <% end %>
@@ -18,100 +18,106 @@
 <% default_run_on = params[:run_on] || Date.current %>
 <% default_time   = params[:time]   || Time.current.strftime("%H:%M") %>
 
-<div class="search-panel">
-  <%= form_with url: runs_path, method: :get, local: true do |f| %>
+<div class="container">
+  <div class="search-panel">
+    <%= form_with url: runs_path, method: :get, local: true do |f| %>
 
-    <!-- 出発 -->
-    <div class="location-row">
-      <div class="location-label depart">出発</div>
-      <div class="location-input">
-        <%= f.collection_select :departure_station_id,
-          Station.order(:station_order),
-          :id,
-          :station_name,
-          { selected: default_departure },
-          { class: "station-select" } %>
-      </div>
-    </div>
-
-    <!-- 入れ替え -->
-    <div class="route-tools">
-      <div class="route-icons">
-        <button type="button" id="swap-stations" class="icon-btn">⇅</button>
-      </div>
-    </div>
-
-    <!-- 到着 -->
-    <div class="location-row">
-      <div class="location-label arrive">到着</div>
-      <div class="location-input">
-        <%= f.collection_select :arrival_station_id,
-          Station.order(:station_order),
-          :id,
-          :station_name,
-          { selected: default_arrival },
-          { class: "station-select" } %>
-      </div>
-    </div>
-
-    <div class="datetime-box">
-      <% default_run_on =
-          params[:run_on].present? ? Date.parse(params[:run_on]) : Date.current %>
-
-      <div class="datetime-click" id="date-display">
-        📅
-        <span id="date-text"><%= default_run_on.strftime("%Y/%m/%d") %></span>
+      <!-- 出発 -->
+      <div class="location-row">
+        <div class="location-label depart">出発</div>
+        <div class="location-input">
+          <%= f.collection_select :departure_station_id,
+            Station.order(:station_order),
+            :id,
+            :station_name,
+            { selected: default_departure },
+            { class: "station-select" } %>
+        </div>
       </div>
 
-      <%= f.date_field :run_on,
-        value: default_run_on,
-        class: "date-input" %>
-
-      <%= f.date_field :run_on,
-            value: default_run_on,
-            class: "date-input",
-            id: "date-input" %>
-
-      <!-- 時刻 -->
-      <div class="datetime-click" id="time-display">
-        🕒
-        <span id="time-text"><%= default_time %></span>
+      <!-- 入れ替え -->
+      <div class="route-tools">
+        <div class="route-icons">
+          <button type="button" id="swap-stations" class="icon-btn">⇅</button>
+        </div>
       </div>
 
-      <%= f.time_field :time,
-            value: default_time,
-            class: "time-input",
-            id: "time-input" %>
+      <!-- 到着 -->
+      <div class="location-row">
+        <div class="location-label arrive">到着</div>
+        <div class="location-input">
+          <%= f.collection_select :arrival_station_id,
+            Station.order(:station_order),
+            :id,
+            :station_name,
+            { selected: default_arrival },
+            { class: "station-select" } %>
+        </div>
+      </div>
 
-      <%= f.select :time_basis,
-            [["出発", "departure"], ["到着", "arrival"]],
-            {},
-            { class: "basis-select" } %>
-    </div>
-    
+      <div class="datetime-box">
+        <% default_run_on =
+            params[:run_on].present? ? Date.parse(params[:run_on]) : Date.current %>
 
-    <!-- 検索 -->
-    <%= f.submit "検索", class: "search-btn" %>
+        <div class="datetime-click" id="date-display">
+          📅
+          <span id="date-text"><%= default_run_on.strftime("%Y/%m/%d") %></span>
+        </div>
 
-  <% end %>
+        <%= f.date_field :run_on,
+          value: default_run_on,
+          class: "date-input" %>
+
+        <%= f.date_field :run_on,
+              value: default_run_on,
+              class: "date-input",
+              id: "date-input" %>
+
+        <!-- 時刻 -->
+        <div class="datetime-click" id="time-display">
+          🕒
+          <span id="time-text"><%= default_time %></span>
+        </div>
+
+        <%= f.time_field :time,
+              value: default_time,
+              class: "time-input",
+              id: "time-input" %>
+
+        <%= f.select :time_basis,
+              [["出発", "departure"], ["到着", "arrival"]],
+              {},
+              { class: "basis-select" } %>
+      </div>
+      
+
+      <!-- 検索 -->
+      <%= f.submit "検索", class: "search-btn" %>
+
+    <% end %>
+  </div>
 </div>
-<div class="results">
+
+
+<div class="container results">
   <%= render partial: "run_cards", locals: { results: @results } %>
 </div>
 
-<div class="pager">
-  <% if @has_prev %>
-    <%= link_to "← 前に戻る",
-      runs_path(params.permit!.merge(offset: @prev_offset)),
-      class: "pager-btn prev" %>
-  <% end %>
+<div class="container">
+  <div class="pager">
+    <% if @has_prev %>
+      <%= link_to "← 前に戻る",
+        runs_path(params.permit!.merge(offset: @prev_offset)),
+        class: "pager-btn prev" %>
+    <% end %>
 
-  <% if @has_next %>
-    <%= link_to "次を検索 →",
-      runs_path(params.permit!.merge(offset: @next_offset)),
-      class: "pager-btn next" %>
-  <% end %>
-</div>
+    <% if @has_next %>
+      <%= link_to "次を検索 →",
+        runs_path(params.permit!.merge(offset: @next_offset)),
+        class: "pager-btn next" %>
+    <% end %>
+  </div>
+<div class="container">
 
 
 <script>

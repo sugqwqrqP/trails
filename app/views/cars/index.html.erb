@@ -1,27 +1,61 @@
-<h1>号車選択</h1>
+<div class="container">
 
-<p>
-  <strong><%= @run.display_name %></strong>
-</p>
+  <div class="page-header">
+    <h2>号車選択</h2>
+    <p class="run-summary">
+      <strong><%= @run.display_name %></strong>
+    </p>
+  </div>
 
-<ul>
-  <% @cars.each do |car| %>
-    <li>
-      <%= link_to "#{car.number}号車（#{car.car_type.name}）",
-        run_car_seats_path(
-          @run,
-          car_id: car.id,
-          departure_station_id: params[:departure_station_id],
-          arrival_station_id:   params[:arrival_station_id],
-          run_on:               params[:run_on],
-          time:                 params[:time],
-          time_basis:           params[:time_basis]
-        )
-      %>
-    </li>
-  <% end %>
-</ul>
+  <div class="train-strip-wrapper">
 
-<%= link_to "検索結果に戻る",
-  runs_path(request.query_parameters)
-%>
+    <% unless @run.is_up %>
+      <div class="train-arrow">◀︎</div>
+    <% end %>
+
+    <div
+      class="train-strip"
+      data-seat-type="<%= params[:seat_type] %>">
+
+      <% @cars.each do |car| %>
+        <% enabled = params[:seat_type].blank? || car.car_type.name == params[:seat_type] %>
+
+        <% car_label =
+          case car.car_type.name
+          when "reserved" then "指定席"
+          when "green"    then "グリーン車"
+          when "fabulous" then "ファビュラスルーム"
+          end
+        %>
+
+        <% if enabled %>
+          <%= link_to run_car_seats_path(
+                @run,
+                car_id: car.id,
+                **request.query_parameters
+              ),
+              class: "car car-#{car.car_type.name}" do %>
+            <span class="car-number"><%= car.number %></span>
+            <span class="car-type"><%= car_label %></span>
+          <% end %>
+        <% else %>
+          <div class="car disabled car-<%= car.car_type.name %>">
+            <span class="car-number"><%= car.number %></span>
+            <span class="car-type"><%= car_label %></span>
+          </div>
+        <% end %>
+      <% end %>
+
+    </div>
+
+    <% if @run.is_up %>
+      <div class="train-arrow">▶</div>
+    <% end %>
+
+  </div>
+
+  <div class="page-footer">
+    <%= link_to "検索結果に戻る", runs_path(request.query_parameters), class: "back-link" %>
+  </div>
+
+</div>

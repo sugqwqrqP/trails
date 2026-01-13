@@ -1,0 +1,142 @@
+/* =========================
+   ページヘッダ
+========================= */
+
+.page-header {
+  margin: 16px 0 24px;
+}
+
+.page-header h2 {
+  margin: 0 0 6px;
+}
+
+.run-summary {
+  color: #555;
+  font-size: 14px;
+}
+
+/* =========================
+   電車ストリップ
+========================= */
+
+.train-strip {
+  display: flex;
+  gap: 8px;
+  padding: 16px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e0e5e0;
+  overflow-x: auto;
+}
+
+/* =========================
+   号車カード
+========================= */
+
+.car {
+  min-width: 64px;
+  height: 96px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.car-number {
+  font-size: 20px;
+}
+
+.car-type {
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* 有効色 */
+
+.car-reserved {
+  background: #e8f0fe;
+  color: #1a73e8;
+}
+
+.car-green {
+  background: #e6f4ea;
+  color: #137333;
+}
+
+.car-fabulous {
+  background: #fce8f3;
+  color: #a61b4d;
+}
+
+/* 無効 */
+
+.car.disabled {
+  background: #f1f3f4;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* =========================
+   フッタ
+========================= */
+
+.page-footer {
+  margin-top: 24px;
+}
+
+.back-link {
+  text-decoration: none;
+  font-weight: 600;
+  color:
+
+    #2e7d32;
+}
+
+/* =========================
+   進行方向表示
+========================= */
+
+.direction-indicator {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.direction-indicator.down {
+  justify-content: flex-start;
+}
+
+.direction-indicator.up {
+  justify-content: flex-end;
+}
+
+.direction-indicator .arrow {
+  font-size: 14px;
+}
+
+/* =========================
+   電車全体（矢印＋号車）
+========================= */
+
+.train-strip-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* =========================
+   矢印
+========================= */
+
+.train-arrow {
+  font-size: 42px;         
+  font-weight: 800;
+  color: #555;
+  flex-shrink: 0;
+}

@@ -13,3 +13,125 @@
  *= require_tree .
  *= require_self
  */
+
+ /* =========================
+   Design Tokens (共通ルール)
+========================= */
+:root{
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --text: #222;
+  --muted: #666;
+  --border: #e0e5e0;
+
+  --brand: #2e7d32;     /* 基本アクセント */
+  --brand-weak: #e6f4ea;
+
+  --info: #1a73e8;      /* reserved */
+  --info-weak: #e8f0fe;
+
+  --pink: #a61b4d;      /* fabulous */
+  --pink-weak: #fce8f3;
+
+  --warn: #ef6c00;      /* pager/注意 */
+  --warn-weak: #fff3e0;
+
+  --r-sm: 12px;
+  --r-md: 16px;
+  --r-lg: 20px;
+
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* =========================
+   Base
+========================= */
+.app-main {
+  padding: 24px 0 40px;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+  margin: 0;
+}
+
+a{ color: inherit; }
+
+/* 中央レイアウトの統一 */
+.container{
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* =========================
+   Surface / Card / Panel
+========================= */
+.card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow);
+}
+
+.panel{
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+/* =========================
+   Buttons
+========================= */
+.btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--r-lg);
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 12px 14px;
+}
+
+.btn-primary{
+  background: var(--brand);
+  color: #fff;
+}
+
+.btn-ghost{
+  background: #fff;
+  border-color: var(--border);
+  color: var(--brand);
+}
+
+.btn-warn{
+  background: var(--warn-weak);
+  border-color: #ffd8a8;
+  color: var(--warn);
+}
+
+/* =========================
+   Alerts
+========================= */
+.alert{
+  padding: 12px 16px;
+  border-radius: var(--r-md);
+  font-weight: 700;
+}
+
+.alert-error{
+  background: #fdecea;
+  color: #b00020;
+}
