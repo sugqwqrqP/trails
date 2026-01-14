@@ -1,0 +1,56 @@
+.reservation-detail {
+  padding: 20px;
+}
+
+.detail-section {
+  margin-bottom: 20px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row .label {
+  color: #777;
+  font-weight: 600;
+}
+
+/* 発券ステータス */
+.status {
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status.issued {
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.status.not-issued {
+  color: #777;
+  border: 1px solid #e0e0e0;
+}
+
+/* 操作 */
+.detail-actions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-danger {
+  background: #fff;
+  border: 1px solid #e57373;
+  color: #c62828;
+}
