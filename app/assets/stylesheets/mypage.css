@@ -144,6 +144,25 @@
   justify-content: flex-start;
 }
 
+.account-footer {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e5e5;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.account-edit-link {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2e7d32;
+  text-decoration: none;
+}
+
+.account-edit-link:hover {
+  text-decoration: underline;
+}
+
 /* =========================
    補助
 ========================= */

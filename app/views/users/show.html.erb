@@ -58,8 +58,8 @@
     </div>
 
     <!-- ===== アカウント（設定領域） ===== -->
-    <div class="account-panel">
-      <h3 class="account-title">アカウント設定</h3>
+    <div class="panel account-panel">
+      <h3 class="section-title">アカウント設定</h3>
 
       <div class="account-row">
         <span class="label">氏名</span>
@@ -71,10 +71,10 @@
         <span><%= @user.login_id %></span>
       </div>
 
-      <div class="account-actions">
+      <div class="account-footer">
         <%= link_to "会員情報を変更する",
           edit_user_path(@user),
-          class: "btn btn-primary" %>
+          class: "account-edit-link" %>
       </div>
     </div>
 
