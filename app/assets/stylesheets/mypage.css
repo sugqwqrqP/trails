@@ -1,0 +1,153 @@
+/* =========================
+   マイページ
+========================= */
+
+.mypage-panel {
+  padding: 20px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+/* =========================
+   予約カード（圧縮版）
+========================= */
+
+.reservation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reservation-card.compact {
+  background: #fff;
+  border: 1px solid #e0e5e0;
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+/* 上段 */
+
+.reservation-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.reservation-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.run-name {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.route,
+.time {
+  font-size: 13px;
+  color: #333;
+}
+
+.meta {
+  font-size: 12px;
+  color: #666;
+}
+
+/* 右側 */
+
+.reservation-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.run-date {
+  font-size: 12px;
+  color: #666;
+}
+
+.detail-btn {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid #d0d5d0;
+  background: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+/* 下段：発券情報 */
+
+.status {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  color: #555;
+  display: inline-block;
+}
+
+.status.issued {
+  border-color: #c8e6c9;
+  color: #2e7d32;
+}
+
+.status.not-issued {
+  border-color: #e0e0e0;
+  color: #777;
+}
+
+/* =========================
+   アカウント（設定扱い）
+========================= */
+
+.account-panel {
+  margin-top: 36px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e5e5;
+  background: transparent;
+}
+
+.account-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.account-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 13px;
+}
+
+.account-row .label {
+  color: #999;
+  font-weight: 600;
+}
+
+.account-actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* =========================
+   補助
+========================= */
+
+.muted {
+  color: #999;
+}
