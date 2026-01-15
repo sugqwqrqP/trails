@@ -7,6 +7,7 @@ class LoginsController < ApplicationController
 
     if user&.authenticate(params[:password])
       session[:user_id] = user.id
+      flash[:notice] = "ログインしました"
 
       case user.role
       when "staff"
