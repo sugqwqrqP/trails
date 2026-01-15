@@ -9,50 +9,56 @@
       <h3 class="section-title">予約一覧</h3>
 
       <div class="reservation-list">
-        <% @reservations.each do |r| %>
-          <% run = r.run %>
-          <% seats = r.reservation_seats.map(&:seat) %>
-          <% car_type = seats.first.car.car_type.name %>
+        <% if @reservations.any? %>
+          <% @reservations.each do |r| %>
+            <% run = r.run %>
+            <% seats = r.reservation_seats.map(&:seat) %>
+            <% car_type = seats.first.car.car_type.name %>
 
-          <div class="reservation-card compact">
-            <div class="reservation-main">
-              <div class="reservation-left">
-                <div class="run-name"><%= run.display_name %></div>
+            <div class="reservation-card compact">
+              <div class="reservation-main">
+                <div class="reservation-left">
+                  <div class="run-name"><%= run.display_name %></div>
 
-                <div class="route">
-                  <%= r.departure_station.station_name %> →
-                  <%= r.arrival_station.station_name %>
+                  <div class="route">
+                    <%= r.departure_station.station_name %> →
+                    <%= r.arrival_station.station_name %>
+                  </div>
+
+                  <div class="time">
+                    <%= run.departure_time_at(r.departure_station).strftime("%H:%M") %>
+                    →
+                    <%= run.arrival_time_at(r.arrival_station).strftime("%H:%M") %>
+                  </div>
+
+                  <div class="meta">
+                    <%= seat_type_label(car_type) %> /
+                    <%= seats.count %>人
+                  </div>
                 </div>
 
-                <div class="time">
-                  <%= run.departure_time_at(r.departure_station).strftime("%H:%M") %>
-                  →
-                  <%= run.arrival_time_at(r.arrival_station).strftime("%H:%M") %>
-                </div>
+                <div class="reservation-right">
+                  <div class="run-date">
+                    <%= run.run_on.strftime("%Y/%m/%d") %>
+                  </div>
 
-                <div class="meta">
-                  <%= seat_type_label(car_type) %> /
-                  <%= seats.count %>人
+                  <%= link_to "詳細",
+                    user_reservation_path(@user, r),
+                    class: "detail-btn" %>
                 </div>
               </div>
 
-              <div class="reservation-right">
-                <div class="run-date">
-                  <%= run.run_on.strftime("%Y/%m/%d") %>
-                </div>
-
-                <%= link_to "詳細",
-                  user_reservation_path(@user, r),
-                  class: "detail-btn" %>
-              </div>
+              <% if r.is_issued %>
+                <span class="status issued">発券済</span>
+              <% else %>
+                <span class="status not-issued">未発券</span>
+              <% end %>
             </div>
-
-            <% if r.is_issued %>
-              <span class="status issued">発券済</span>
-            <% else %>
-              <span class="status not-issued">未発券</span>
-            <% end %>
-          </div>
+          <% end %>
+        <% else %>
+          <p class="empty-text">
+            現在、予約はありません。
+          </p>
         <% end %>
       </div>
     </div>
