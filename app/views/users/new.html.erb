@@ -1,44 +1,92 @@
-<h1>新規登録</h1>
+<div class="app-main">
+  <div class="container">
 
-<%= form_with model: @user, local: true do |f| %>
+    <div class="page-header">
+      <h2>新規登録</h2>
+    </div>
 
-  <!-- ログインID -->
-  <div class="field <%= 'has-error' if @user.errors[:login_id].any? %>">
-    <%= f.label :login_id, "ログインID" %><br>
-    <%= f.text_field :login_id %>
+    <div class="panel auth-panel">
 
-    <% @user.errors[:login_id].each do |msg| %>
-      <div class="error-message"><%= msg %></div>
-    <% end %>
+      <%= form_with model: @user, local: true do |f| %>
+
+        <div class="form-section">
+
+          <!-- ログインID -->
+          <div class="form-row <%= 'has-error' if @user.errors[:login_id].any? %>">
+            <%= f.label :login_id, "ログインID" %>
+            <%= f.text_field :login_id, autocomplete: "username" %>
+
+            <% @user.errors[:login_id].each do |msg| %>
+              <div class="field-error"><%= msg %></div>
+            <% end %>
+          </div>
+
+          <!-- 氏名 -->
+          <div class="form-row <%= 'has-error' if @user.errors[:user_fullname].any? %>">
+            <%= f.label :user_fullname, "氏名" %>
+            <%= f.text_field :user_fullname %>
+
+            <% @user.errors[:user_fullname].each do |msg| %>
+              <div class="field-error"><%= msg %></div>
+            <% end %>
+          </div>
+
+          <!-- パスワード -->
+          <div class="form-row <%= 'has-error' if @user.errors[:password].any? %>">
+            <%= f.label :password, "パスワード" %>
+
+            <div class="password-field">
+              <%= f.password_field :password,
+                id: "signup-password",
+                autocomplete: "new-password" %>
+
+              <button
+                type="button"
+                class="password-toggle"
+                data-target="signup-password"
+                aria-label="パスワードを表示">
+                👁
+              </button>
+            </div>
+
+            <% @user.errors[:password].each do |msg| %>
+              <div class="field-error"><%= msg %></div>
+            <% end %>
+          </div>
+
+          <!-- パスワード確認 -->
+          <div class="form-row">
+            <%= f.label :password_confirmation, "パスワード（確認）" %>
+
+            <div class="password-field">
+              <%= f.password_field :password_confirmation,
+                id: "signup-password-confirm",
+                autocomplete: "new-password" %>
+
+              <button
+                type="button"
+                class="password-toggle"
+                data-target="signup-password-confirm"
+                aria-label="パスワードを表示">
+                👁
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+          <%= link_to "トップページに戻る",
+            root_path,
+            class: "btn btn-ghost" %>
+
+          <%= f.submit "登録する",
+            class: "btn btn-primary" %>
+        </div>
+
+      <% end %>
+
+    </div>
+
   </div>
-
-  <!-- 氏名 -->
-  <div class="field <%= 'has-error' if @user.errors[:user_fullname].any? %>">
-    <%= f.label :user_fullname, "氏名" %><br>
-    <%= f.text_field :user_fullname %>
-
-    <% @user.errors[:user_fullname].each do |msg| %>
-      <div class="error-message"><%= msg %></div>
-    <% end %>
-  </div>
-
-  <!-- パスワード -->
-  <div class="field <%= 'has-error' if @user.errors[:password].any? %>">
-    <%= f.label :password, "パスワード" %><br>
-    <%= f.password_field :password %>
-
-    <% @user.errors[:password].each do |msg| %>
-      <div class="error-message"><%= msg %></div>
-    <% end %>
-  </div>
-
-  <!-- パスワード確認 -->
-  <div class="field <%= 'has-error' if @user.errors[:password_confirmation].any? %>">
-    <%= f.label :password_confirmation, "パスワード（確認）" %><br>
-    <%= f.password_field :password_confirmation %>
-  </div>
-
-  <%= f.submit "登録" %>
-
-<% end %>
-  <p><%= link_to "トップページに戻る", root_path %></p>
+</div>
