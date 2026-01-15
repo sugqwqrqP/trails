@@ -145,3 +145,42 @@ a{ color: inherit; }
   color: #b00020;
   border: 1px solid #f5c6cb;
 }
+
+/* ===== Forms (Global) ===== */
+
+.form-section {
+  margin-bottom: 24px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.form-row input {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.form-note {
+  font-size: 12px;
+  color: #777;
+}
+
+.field-error {
+  font-size: 12px;
+  color: #c62828;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.field_with_errors {
+  display: contents;
+}
