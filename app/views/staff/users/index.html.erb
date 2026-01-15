@@ -1,21 +1,74 @@
-<h1>利用者一覧</h1>
+<div class="app-main">
+  <div class="container">
 
-<table>
-  <tr>
-    <th>ID</th>
-    <th>ログインID</th>
-    <th>氏名</th>
-    <th>操作</th>
-  </tr>
+    <div class="page-header">
+      <h2>利用者一覧</h2>
+      <p class="page-description">登録されている利用者の一覧</p>
+    </div>
 
-  <% @users.each do |user| %>
-    <tr>
-      <td><%= user.id %></td>
-      <td><%= user.login_id %></td>
-      <td><%= user.user_fullname %></td>
-      <td>
-        <%= link_to "詳細", staff_user_path(user) %>
-      </td>
-    </tr>
-  <% end %>
-</table>
+    <!-- 検索 -->
+    <div class="panel search-panel">
+      <%= form_with url: staff_users_path, method: :get, local: true do %>
+
+        <div class="search-row">
+          <%= text_field_tag :login_id,
+                params[:login_id],
+                placeholder: "ログインID" %>
+
+          <%= text_field_tag :user_fullname,
+                params[:user_fullname],
+                placeholder: "氏名" %>
+
+          <%= submit_tag "絞り込み",
+                class: "btn btn-sm btn-primary" %>
+        </div>
+
+        <label class="search-toggle">
+          <%= check_box_tag :include_admins, "1", @include_admins %>
+          運行管理者・駅員を表示
+        </label>
+
+      <% end %>
+    </div>
+
+    <!-- 一覧 -->
+    <div class="panel">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>ログインID</th>
+            <th>氏名</th>
+            <th>区分</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @users.each do |user| %>
+            <tr>
+              <td><%= user.id %></td>
+              <td><%= user.login_id %></td>
+              <td><%= user.user_fullname %></td>
+              <td>
+                <% if user.operator? %>
+                  <span class="role-badge role-operator">運行管理者</span>
+                <% elsif user.staff? %>
+                  <span class="role-badge role-staff">駅員</span>
+                <% else %>
+                  <span class="role-badge role-user">利用者</span>
+                <% end %>
+              </td>
+              <td>
+                <%= link_to "詳細",
+                      staff_user_path(user),
+                      class: "btn btn-sm btn-ghost" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
