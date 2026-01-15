@@ -151,10 +151,11 @@
   display: grid;
   grid-template-columns:
     40px     /* ID */
-    120px    /* 便名 */
-    120px    /* 運行日 */
-    1fr      /* 区間 */
-    60px     /* 人数 */
+    100px    /* 運行日 */
+    100px    /* 便名 */
+    120px      /* 区間 */
+    30px     /* 人数 */
+    80px     /* 席種 */
     60px     /* 発券 */
     80px;    /* 詳細 */
   align-items: center;
@@ -205,5 +206,6 @@
 
 /* フッター */
 .page-footer {
-  margin-top: 24px;
+  margin-top: 16px;
+  text-align: left; 
 }

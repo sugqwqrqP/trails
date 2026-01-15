@@ -44,10 +44,11 @@
 
           <div class="reservation-header">
             <span>ID</span>
-            <span>便名</span>
             <span>運行日</span>
+            <span>便名</span>
             <span>区間</span>
             <span>人数</span>
+            <span>席種</span>
             <span>発券</span>
             <span></span>
           </div>
@@ -56,10 +57,12 @@
             <div class="reservation-row">
               <span class="col"><%= r.id %></span>
 
-              <span class="col"><%= r.run.display_name %></span>
-
               <span class="col">
                 <%= r.run.run_on.strftime("%Y-%m-%d") %>
+              </span>
+
+              <span class="col">
+                <%= r.run.display_name %>
               </span>
 
               <span class="col">
@@ -68,6 +71,10 @@
               </span>
 
               <span class="col"><%= r.seats.size %>名</span>
+
+              <span class="col">
+                <%= r.seats.first.car.car_type.label %>
+              </span>
 
               <span class="col status-text <%= r.is_issued? ? "issued" : "not-issued" %>">
                 <%= r.is_issued? ? "済" : "未" %>
@@ -86,12 +93,10 @@
         <p class="empty-text">予約はまだありません。</p>
       <% end %>
     </div>
-
-    <div class="page-footer">
-      <%= link_to "一覧に戻る",
-        staff_users_path,
-        class: "btn btn-ghost" %>
-    </div>
-
+          <div class="page-footer">
+        <%= link_to "一覧に戻る",
+          staff_users_path,
+          class: "btn btn-ghost" %>
+    </div> 
   </div>
 </div>
