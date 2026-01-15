@@ -1,51 +1,97 @@
-<h1>利用者詳細</h1>
+<div class="app-main">
+  <div class="container">
 
-<p>ID：<%= @user.id %></p>
-<p>氏名：<%= @user.user_fullname %></p>
+    <div class="page-header">
+      <h2>利用者詳細</h2>
+      <p class="page-description">利用者の基本情報と予約履歴を確認します</p>
+    </div>
 
-<hr>
+    <!-- ===== 基本情報 ===== -->
+    <div class="panel">
+      <h3 class="section-title">基本情報</h3>
 
-<h2>予約一覧</h2>
+      <div class="info-grid">
+        <div class="info-row">
+          <span class="label">ID</span>
+          <span><%= @user.id %></span>
+        </div>
 
-<table>
-  <tr>
-    <th>予約ID</th>
-    <th>便名</th>
-    <th>運行日</th>
-    <th>区間</th>
-    <th>人数</th>
-    <th>発券</th>
-    <th>操作</th>
-  </tr>
+        <div class="info-row">
+          <span class="label">ログインID</span>
+          <span><%= @user.login_id %></span>
+        </div>
 
-  <% @reservations.each do |r| %>
-    <tr>
-      <td><%= r.id %></td>
+        <div class="info-row">
+          <span class="label">氏名</span>
+          <span><%= @user.user_fullname %></span>
+        </div>
 
-      <td>
-        <%= r.run.display_name %>
-      </td>
+        <div class="info-row">
+          <span class="label">区分</span>
+          <span class="role-text <%= @user.role %>">
+            <%= @user.role_label %>
+          </span>
+        </div>
+      </div>
+    </div>
 
-      <td>
-        <%= r.run.run_on %>
-      </td>
+    <!-- ===== 予約一覧 ===== -->
+    <div class="panel">
+      <h3 class="section-title">予約一覧</h3>
 
-      <td>
-        <%= r.departure_station.station_name %> →
-        <%= r.arrival_station.station_name %>
-      </td>
+      <% if @reservations.any? %>
+        <div class="reservation-rows">
 
-      <td>
-        <%= r.seats.size %>名
-      </td>
+          <div class="reservation-header">
+            <span>ID</span>
+            <span>便名</span>
+            <span>運行日</span>
+            <span>区間</span>
+            <span>人数</span>
+            <span>発券</span>
+            <span></span>
+          </div>
 
-      <td>
-        <%= r.is_issued? ? "済" : "未" %>
-      </td>
+          <% @reservations.each do |r| %>
+            <div class="reservation-row">
+              <span class="col"><%= r.id %></span>
 
-      <td>
-        <%= link_to "詳細", staff_reservation_path(r) %>
-      </td>
-    </tr>
-  <% end %>
-</table>
+              <span class="col"><%= r.run.display_name %></span>
+
+              <span class="col">
+                <%= r.run.run_on.strftime("%Y-%m-%d") %>
+              </span>
+
+              <span class="col">
+                <%= r.departure_station.station_name %> →
+                <%= r.arrival_station.station_name %>
+              </span>
+
+              <span class="col"><%= r.seats.size %>名</span>
+
+              <span class="col status-text <%= r.is_issued? ? "issued" : "not-issued" %>">
+                <%= r.is_issued? ? "済" : "未" %>
+              </span>
+
+              <span class="col">
+                <%= link_to "詳細",
+                  staff_reservation_path(r),
+                  class: "btn btn-sm btn-ghost" %>
+              </span>
+            </div>
+          <% end %>
+
+        </div>
+      <% else %>
+        <p class="empty-text">予約はまだありません。</p>
+      <% end %>
+    </div>
+
+    <div class="page-footer">
+      <%= link_to "一覧に戻る",
+        staff_users_path,
+        class: "btn btn-ghost" %>
+    </div>
+
+  </div>
+</div>

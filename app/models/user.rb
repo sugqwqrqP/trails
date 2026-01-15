@@ -4,6 +4,14 @@ class User < ApplicationRecord
   has_many :reservations, dependent: :destroy
   enum role: { user: 0, staff: 1, operator: 2 }
 
+  def role_label
+    case role
+    when "user"     then "利用者"
+    when "staff"    then "駅員"
+    when "operator" then "運行管理者"
+    end
+  end
+
   # ログインID
   validates :login_id,
     presence: { message: "を入力してください" }

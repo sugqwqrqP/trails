@@ -95,3 +95,115 @@
   padding: 6px 10px;
   font-size: 12px;
 }
+/* =========================
+   Staff Users 
+========================= */
+
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+/* ===== 基本情報 ===== */
+
+.info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.info-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+}
+
+.info-row .label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* 区分：文字＋色のみ */
+.role-text.user {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.role-text.staff {
+  color: #b00020;
+  font-weight: 600;
+}
+
+.role-text.operator {
+  color: #1a73e8;
+  font-weight: 600;
+}
+
+/* ===== 予約一覧 ===== */
+
+.reservation-rows {
+  margin-top: 8px;
+}
+
+.reservation-header,
+.reservation-row {
+  display: grid;
+  grid-template-columns:
+    40px     /* ID */
+    120px    /* 便名 */
+    120px    /* 運行日 */
+    1fr      /* 区間 */
+    60px     /* 人数 */
+    60px     /* 発券 */
+    80px;    /* 詳細 */
+  align-items: center;
+  gap: 8px;
+}
+.reservation-header {
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.reservation-row {
+  padding: 12px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.reservation-row:hover {
+  background: #f8f9fa;
+}
+
+.col {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 発券ステータス：文字＋色のみ */
+.status-text {
+  font-weight: 600;
+}
+
+.status-text.issued {
+  color: #2e7d32;
+}
+
+.status-text.not-issued {
+  color: #b00020;
+}
+
+/* 空表示 */
+.empty-text {
+  font-size: 14px;
+  color: var(--muted);
+  padding: 12px 0;
+}
+
+/* フッター */
+.page-footer {
+  margin-top: 24px;
+}
