@@ -3,70 +3,92 @@ class RunsController < ApplicationController
 
   def index
     @results = []
-    @has_more = false
+    @errors  = []
 
-    # ==========
-    # 0) params
-    # ==========
     departure_station_id = params[:departure_station_id].presence
     arrival_station_id   = params[:arrival_station_id].presence
     run_on_str           = params[:run_on].presence
     time_str             = params[:time].presence
     time_basis           = params[:time_basis].presence
-    offset               = params[:offset].to_i || 0
-
-    unless departure_station_id && arrival_station_id && run_on_str
-      @runs = Run.all
-      return
-    end
-
-    departure_station = Station.find(departure_station_id)
-    arrival_station   = Station.find(arrival_station_id)
-    run_on             = Date.parse(run_on_str)
+    offset               = params[:offset].to_i
 
     # ==========
-    # バリデーション
+    # 1) presence
     # ==========
-    if departure_station_id == arrival_station_id
-      @search_error = "発駅と着駅は異なる駅を指定してください"
-      return
+    @errors << "出発駅を選択してください" if departure_station_id.blank?
+    @errors << "到着駅を選択してください" if arrival_station_id.blank?
+    @errors << "日付を選択してください"   if run_on_str.blank?
+
+    # ==========
+    # 2) parse / find（presence があっても落ちないように）
+    # ==========
+    departure_station = nil
+    arrival_station   = nil
+    run_on            = nil
+
+    if departure_station_id.present?
+      departure_station = Station.find_by(id: departure_station_id)
+      @errors << "出発駅が不正です" if departure_station.nil?
     end
 
-    if run_on < Date.current
-      @search_error = "過去の日付は指定できません"
-      return
+    if arrival_station_id.present?
+      arrival_station = Station.find_by(id: arrival_station_id)
+      @errors << "到着駅が不正です" if arrival_station.nil?
     end
 
-    if run_on > Date.current + 14
-      @search_error = "2週間後以降の便は検索できません"
-      return
-    end
-
-    if run_on == Date.current && time_str.present?
-      target_time = Time.zone.parse("#{run_on} #{time_str}")
-
-      # その時間まではOK
-      if target_time < Time.zone.now - 1.minute
-        @search_error = "過去の時刻は指定できません"
-        return
+    if run_on_str.present?
+      begin
+        run_on = Date.parse(run_on_str)
+      rescue ArgumentError
+        @errors << "日付の形式が不正です"
       end
     end
 
     # ==========
-    # 1) 上り下り判定
+    # 3) business rule（全部評価する）
+    # ==========
+    if departure_station && arrival_station
+      if departure_station.id == arrival_station.id
+        @errors << "発駅と着駅は異なる駅を指定してください"
+      end
+    end
+
+    if run_on
+      if run_on < Date.current
+        @errors << "過去の日付は指定できません"
+      elsif run_on > Date.current + 14
+        @errors << "2週間後以降の便は検索できません"
+      end
+
+      if run_on == Date.current && time_str.present?
+        begin
+          target_time = Time.zone.parse("#{run_on} #{time_str}")
+          if target_time < Time.zone.now - 1.minute
+            @errors << "過去の時刻は指定できません"
+          end
+        rescue ArgumentError, TypeError
+          @errors << "時刻の形式が不正です"
+        end
+      end
+    end
+
+    return if @errors.any?
+
+    # ==========
+    # 4) 上り下り判定
     # ==========
     desired_is_up =
       departure_station.station_order > arrival_station.station_order
 
     # ==========
-    # 2) run_on / is_up で絞る
+    # 5) run_on / is_up で絞る
     # ==========
     runs = Run
       .includes(run_type: { sections: [:from_station, :to_station] })
       .where(run_on: run_on, is_up: desired_is_up)
 
     # ==========
-    # 3) 乗車可能な便だけ残す（軽い）
+    # 6) 乗車可能な便だけ残す（軽い）
     # ==========
     candidates = runs.select do |run|
       begin
@@ -74,13 +96,14 @@ class RunsController < ApplicationController
           from_station: departure_station,
           to_station: arrival_station
         )
+        true
       rescue ActiveRecord::RecordNotFound
         false
       end
     end
 
     # ==========
-    # 4) 時刻計算（まだ空席は見ない）
+    # 7) 時刻計算（まだ空席は見ない）
     # ==========
     basic_results = candidates.map do |run|
       {
@@ -95,25 +118,23 @@ class RunsController < ApplicationController
     end
 
     # ==========
-    # 5) 並び替え（軽い）
+    # 8) 並び替え
     # ==========
     if time_str.present?
       target = Time.zone.parse("#{run_on} #{time_str}")
       key = (time_basis == "arrival") ? :arrival_time : :departure_time
-
       basic_results.sort_by! { |h| (h[key] - target).abs }
     else
       basic_results.sort_by! { |h| h[:departure_time] }
     end
 
     # ==========
-    # 6) 表示対象だけ空席計算（重い）
+    # 9) 表示対象だけ空席計算（重い）
     # ==========
     slice = basic_results.slice(offset, DISPLAY_LIMIT) || []
 
     @results = slice.map do |h|
       run = h[:run]
-
       h.merge(
         availability: {
           reserved: availability(run, "reserved", departure_station, arrival_station),
@@ -124,14 +145,11 @@ class RunsController < ApplicationController
     end
 
     # ==========
-    # 7) もっと表示 判定
+    # 10) pager
     # ==========
-    offset = params[:offset].to_i
     limit  = DISPLAY_LIMIT
-
     @has_prev = offset > 0
     @has_next = basic_results.size > offset + limit
-
     @prev_offset = [offset - limit, 0].max
     @next_offset = offset + limit
   end
@@ -150,5 +168,4 @@ class RunsController < ApplicationController
       mark: run.availability_mark(car_type, count)
     }
   end
-
 end
