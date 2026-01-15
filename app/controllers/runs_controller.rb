@@ -12,12 +12,21 @@ class RunsController < ApplicationController
     time_basis           = params[:time_basis].presence
     offset               = params[:offset].to_i
 
+    search_requested =
+        params[:departure_station_id].present? ||
+        params[:arrival_station_id].present? ||
+        params[:run_on].present? ||
+        params[:time].present?
+
     # ==========
     # 1) presence
     # ==========
-    @errors << "出発駅を選択してください" if departure_station_id.blank?
-    @errors << "到着駅を選択してください" if arrival_station_id.blank?
-    @errors << "日付を選択してください"   if run_on_str.blank?
+    if search_requested
+      @errors << "出発駅を選択してください" if departure_station_id.blank?
+      @errors << "到着駅を選択してください" if arrival_station_id.blank?
+      @errors << "日付を選択してください"   if run_on_str.blank?
+    end
+    return unless search_requested
 
     # ==========
     # 2) parse / find（presence があっても落ちないように）
