@@ -121,17 +121,27 @@ a{ color: inherit; }
   border-color: #ffd8a8;
   color: var(--warn);
 }
-
 /* =========================
-   Alerts
+   Flash Message
 ========================= */
-.alert{
+
+.flash {
+  max-width: 720px;
+  margin: 16px auto;
   padding: 12px 16px;
-  border-radius: var(--r-md);
-  font-weight: 700;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
-.alert-error{
+.flash.notice {
+  background: #e8f0fe;   /* 薄い青 */
+  color: #1a73e8;
+  border: 1px solid #c6dafc;
+}
+
+.flash.alert {
   background: #fdecea;
   color: #b00020;
+  border: 1px solid #f5c6cb;
 }

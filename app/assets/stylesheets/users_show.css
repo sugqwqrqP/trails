@@ -1,0 +1,61 @@
+.account-edit-panel {
+  padding: 20px;
+}
+
+.form-section {
+  margin-bottom: 24px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-row input {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.form-note {
+  font-size: 12px;
+  color: #777;
+}
+
+.field-error {
+  font-size: 12px;
+  color: #c62828;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* 危険ゾーン */
+
+.danger-panel {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid #f0caca;
+  background: #fff5f5;
+}
+
+.section-title.danger {
+  color: #c62828;
+}
+
+.danger-text {
+  font-size: 13px;
+  color: #a33;
+  margin-bottom: 12px;
+}
+
+.btn-danger {
+  background: #fff;
+  border: 1px solid #e57373;
+  color: #c62828;
+}
+

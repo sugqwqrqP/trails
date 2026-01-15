@@ -12,10 +12,11 @@
     <%= render "shared/header" %>
 
     <main class="app-main">
-      <% if flash[:notice] %>
-        <div class="container">
-          <div class="alert alert-notice">
-            <%= flash[:notice] %>
+
+      <% flash.each do |type, message| %>
+        <div class="flash <%= type %>">
+          <div class="container">
+            <%= message %>
           </div>
         </div>
       <% end %>

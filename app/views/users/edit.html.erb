@@ -1,37 +1,85 @@
-<h1>会員情報変更</h1>
+<div class="app-main">
+  <div class="container">
 
-<%= form_with model: @user, local: true do |f| %>
+    <div class="page-header">
+      <h2>会員情報変更</h2>
+    </div>
 
-  <div>
-    <%= f.label :login_id, "ログインID" %><br>
-    <%= f.text_field :login_id, disabled: true %>
+    <div class="panel account-edit-panel">
+
+      <%= form_with model: @user, local: true do |f| %>
+
+        <!-- ログイン情報 -->
+        <div class="form-section">
+          <h3 class="section-title">ログイン情報</h3>
+
+          <div class="form-row">
+            <%= f.label :login_id, "ログインID" %>
+            <%= f.text_field :login_id, disabled: true %>
+            <p class="form-note">ログインIDは変更できません。</p>
+          </div>
+        </div>
+
+        <!-- 個人情報 -->
+        <div class="form-section">
+          <h3 class="section-title">個人情報</h3>
+
+          <div class="form-row">
+            <%= f.label :user_fullname, "氏名" %>
+            <%= f.text_field :user_fullname %>
+            <% @user.errors.full_messages_for(:user_fullname).each do |msg| %>
+              <div class="field-error"><%= msg %></div>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- パスワード -->
+        <div class="form-section">
+          <h3 class="section-title">パスワード</h3>
+
+          <div class="form-row">
+            <%= f.label :password, "新しいパスワード" %>
+            <%= f.password_field :password %>
+            <p class="form-note">変更しない場合は空欄のままにしてください。</p>
+            <% @user.errors.full_messages_for(:password).each do |msg| %>
+              <div class="field-error"><%= msg %></div>
+            <% end %>
+          </div>
+
+          <div class="form-row">
+            <%= f.label :password_confirmation, "パスワード（確認）" %>
+            <%= f.password_field :password_confirmation %>
+          </div>
+        </div>
+
+        <!-- 保存 -->
+        <div class="form-actions">
+          <%= link_to "マイページに戻る",
+            user_path(@user),
+            class: "btn btn-ghost" %>
+
+          <%= f.submit "更新する",
+            class: "btn btn-primary" %>
+        </div>
+
+      <% end %>
+    </div>
+
+    <!-- 退会 -->
+    <div class="panel danger-panel">
+      <h3 class="section-title danger">退会</h3>
+
+      <p class="danger-text">
+        退会すると、すべての予約情報が削除されます。
+        この操作は取り消せません。
+      </p>
+
+      <%= button_to "退会する",
+        user_path(@user),
+        method: :delete,
+        data: { confirm: "本当に退会しますか？この操作は取り消せません。" },
+        class: "btn btn-danger" %>
+    </div>
+
   </div>
-
-  <div>
-    <%= f.label :user_fullname, "氏名" %><br>
-    <%= f.text_field :user_fullname %>
-    <% @user.errors.full_messages_for(:user_fullname).each do |msg| %>
-      <div class="field-error"><%= msg %></div>
-    <% end %>
-  </div>
-
-  <div>
-    <%= f.label :password, "新しいパスワード" %><br>
-    <%= f.password_field :password %>
-    <% @user.errors.full_messages_for(:password).each do |msg| %>
-      <div class="field-error"><%= msg %></div>
-    <% end %>
-  </div>
-
-  <div>
-    <%= f.label :password_confirmation, "パスワード（確認）" %><br>
-    <%= f.password_field :password_confirmation %>
-  </div>
-
-  <%= f.submit "更新する" %>
-
-<% end %>
-
-<p>
-  <%= link_to "マイページに戻る", user_path(@user) %>
-</p>
+</div>

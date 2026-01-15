@@ -1,23 +1,48 @@
-<h1>ログイン</h1>
+<div class="app-main">
+  <div class="container">
 
-<%= form_with url: login_path, method: :post, local: true do |f| %>
-
-  <% if flash[:alert] %>
-    <div class="form-error">
-      <%= flash[:alert] %>
+    <div class="page-header">
+      <h2>ログイン</h2>
     </div>
-  <% end %>
 
-  <div class="form-group <%= 'has-error' if flash[:alert] %>">
-    <%= f.label :login_id, "ログインID" %>
-    <%= f.text_field :login_id, class: "form-control" %>
+    <div class="panel auth-panel">
+
+      <%= form_with url: login_path, method: :post, local: true do |f| %>
+
+        <div class="form-section">
+
+          <div class="form-row">
+            <%= f.label :login_id, "ログインID" %>
+            <%= f.text_field :login_id, autocomplete: "username" %>
+          </div>
+
+          <div class="form-row">
+            <%= f.label :password, "パスワード" %>
+
+            <div class="password-field">
+              <%= f.password_field :password,
+                id: "login-password",
+                autocomplete: "current-password" %>
+
+              <button
+                type="button"
+                class="password-toggle"
+                data-target="login-password"
+                aria-label="パスワードを表示">
+                👁
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+          <%= f.submit "ログイン", class: "btn btn-primary" %>
+        </div>
+
+      <% end %>
+
+    </div>
+
   </div>
-
-  <div class="form-group <%= 'has-error' if flash[:alert] %>">
-    <%= f.label :password, "パスワード" %>
-    <%= f.password_field :password, class: "form-control" %>
-  </div>
-
-  <%= f.submit "ログイン" %>
-
-<% end %>
+</div>
