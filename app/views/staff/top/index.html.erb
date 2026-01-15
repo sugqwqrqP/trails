@@ -1,6 +1,25 @@
-<h1>駅員トップページ</h1>
+<div class="app-main staff-mode">
+  <div class="container">
 
-<ul>
-  <li><%= link_to "便を検索", staff_runs_path %></li>
-  <li><%= link_to "利用者一覧", staff_users_path %></li>
-</ul>
+    <div class="page-header">
+      <h2>駅員トップページ</h2>
+    </div>
+
+    <div class="panel">
+      <div class="menu-list">
+
+        <%= link_to staff_runs_path, class: "menu-item" do %>
+          <strong>便一覧</strong>
+          <span>運行中・運行予定の便を確認</span>
+        <% end %>
+
+        <%= link_to staff_users_path, class: "menu-item" do %>
+          <strong>利用者一覧</strong>
+          <span>登録利用者の情報を確認</span>
+        <% end %>
+
+      </div>
+    </div>
+
+  </div>
+</div>

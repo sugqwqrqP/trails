@@ -1,0 +1,97 @@
+/* =========================
+   Staff Users
+========================= */
+
+.page-header {
+  margin-bottom: 16px;
+}
+
+.page-header h2 {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.page-description {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* ===== 検索 ===== */
+
+.search-panel {
+  margin-bottom: 16px;
+}
+
+.search-row {
+  display: flex;
+  gap: 8px;
+}
+
+.search-row input {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.search-toggle {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ===== テーブル ===== */
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.data-table th {
+  text-align: left;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* ===== ロールバッジ ===== */
+
+.role-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* 利用者：緑 */
+.role-user {
+  background: #e6f4ea;
+  color: #2e7d32;
+}
+
+/* 駅員：赤 */
+.role-staff {
+  background: #fdecea;
+  color: #b00020;
+}
+
+/* 運行管理者：青 */
+.role-operator {
+  background: #e8f0fe;
+  color: #1a73e8;
+}
+
+/* ===== ボタン補助 ===== */
+
+.btn-sm {
+  padding: 6px 10px;
+  font-size: 12px;
+}

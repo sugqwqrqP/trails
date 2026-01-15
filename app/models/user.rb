@@ -41,4 +41,7 @@ class User < ApplicationRecord
       message: "は大文字・小文字・数字・記号(@¥!$&)を含めてください"
     },
     unless: -> { password.blank? }
+
+    # 駅員と運行管理者を除外
+    scope :customers, -> { where(role: :user) }
 end

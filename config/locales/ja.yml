@@ -1,18 +1,19 @@
 ja:
-  activerecord:
-    attributes:
-      user:
-        login_id: ログインID
-        user_fullname: 氏名
-        password: パスワード
-        password_confirmation: パスワード（確認）
+    activerecord:
+        attributes:
+            user:
+                login_id: ログインID
+                user_fullname: 氏名
+                password: パスワード
+                password_confirmation: パスワード（確認）
 
-      run:
-        run_on: 運行日
-        first_station_departure_time: 始発時刻
-        run_type: 種別
-        is_up: 上り下り
+            run:
+                run_on: 運行日
+                first_station_departure_time: 始発時刻
+                run_type: 種別
+                is_up: 上り下り
 
-  errors:
-    messages:
-      blank: を入力してください
+    errors:
+        messages:
+            blank: 入力してください
+            format: "%{message}"

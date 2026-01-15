@@ -1,0 +1,68 @@
+/* =========================
+   Staff Top Page
+========================= */
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h2 {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.page-description {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* メニュー全体 */
+.menu-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* メニュー項目 */
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  padding: 16px 18px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  background: #fff;
+
+  text-decoration: none;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.menu-item + .menu-item {
+  margin-top: 12px;
+}
+
+/* hover / focus は「静かに」 */
+.menu-item:hover,
+.menu-item:focus-visible {
+  background: #f8f9fa;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 1px var(--brand-weak);
+  outline: none;
+}
+
+/* テキスト */
+.menu-item strong {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.menu-item span {
+  font-size: 13px;
+  color: var(--muted);
+}
+
