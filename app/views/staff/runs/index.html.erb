@@ -103,21 +103,16 @@
             </div>
           </div>
 
-          <!-- 右：空席状況（表示のみ） -->
+          <!-- 右：空席数（駅員向け） -->
           <div class="seat-status">
-            <div class="seat-type-btn reserved disabled">
-              <span class="seat-label">指定席</span>
-              <span class="seat-mark"><%= result[:availability][:reserved][:mark] %></span>
+            <div class="seat-count">
+              指定席: <%= result[:availability][:reserved][:count] %>
             </div>
-
-            <div class="seat-type-btn green disabled">
-              <span class="seat-label">グリーン</span>
-              <span class="seat-mark"><%= result[:availability][:green][:mark] %></span>
+            <div class="seat-count">
+              グリーン: <%= result[:availability][:green][:count] %>
             </div>
-
-            <div class="seat-type-btn fabulous disabled">
-              <span class="seat-label">ファビュラス</span>
-              <span class="seat-mark"><%= result[:availability][:fabulous][:mark] %></span>
+            <div class="seat-count">
+              ファビュラス: <%= result[:availability][:fabulous][:count] %>
             </div>
           </div>
         </div>
@@ -130,7 +125,7 @@
               departure_station_id: params[:departure_station_id],
               arrival_station_id:   params[:arrival_station_id]
             ),
-            class: "btn btn-primary"
+            class: "btn btn-ghost btn-sm"
           %>
         </div>
       </div>
