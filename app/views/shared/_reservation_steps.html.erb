@@ -1,0 +1,31 @@
+<% steps = [
+  { number: 1, label: "便・席種選択" },
+  { number: 2, label: "号車選択" },
+  { number: 3, label: "座席選択" },
+  { number: 4, label: "内容確認" },
+  { number: 5, label: "予約完了" }
+] %>
+
+<ol class="reservation-steps">
+  <% steps.each do |step| %>
+    <% state =
+      if step[:number] < current_step
+        "is-done"
+      elsif step[:number] == current_step
+        "is-active"
+      else
+        ""
+      end
+    %>
+    <li class="reservation-step <%= state %>">
+      <div class="step-circle">
+        <% if step[:number] < current_step %>
+          ✓
+        <% else %>
+          <%= step[:number] %>
+        <% end %>
+      </div>
+      <div class="step-label"><%= step[:label] %></div>
+    </li>
+  <% end %>
+</ol>
