@@ -1,40 +1,112 @@
-<h1><%= @run.display_name %></h1>
+<div class="app-main">
+  <div class="container">
 
-<p>
-  <%= @run.run_on %>
-</p>
+    <!-- ===== ページヘッダ ===== -->
+    <div class="page-header">
+      <h2>便詳細（駅員）</h2>
+    </div>
 
-<h2>予約一覧</h2>
+    <!-- ===== 便情報 ===== -->
+    <div class="panel run-detail">
 
-<%= link_to "この便で予約を作成",
-  run_cars_path(
-    @run,
-    departure_station_id: @departure_station.id,
-    arrival_station_id:   @arrival_station.id
-  )
-%>
+      <div class="detail-section">
+        <h3 class="section-title">運行情報</h3>
 
-<table>
-  <tr>
-    <th>ID</th>
-    <th>名義</th>
-    <th>区間</th>
-    <th>発券</th>
-    <th>操作</th>
-  </tr>
+        <div class="detail-row">
+          <span class="label">便名</span>
+          <span><%= @run.display_name %></span>
+        </div>
 
-  <% @reservations.each do |r| %>
-    <tr>
-      <td><%= r.id %></td>
-      <td><%= r.holder_name %></td>
-      <td>
-        <%= r.departure_station.station_name %> →
-        <%= r.arrival_station.station_name %>
-      </td>
-      <td><%= r.is_issued? ? "済" : "未" %></td>
-      <td>
-        <%= link_to "詳細", staff_reservation_path(r) %>
-      </td>
-    </tr>
-  <% end %>
-</table>
+        <div class="detail-row">
+          <span class="label">運行日</span>
+          <span><%= @run.run_on.strftime("%Y/%m/%d") %></span>
+        </div>
+
+        <% if @departure_station && @arrival_station %>
+          <div class="detail-row">
+            <span class="label">区間</span>
+            <span>
+              <%= @departure_station.station_name %> →
+              <%= @arrival_station.station_name %>
+            </span>
+          </div>
+
+          <div class="detail-row">
+            <span class="label">時刻</span>
+            <span>
+              <%= @run.departure_time_at(@departure_station).strftime("%H:%M") %>
+              →
+              <%= @run.arrival_time_at(@arrival_station).strftime("%H:%M") %>
+            </span>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- ===== 操作 ===== -->
+      <% if @departure_station && @arrival_station %>
+
+      <% end %>
+
+    </div>
+
+    <!-- ===== 予約一覧 ===== -->
+    <div class="panel reservation-list">
+
+      <div class="detail-section">
+        <h3 class="section-title">予約一覧</h3>
+
+        <div class="detail-actions">
+          <%= link_to "新規予約",
+            run_cars_path(
+              @run,
+              departure_station_id: @departure_station.id,
+              arrival_station_id:   @arrival_station.id
+            ),
+            class: "btn btn-ghost btn-sm"
+          %>
+        </div>
+
+        <% if @reservations.any? %>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>名義</th>
+                <th>区間</th>
+                <th>発券</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% @reservations.each do |r| %>
+                <tr>
+                  <td><%= r.id %></td>
+                  <td><%= r.holder_name %></td>
+                  <td>
+                    <%= r.departure_station.station_name %> →
+                    <%= r.arrival_station.station_name %>
+                  </td>
+                  <td>
+                    <span class="status <%= r.is_issued? ? "issued" : "not-issued" %>">
+                      <%= r.is_issued? ? "発券済" : "未発券" %>
+                    </span>
+                  </td>
+                  <td>
+                    <%= link_to "詳細",
+                      staff_reservation_path(r),
+                      class: "btn btn-ghost btn-sm" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <p class="empty-message">この便にはまだ予約がありません。</p>
+        <% end %>
+
+      </div>
+    </div>
+
+  </div>
+</div>
