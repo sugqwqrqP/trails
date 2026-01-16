@@ -45,3 +45,32 @@ User.create!(
   password_confirmation: "Senshu3!",
   role: 0
 )
+
+family_names = %w[
+  佐藤 鈴木 高橋 田中 渡辺 伊藤 山本 中村 小林 加藤
+  吉田 山田 佐々木 山口 斎藤 松本 井上 木村 林 清水
+  山崎 森 阿部 池田 橋本 石川 山下 中島 前田 藤田
+]
+given_names = %w[
+  太郎 大輔 翔 直樹 健太 悠斗 翔太 颯太 亮 直人
+  大樹 拓海 健 瞳 美咲 沙織 彩香 由美 恵 里奈
+  優花 真由 美月 さくら 陽菜 葵 愛 実咲 結衣 明日香
+]
+
+created = 0
+index = 1
+while created < 30
+  full_name = "#{family_names.sample} #{given_names.sample}"
+  login_id = format("seed_user_%02d", index)
+  index += 1
+
+  User.create!(
+    login_id: login_id,
+    user_fullname: full_name,
+    password: "SeedUser1234!",
+    password_confirmation: "SeedUser1234!",
+    role: 0
+  )
+
+  created += 1
+end
