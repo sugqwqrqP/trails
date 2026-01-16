@@ -49,8 +49,18 @@
   align-items: center;
 }
 
+.detail-actions .action-group {
+  display: flex;
+  gap: 12px;
+}
+
 .btn-danger {
   background: #fff;
   border: 1px solid #e57373;
   color: #c62828;
+}
+
+.btn-danger.is-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }

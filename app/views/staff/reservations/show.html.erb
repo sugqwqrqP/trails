@@ -1,29 +1,128 @@
-<h1>予約詳細</h1>
+<div class="app-main">
+  <div class="container">
 
-<p>
-  <strong><%= @reservation.run.display_name %></strong><br>
-  <%= @reservation.departure_station.station_name %> →
-  <%= @reservation.arrival_station.station_name %>
-</p>
+    <div class="page-header">
+      <h2>予約詳細（駅員）</h2>
+    </div>
 
-<p>予約番号：<%= @reservation.id %></p>
-<p>予約者名義：<%= @reservation.holder_name %></p>
-<p>
-  発券状況:
-  <%= @reservation.is_issued? ? "発券済み" : "未発券" %>
-</p>
+    <div class="panel reservation-detail">
 
-<% unless @reservation.is_issued? %>
-  <%= button_to "発券する",
-    issue_staff_reservation_path(@reservation),
-    method: :patch,
-    data: { confirm: "発券しますか？" } %>
-<% end %>
+      <!-- ===== 基本情報 ===== -->
+      <div class="detail-section">
+        <h3 class="section-title">基本情報</h3>
 
-<% unless @reservation.is_issued? %>
-  <%= button_to "予約を削除",
-    staff_reservation_path(@reservation),
-    method: :delete,
-    data: { confirm: "本当に削除しますか？" }
-  %>
-<% end %>
+        <div class="detail-row">
+          <span class="label">予約番号</span>
+          <span><%= @reservation.id %></span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">予約者名義</span>
+          <span><%= @reservation.holder_name %></span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">発券状況</span>
+          <span class="status <%= @reservation.is_issued? ? "issued" : "not-issued" %>">
+            <%= @reservation.is_issued? ? "発券済" : "未発券" %>
+          </span>
+        </div>
+      </div>
+
+      <!-- ===== 乗車情報 ===== -->
+      <div class="detail-section">
+        <h3 class="section-title">乗車情報</h3>
+
+        <div class="detail-row">
+          <span class="label">日付</span>
+          <span><%= @reservation.run.run_on.strftime("%Y/%m/%d") %></span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">列車</span>
+          <span><%= @reservation.run.display_name %></span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">区間</span>
+          <span>
+            <%= @reservation.departure_station.station_name %> →
+            <%= @reservation.arrival_station.station_name %>
+          </span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">時刻</span>
+          <span>
+            <%= @reservation.run
+                  .departure_time_at(@reservation.departure_station)
+                  .strftime("%H:%M") %>
+            →
+            <%= @reservation.run
+                  .arrival_time_at(@reservation.arrival_station)
+                  .strftime("%H:%M") %>
+          </span>
+        </div>
+      </div>
+
+      <!-- ===== 座席情報 ===== -->
+      <div class="detail-section">
+        <h3 class="section-title">座席情報</h3>
+
+        <div class="detail-row">
+          <span class="label">席種</span>
+          <span>
+            <%= seat_type_label(
+              @reservation.reservation_seats.first.seat.car.car_type.name
+            ) %>
+          </span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">人数</span>
+          <span><%= @reservation.reservation_seats.count %>人</span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">座席番号</span>
+          <span>
+            <%= @reservation.reservation_seats
+              .map { |rs| "#{rs.seat.row}#{rs.seat.column}" }
+              .join(", ") %>
+          </span>
+        </div>
+      </div>
+
+      <!-- ===== 操作（駅員） ===== -->
+      <div class="detail-actions">
+
+        <!-- 戻る系 -->
+        <%= link_to "利用者詳細に戻る",
+          staff_user_path(@reservation.user),
+          class: "btn btn-ghost" %>
+
+        <div class="action-group">
+          <% unless @reservation.is_issued? %>
+            <%= button_to "発券する",
+              issue_staff_reservation_path(@reservation),
+              method: :patch,
+              data: { confirm: "この予約を発券しますか？" },
+              class: "btn btn-primary" %>
+
+            <%= button_to "予約を削除",
+              staff_reservation_path(@reservation),
+              method: :delete,
+              data: { confirm: "本当にこの予約を削除しますか？" },
+              class: "btn btn-danger" %>
+          <% else %>
+            <%= button_tag "予約を削除",
+              class: "btn btn-danger is-disabled",
+              disabled: true %>
+          <% end %>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
