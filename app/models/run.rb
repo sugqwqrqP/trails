@@ -145,14 +145,14 @@ class Run < ApplicationRecord
       case count
       when 5..6 then "◎"
       when 3..4 then "◯"
-      when 1..2 then "△ (残り#{count})"
+      when 1..2 then "残り#{count}席"
       else "×"
       end
     else
       case count
-      when 20.. then "◎"
-      when 7..19 then "◯"
-      when 1..6 then "△ (残り#{count})"
+      when 50.. then "◎"
+      when 20..49 then "◯"
+      when 1..19 then "残り#{count}席"
       else "×"
       end
     end

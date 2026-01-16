@@ -264,6 +264,28 @@ body {
   font-size: 32px;
   font-weight: 800;
   line-height: 1;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seat-mark.small {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.seat-type-btn.disabled {
+  background: #f2f2f2 !important;
+  color: #8c8c8c !important;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.seat-type-btn.disabled .seat-label,
+.seat-type-btn.disabled .seat-mark {
+  color: #8c8c8c !important;
 }
 
 /* 色 */

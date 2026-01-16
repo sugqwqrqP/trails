@@ -23,31 +23,58 @@
 
       <!-- 右：空席案内（横並び） -->
       <div class="seat-status">
-        <%= link_to run_cars_path(
-              run,
-              request.query_parameters.merge(seat_type: "reserved")
-            ),
-            class: "seat-type-btn reserved" do %>
-          <span class="seat-label">指定席</span>
-          <span class="seat-mark"><%= result[:availability][:reserved][:mark] %></span>
+        <% reserved_mark = result[:availability][:reserved][:mark] %>
+        <% reserved_class = reserved_mark.start_with?("残り") ? "seat-mark small" : "seat-mark" %>
+        <% if reserved_mark == "×" %>
+          <div class="seat-type-btn reserved disabled">
+            <span class="seat-label">指定席</span>
+            <span class="<%= reserved_class %>"><%= reserved_mark %></span>
+          </div>
+        <% else %>
+          <%= link_to run_cars_path(
+                run,
+                request.query_parameters.merge(seat_type: "reserved")
+              ),
+              class: "seat-type-btn reserved" do %>
+            <span class="seat-label">指定席</span>
+            <span class="<%= reserved_class %>"><%= reserved_mark %></span>
+          <% end %>
         <% end %>
 
-        <%= link_to run_cars_path(
-              run,
-              request.query_parameters.merge(seat_type: "green")
-            ),
-            class: "seat-type-btn green" do %>
-          <span class="seat-label">グリーン</span>
-          <span class="seat-mark"><%= result[:availability][:green][:mark] %></span>
+        <% green_mark = result[:availability][:green][:mark] %>
+        <% green_class = green_mark.start_with?("残り") ? "seat-mark small" : "seat-mark" %>
+        <% if green_mark == "×" %>
+          <div class="seat-type-btn green disabled">
+            <span class="seat-label">グリーン</span>
+            <span class="<%= green_class %>"><%= green_mark %></span>
+          </div>
+        <% else %>
+          <%= link_to run_cars_path(
+                run,
+                request.query_parameters.merge(seat_type: "green")
+              ),
+              class: "seat-type-btn green" do %>
+            <span class="seat-label">グリーン</span>
+            <span class="<%= green_class %>"><%= green_mark %></span>
+          <% end %>
         <% end %>
 
-        <%= link_to run_cars_path(
-              run,
-              request.query_parameters.merge(seat_type: "fabulous")
-            ),
-            class: "seat-type-btn fabulous" do %>
-          <span class="seat-label">ファビュラス</span>
-          <span class="seat-mark"><%= result[:availability][:fabulous][:mark] %></span>
+        <% fabulous_mark = result[:availability][:fabulous][:mark] %>
+        <% fabulous_class = fabulous_mark.start_with?("残り") ? "seat-mark small" : "seat-mark" %>
+        <% if fabulous_mark == "×" %>
+          <div class="seat-type-btn fabulous disabled">
+            <span class="seat-label">ファビュラス</span>
+            <span class="<%= fabulous_class %>"><%= fabulous_mark %></span>
+          </div>
+        <% else %>
+          <%= link_to run_cars_path(
+                run,
+                request.query_parameters.merge(seat_type: "fabulous")
+              ),
+              class: "seat-type-btn fabulous" do %>
+            <span class="seat-label">ファビュラス</span>
+            <span class="<%= fabulous_class %>"><%= fabulous_mark %></span>
+          <% end %>
         <% end %>
       </div>
     </div>
