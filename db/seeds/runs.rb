@@ -47,64 +47,36 @@ base_numbers = {
   "こだま" => 701
 }
 
-# 4日目以降に流すこだまだけの最低限ダイヤ
-limited_schedule = [
-  ["06:30", kodama]
-]
-
-# 0日目〜15日目を投入
-days = 16
+# 0日目〜2日目だけフル便を投入
+days = 3
 (0...days).each do |day_offset|
   run_on = Date.today + day_offset
 
-  if day_offset <= 3
-    # 0〜3日目はフル便ダイヤ
-    # 東京 → 新大阪（下り・奇数）
-    counters_down = base_numbers.transform_values { |v| v }
+  # 東京 → 新大阪（下り・奇数）
+  counters_down = base_numbers.transform_values { |v| v }
 
-    schedule.each do |time_str, run_type|
-      Run.create!(
-        run_number: counters_down[run_type.name],
-        run_on: run_on,
-        is_up: false,
-        first_station_departure_time: time_str,
-        run_type: run_type
-      )
-      counters_down[run_type.name] += 2
-    end
+  schedule.each do |time_str, run_type|
+    Run.create!(
+      run_number: counters_down[run_type.name],
+      run_on: run_on,
+      is_up: false,
+      first_station_departure_time: time_str,
+      run_type: run_type
+    )
+    counters_down[run_type.name] += 2
+  end
 
-    # 新大阪 → 東京（上り・偶数）
-    counters_up = base_numbers.transform_values { |v| v + 1 }
+  # 新大阪 → 東京（上り・偶数）
+  counters_up = base_numbers.transform_values { |v| v + 1 }
 
-    schedule.each do |time_str, run_type|
-      Run.create!(
-        run_number: counters_up[run_type.name],
-        run_on: run_on,
-        is_up: true,
-        first_station_departure_time: time_str,
-        run_type: run_type
-      )
-      counters_up[run_type.name] += 2
-    end
-  else
-    # 4日目以降はこだまのみ（上下1本）
-    limited_schedule.each do |time_str, run_type|
-      Run.create!(
-        run_number: base_numbers[run_type.name],
-        run_on: run_on,
-        is_up: false,
-        first_station_departure_time: time_str,
-        run_type: run_type
-      )
-
-      # 上りは偶数便
-      Run.create!(
-        run_number: base_numbers[run_type.name] + 1,
-        run_on: run_on,
-        is_up: true,
-        first_station_departure_time: time_str,
-        run_type: run_type
-      )
-    end
+  schedule.each do |time_str, run_type|
+    Run.create!(
+      run_number: counters_up[run_type.name],
+      run_on: run_on,
+      is_up: true,
+      first_station_departure_time: time_str,
+      run_type: run_type
+    )
+    counters_up[run_type.name] += 2
   end
 end
