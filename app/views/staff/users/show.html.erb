@@ -82,7 +82,7 @@
 
               <span class="col">
                 <%= link_to "詳細",
-                  staff_reservation_path(r),
+                  staff_reservation_path(r, return_to: request.fullpath),
                   class: "btn btn-sm btn-ghost" %>
               </span>
             </div>

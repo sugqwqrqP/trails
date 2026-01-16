@@ -97,8 +97,8 @@
       <div class="detail-actions">
 
         <!-- 戻る系 -->
-        <%= link_to "利用者詳細に戻る",
-          staff_user_path(@reservation.user),
+        <%= link_to "戻る",
+          params[:return_to].presence || staff_user_path(@reservation.user),
           class: "btn btn-ghost" %>
 
         <div class="action-group">

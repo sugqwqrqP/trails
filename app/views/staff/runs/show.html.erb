@@ -94,7 +94,7 @@
                   </td>
                   <td>
                     <%= link_to "詳細",
-                      staff_reservation_path(r),
+                      staff_reservation_path(r, return_to: request.fullpath),
                       class: "btn btn-ghost btn-sm" %>
                   </td>
                 </tr>
