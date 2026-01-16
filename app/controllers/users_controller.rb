@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :require_login, except: [:new, :create]
-  before_action :set_user, only: [:show, :edit, :update]
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def new
     @user = User.new
@@ -42,6 +42,10 @@ class UsersController < ApplicationController
   end
   
   def destroy
+    @user.destroy
+
+    reset_session
+    redirect_to root_path, notice: "退会しました"
   end
 
   private
