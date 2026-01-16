@@ -1,25 +1,156 @@
-<h1>運行管理者｜トップ</h1>
+<div class="app-main">
+  <div class="container">
 
-<p>
-  <%= link_to "便を追加", new_operator_run_path %>
-</p>
+    <div class="page-header">
+      <h2>運行管理者｜便一覧</h2>
 
-<table>
-  <tr>
-    <th>ID</th>
-    <th>便名</th>
-    <th>運行日</th>
-    <th>操作</th>
-  </tr>
+      <div class="page-actions">
+        <%= link_to "＋ 便を追加",
+          new_operator_run_path,
+          class: "btn btn-primary" %>
+      </div>
+    </div>
 
-  <% @runs.each do |run| %>
-    <tr>
-      <td><%= run.id %></td>
-      <td><%= run.display_name %></td>
-      <td><%= run.run_on %></td>
-      <td>
-        <%= link_to "詳細", operator_run_path(run) %>
-      </td>
-    </tr>
-  <% end %>
-</table>
+    <div class="banner">
+      <% if @errors.present? && @errors.any? %>
+        <div class="alert">
+          <%= @errors.join(" / ") %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- デフォルト値の設定 -->
+    <% default_departure =
+        params[:departure_station_id] ||
+        Station.find_by(station_name: "東京")&.id %>
+
+    <% default_arrival =
+        params[:arrival_station_id] ||
+        Station.find_by(station_name: "新大阪")&.id %>
+
+    <% default_run_on = params[:run_on] || Date.current %>
+    <% default_time   = params[:time]   || Time.current.strftime("%H:%M") %>
+
+    <!-- 検索フォーム -->
+    <%= form_with url: operator_runs_path, method: :get, local: true do |f| %>
+
+      <!-- 乗車駅 -->
+      <div>
+        <%= f.label :departure_station_id, "乗車駅" %>
+        <%= f.collection_select :departure_station_id,
+              Station.order(:station_order),
+              :id,
+              :station_name,
+              prompt: "選択してください",
+              selected: default_departure %>
+      </div>
+
+      <!-- 降車駅 -->
+      <div>
+        <%= f.label :arrival_station_id, "降車駅" %>
+        <%= f.collection_select :arrival_station_id,
+              Station.order(:station_order),
+              :id,
+              :station_name,
+              prompt: "選択してください",
+              selected: default_arrival %>
+      </div>
+
+      <button type="button" id="swap-stations">
+        発着を入れ替え
+      </button>
+
+      <!-- 日付 -->
+      <div>
+        <%= f.label :run_on, "日付" %>
+        <%= f.date_field :run_on, value: default_run_on %>
+      </div>
+
+      <!-- 時刻 -->
+      <div>
+        <%= f.label :time, "時間" %>
+        <%= f.time_field :time, value: default_time %>
+      </div>
+
+      <!-- 時刻基準 -->
+      <div>
+        <%= f.label :time_basis, "基準" %>
+        <%= f.select :time_basis,
+              [["出発時間", "departure"], ["到着時間", "arrival"]],
+              selected: params[:time_basis] %>
+      </div>
+
+      <%= f.submit "検索", class: "btn btn-secondary" %>
+    <% end %>
+
+    <!-- 一覧 -->
+    <% @results.each do |result| %>
+      <% run = result[:run] %>
+
+      <div class="run-card">
+        <div class="run-main">
+
+          <!-- 左：列車情報 -->
+          <div class="run-info">
+            <div class="run-name">
+              <%= run.run_type.name %> <%= run.run_number %>号
+            </div>
+
+            <div class="run-time-big">
+              <%= result[:departure_time].strftime("%H:%M") %>
+              <span class="arrow">→</span>
+              <%= result[:arrival_time].strftime("%H:%M") %>
+            </div>
+
+            <div class="run-sub">
+              所要 <%= result[:travel_min] %>分
+            </div>
+          </div>
+
+          <!-- 右：空席状況（表示のみ） -->
+          <div class="seat-status">
+            <div class="seat-type-btn reserved disabled">
+              <span class="seat-label">指定席</span>
+              <span class="seat-mark"><%= result[:availability][:reserved][:mark] %></span>
+            </div>
+
+            <div class="seat-type-btn green disabled">
+              <span class="seat-label">グリーン</span>
+              <span class="seat-mark"><%= result[:availability][:green][:mark] %></span>
+            </div>
+
+            <div class="seat-type-btn fabulous disabled">
+              <span class="seat-label">ファビュラス</span>
+              <span class="seat-mark"><%= result[:availability][:fabulous][:mark] %></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="run-actions">
+          <%= link_to "便詳細",
+            operator_run_path(run),
+            class: "btn btn-primary"
+          %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const swapBtn = document.getElementById("swap-stations");
+    if (!swapBtn) return;
+
+    swapBtn.addEventListener("click", () => {
+      const dep = document.querySelector("[name='departure_station_id']");
+      const arr = document.querySelector("[name='arrival_station_id']");
+
+      if (!dep || !arr) return;
+
+      const tmp = dep.value;
+      dep.value = arr.value;
+      arr.value = tmp;
+    });
+  });
+</script>
