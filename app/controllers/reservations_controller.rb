@@ -74,7 +74,8 @@ class ReservationsController < ApplicationController
       run: run,
       departure_station: departure_station,
       arrival_station: arrival_station,
-      holder_name: holder_name
+      holder_name: holder_name,
+      is_issued: current_user.staff?
     )
 
     unless @reservation.save
