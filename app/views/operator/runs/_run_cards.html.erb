@@ -1,0 +1,32 @@
+<% results.each do |result| %>
+  <% run = result[:run] %>
+
+  <div class="run-card">
+    <div class="run-main">
+
+      <!-- 左：列車情報 -->
+      <div class="run-info">
+        <div class="run-name">
+          <%= run.run_type.name %> <%= run.run_number %>号
+        </div>
+
+        <div class="run-time-big">
+          <%= result[:departure_time].strftime("%H:%M") %>
+          <span class="arrow">→</span>
+          <%= result[:arrival_time].strftime("%H:%M") %>
+        </div>
+
+        <div class="run-sub">
+          所要 <%= result[:travel_min] %>分
+        </div>
+      </div>
+    </div>
+
+    <div class="run-actions">
+      <%= link_to "便詳細",
+        operator_run_path(run),
+        class: "btn btn-ghost btn-sm"
+      %>
+    </div>
+  </div>
+<% end %>

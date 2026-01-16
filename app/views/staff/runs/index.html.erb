@@ -2,7 +2,7 @@
   <div class="container">
     
     <div class="page-header">
-      <h2>新幹線一覧（駅員）</h2>
+      <h2>駅員｜便一覧</h2>
     </div>
 
     <div class="banner">
@@ -80,56 +80,7 @@
 
     <% end %>
 
-    <% @results.each do |result| %>
-      <% run = result[:run] %>
-
-      <div class="run-card">
-        <div class="run-main">
-
-          <!-- 左：列車情報 -->
-          <div class="run-info">
-            <div class="run-name">
-              <%= run.run_type.name %> <%= run.run_number %>号
-            </div>
-
-            <div class="run-time-big">
-              <%= result[:departure_time].strftime("%H:%M") %>
-              <span class="arrow">→</span>
-              <%= result[:arrival_time].strftime("%H:%M") %>
-            </div>
-
-            <div class="run-sub">
-              所要 <%= result[:travel_min] %>分
-            </div>
-          </div>
-
-          <!-- 右：空席数（駅員向け） -->
-          <div class="seat-status">
-            <div class="seat-count">
-              指定席: <%= result[:availability][:reserved][:count] %>
-            </div>
-            <div class="seat-count">
-              グリーン: <%= result[:availability][:green][:count] %>
-            </div>
-            <div class="seat-count">
-              ファビュラス: <%= result[:availability][:fabulous][:count] %>
-            </div>
-          </div>
-        </div>
-
-        <!-- 下：駅員用操作 -->
-        <div class="run-actions">
-          <%= link_to "便詳細",
-            staff_run_path(
-              run,
-              departure_station_id: params[:departure_station_id],
-              arrival_station_id:   params[:arrival_station_id]
-            ),
-            class: "btn btn-ghost btn-sm"
-          %>
-        </div>
-      </div>
-    <% end %>
+    <%= render partial: "run_cards", locals: { results: @results } %>
   </div>
 </div>
 
