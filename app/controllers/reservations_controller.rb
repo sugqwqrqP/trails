@@ -51,6 +51,7 @@ class ReservationsController < ApplicationController
     end
 
     if unavailable_seats.any?
+      flash[:alert] = "申し訳ありません。選択した席は既に予約されています。再度選択してください。"
       redirect_to run_car_seats_path(
         run,
         car_id: seats.first.car_id,
