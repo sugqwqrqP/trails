@@ -23,14 +23,15 @@ class Staff::ReservationsController < Staff::BaseController
 
   def destroy
     reservation = Reservation.find(params[:id])
+    user = reservation.user
 
     if reservation.is_issued?
       redirect_to staff_reservation_path(reservation),
                   alert: "発券済みの予約は削除できません"
     else
       reservation.destroy
-      redirect_to staff_root_path,
-                  notice: "予約を削除しました"
+      redirect_to staff_user_path(user),
+            notice: "予約を削除しました（利用者：#{user.user_fullname}）"
     end
   end
 end
