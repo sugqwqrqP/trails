@@ -173,11 +173,48 @@ body {
   align-items: center;
 }
 
+.is-hidden {
+  display: none !important;
+}
+
+.skeleton-results {
+  align-items: center;
+}
+
+.skeleton-card {
+  width: 100%;
+  max-width: 680px;
+}
+
+.skeleton-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.skeleton-line {
+  height: 14px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #f0f0f0, #e4e4e4, #f0f0f0);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.2s ease-in-out infinite;
+}
+
+.skeleton-line.w-40 { width: 40%; }
+.skeleton-line.w-50 { width: 50%; }
+.skeleton-line.w-60 { width: 60%; }
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
 /* =========================
    便カード（中央固定）
 ========================= */
 
 .run-card {
+  width: 100%;
   max-width: 680px;
   background: #ffffff;
   border: 1px solid #e0e5e0;

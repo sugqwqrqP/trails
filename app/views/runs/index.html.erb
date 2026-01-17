@@ -23,7 +23,8 @@
 
 <div class="container">
   <div class="search-panel">
-    <%= form_with url: runs_path, method: :get, local: true do |f| %>
+    <%= form_with url: runs_path, method: :get, local: true,
+      html: { id: "run-search-form" }, data: { turbo: false } do |f| %>
 
       <!-- 出発 -->
       <div class="location-row">
@@ -109,11 +110,25 @@
 </div>
 
 
-<div class="container results">
+<div class="container results skeleton-results is-hidden" id="skeleton-results">
+  <% 3.times do %>
+    <div class="run-card skeleton-card">
+      <div class="skeleton-row">
+        <div class="skeleton-line w-40"></div>
+        <div class="skeleton-line w-60"></div>
+      </div>
+      <div class="skeleton-row">
+        <div class="skeleton-line w-50"></div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div class="container results" id="run-results">
   <%= render partial: "run_cards", locals: { results: @results } %>
 </div>
 
-<div class="container">
+<div class="container" id="run-pager">
   <div class="pager">
     <% if @has_prev %>
       <%= link_to "← 前に戻る",
@@ -195,6 +210,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
       timeInput.value = current;
       timeText.textContent = current;
+    });
+  }
+
+  const searchForm = document.getElementById("run-search-form");
+  const skeletonResults = document.getElementById("skeleton-results");
+  const runResults = document.getElementById("run-results");
+  const runPager = document.getElementById("run-pager");
+
+  if (skeletonResults) skeletonResults.classList.add("is-hidden");
+  if (runResults) runResults.classList.remove("is-hidden");
+  if (runPager) runPager.classList.remove("is-hidden");
+
+  if (searchForm && skeletonResults && !searchForm.dataset.skeletonBound) {
+    searchForm.dataset.skeletonBound = "true";
+    searchForm.addEventListener("submit", () => {
+      skeletonResults.classList.remove("is-hidden");
+      if (runResults) runResults.classList.add("is-hidden");
+      if (runPager) runPager.classList.add("is-hidden");
     });
   }
 });
