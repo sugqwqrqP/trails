@@ -42,28 +42,33 @@
         <% end %>
       </div>
 
-      <!-- ===== 操作 ===== -->
-      <% if @departure_station && @arrival_station %>
-
-      <% end %>
-
     </div>
+
+    <% if params[:return_to].present? %>
+      <div class="between-panels">
+        <%= link_to "検索結果に戻る",
+          params[:return_to],
+          class: "back-link" %>
+      </div>
+    <% end %>
 
     <!-- ===== 予約一覧 ===== -->
     <div class="panel reservation-list">
 
       <div class="detail-section">
-        <h3 class="section-title">予約一覧</h3>
+        <div class="section-head">
+          <h3 class="section-title">予約一覧</h3>
 
-        <div class="detail-actions">
-          <%= link_to "新規予約",
-            run_cars_path(
-              @run,
-              departure_station_id: @departure_station.id,
-              arrival_station_id:   @arrival_station.id
-            ),
-            class: "btn btn-ghost btn-sm"
-          %>
+          <div class="section-actions">
+            <%= link_to "新規予約",
+              run_cars_path(
+                @run,
+                departure_station_id: @departure_station.id,
+                arrival_station_id:   @arrival_station.id
+              ),
+              class: "btn btn-ghost btn-sm"
+            %>
+          </div>
         </div>
 
         <% if @reservations.any? %>

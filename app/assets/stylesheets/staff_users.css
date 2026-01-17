@@ -105,6 +105,25 @@
   margin-bottom: 12px;
 }
 
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.section-actions {
+  display: flex;
+  align-items: center;
+}
+
+.between-panels {
+  width: 100%;
+  max-width: 680px;
+  margin: 8px auto 16px;
+}
+
 /* ===== 基本情報 ===== */
 
 .info-grid {
