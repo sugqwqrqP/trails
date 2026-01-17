@@ -41,7 +41,8 @@
         staff_run_path(
           run,
           departure_station_id: params[:departure_station_id],
-          arrival_station_id:   params[:arrival_station_id]
+          arrival_station_id:   params[:arrival_station_id],
+          return_to: request.fullpath
         ),
         class: "btn btn-ghost btn-sm"
       %>

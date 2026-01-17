@@ -169,7 +169,7 @@
 .reservation-row {
   display: grid;
   grid-template-columns:
-    40px     /* ID */
+    50px     /* ID */
     80px    /* 運行日 */
     90px    /* 便名 */
     110px     /* 区間 */
