@@ -62,6 +62,8 @@
       <div class="datetime-box">
         <% default_run_on =
             params[:run_on].present? ? Date.parse(params[:run_on]) : Date.current %>
+        <% min_run_on = Date.current %>
+        <% max_run_on = Date.current + 14 %>
 
         <div class="datetime-click" id="date-display">
           📅
@@ -70,10 +72,14 @@
 
         <%= f.date_field :run_on,
           value: default_run_on,
+          min: min_run_on,
+          max: max_run_on,
           class: "date-input" %>
 
         <%= f.date_field :run_on,
               value: default_run_on,
+              min: min_run_on,
+              max: max_run_on,
               class: "date-input",
               id: "date-input" %>
 
