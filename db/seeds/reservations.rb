@@ -89,111 +89,127 @@ eligible_users = User.where(role: 0)
 
 runs = Run.includes(:run_type, cars: [:seats, :car_type])
   .where(run_on: Date.today..Date.today + 2)
+  .order(:run_on, :run_number, :is_up)
 
 run_type_stations = {}
 
-runs.each do |run|
-  next if excluded_run?(run, excluded_runs)
-  next if eligible_users.empty?
+def build_mark_plan(size)
+  marks = [:high, :mid, :low, :zero]
+  base = size / marks.size
+  remainder = size % marks.size
 
+  plan = marks.flat_map { |mark| [mark] * base }
+  plan.concat(marks.sample(remainder))
+  plan.shuffle
+end
+
+def target_available_count_for_mark(mark, car_type_name, total_seats)
+  return 0 if total_seats <= 0
+
+  if car_type_name == "fabulous"
+    case mark
+    when :high then rand(5..6)
+    when :mid then rand(3..4)
+    when :low then rand(1..2)
+    else 0
+    end
+  else
+    case mark
+    when :high
+      min = [50, total_seats].min
+      max = total_seats
+      min > max ? max : rand(min..max)
+    when :mid
+      min = [20, total_seats].min
+      max = [49, total_seats].min
+      min > max ? max : rand(min..max)
+    when :low
+      min = [1, total_seats].min
+      max = [19, total_seats].min
+      max < 1 ? 0 : (min > max ? max : rand(min..max))
+    else
+      0
+    end
+  end
+end
+
+# こだま713（東京→新大阪）の指定席 2号車 1A/1B/1C を3日分手動で予約
+(0..2).each do |day_offset|
+  manual_run = runs.find do |run|
+    run.run_on == Date.today + day_offset &&
+      run.run_type.name == "こだま" &&
+      run.run_number == 713 &&
+      run.is_up == false
+  end
+
+  next unless manual_run && eligible_users.any?
+
+  manual_departure = Station.find_by!(station_name: "東京")
+  manual_arrival = Station.find_by!(station_name: "新大阪")
+  manual_user = User.find_by(login_id: "test_taro") || eligible_users.sample
+  manual_car = manual_run.cars.find { |car| car.number == 2 && car.car_type.name == "reserved" }
+
+  next unless manual_car
+
+  manual_seats = %w[A B C].map do |col|
+    manual_car.seats.find_by(row: 1, column: col)
+  end.compact
+
+  next unless manual_seats.size == 3
+
+  available = manual_seats.all? do |seat|
+    seat.available_for?(
+      run: manual_run,
+      departure_station: manual_departure,
+      arrival_station: manual_arrival
+    )
+  end
+
+  next unless available
+
+  create_reservation!(
+    manual_user,
+    manual_run,
+    manual_departure,
+    manual_arrival,
+    manual_seats
+  )
+end
+
+eligible_runs = runs.reject { |run| excluded_run?(run, excluded_runs) }
+return if eligible_users.empty?
+
+mark_plans = {
+  "reserved" => build_mark_plan(eligible_runs.size),
+  "green" => build_mark_plan(eligible_runs.size),
+  "fabulous" => build_mark_plan(eligible_runs.size)
+}
+
+eligible_runs.each_with_index do |run, index|
   stations = run_type_stations[run.run_type_id] ||= stations_for(run.run_type)
   next if stations.size < 2
 
-  day_offset = (run.run_on - Date.today).to_i
-  hour = run.first_station_departure_time.strftime("%H").to_i
-
   departure_station, arrival_station = full_route_segment(stations, run.is_up)
 
-  if day_offset.zero? && (11..14).include?(hour)
-    # 昼のピークはほぼ満席（×や△が多め）
+  %w[reserved green fabulous].each do |car_type|
+    total_seats =
+      run.cars
+        .select { |car| car.car_type.name == car_type }
+        .sum { |car| car.seats.size }
+
+    desired_available = target_available_count_for_mark(
+      mark_plans[car_type][index],
+      car_type,
+      total_seats
+    )
+
     fill_car_type!(
       run,
-      "fabulous",
+      car_type,
       departure_station,
       arrival_station,
-      rand < 0.7 ? 0 : 1,
+      desired_available,
       eligible_users
-    )
-    fill_car_type!(
-      run,
-      "reserved",
-      departure_station,
-      arrival_station,
-      rand < 0.6 ? 0 : rand(1..2),
-      eligible_users
-    )
-    fill_car_type!(
-      run,
-      "green",
-      departure_station,
-      arrival_station,
-      rand < 0.6 ? 0 : rand(1..2),
-      eligible_users
-    )
-    next
-  end
-
-  if day_offset.zero? && (15..20).include?(hour)
-    # 夕方は△が出る程度に調整（まばら）
-    if rand < 0.7
-      fill_car_type!(
-        run,
-        "fabulous",
-        departure_station,
-        arrival_station,
-        rand(1..2),
-        eligible_users
-      )
-      fill_car_type!(
-        run,
-        "reserved",
-        departure_station,
-        arrival_station,
-        rand(1..6),
-        eligible_users
-      )
-      fill_car_type!(
-        run,
-        "green",
-        departure_station,
-        arrival_station,
-        rand(1..6),
-        eligible_users
-      )
-    end
-  end
-
-  # それ以外は軽めにランダム予約
-  reservation_count =
-    if day_offset.zero?
-      rand(2..5)
-    else
-      rand(1..2)
-    end
-
-  reservation_count.times do
-    user = eligible_users.sample
-    segment_departure, segment_arrival = pick_segment(stations, run.is_up)
-
-    car = run.cars.sample
-    next unless car
-
-    seat_count = car.car_type.name == "fabulous" ? 1 : rand(1..3)
-    available_seats = available_seats_for(
-      car,
-      run,
-      segment_departure,
-      segment_arrival
-    )
-    next if available_seats.size < seat_count
-    seats = available_seats.sample(seat_count)
-
-    create_reservation!(
-      user,
-      run,
-      segment_departure,
-      segment_arrival,
-      seats
     )
   end
 end
