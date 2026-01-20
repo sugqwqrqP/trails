@@ -15,6 +15,8 @@
           <div class="form-row <%= 'has-error' if @user.errors[:login_id].any? %>">
             <%= f.label :login_id, "ログインID" %>
             <%= f.text_field :login_id, autocomplete: "username" %>
+            <div class="field-help">6〜20文字</div>
+            <div class="field-help">英数字と _ のみ使用できます</div>
 
             <% @user.errors[:login_id].each do |msg| %>
               <div class="field-error"><%= msg %></div>
@@ -48,6 +50,8 @@
                 👁
               </button>
             </div>
+            <div class="field-help">6〜20文字</div>
+            <div class="field-help">大文字・小文字・数字・記号（@¥!$&）を必ず使用してください</div>
 
             <% @user.errors[:password].each do |msg| %>
               <div class="field-error"><%= msg %></div>

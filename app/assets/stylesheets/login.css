@@ -36,6 +36,11 @@
   border-color: var(--brand);
 }
 
+.field-help {
+  font-size: 12px;
+  color: var(--muted);
+}
+
 .form-actions {
   margin-top: 24px;
   display: flex;
