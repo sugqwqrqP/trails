@@ -2,7 +2,7 @@
   <div class="container">
 
     <div class="page-header">
-      <h2>利用者一覧</h2>
+      <h2>駅員｜利用者一覧</h2>
       <p class="page-description">登録されている利用者の一覧</p>
     </div>
 
@@ -45,25 +45,31 @@
         </thead>
 
         <tbody>
-          <% @users.each do |user| %>
+          <% if @users.any? %>
+            <% @users.each do |user| %>
+              <tr>
+                <td><%= user.id %></td>
+                <td><%= user.login_id %></td>
+                <td><%= user.user_fullname %></td>
+                <td>
+                  <% if user.operator? %>
+                    <span class="role-badge role-operator">運行管理者</span>
+                  <% elsif user.staff? %>
+                    <span class="role-badge role-staff">駅員</span>
+                  <% else %>
+                    <span class="role-badge role-user">利用者</span>
+                  <% end %>
+                </td>
+                <td>
+                  <%= link_to "詳細",
+                        staff_user_path(user),
+                        class: "btn btn-sm btn-ghost" %>
+                </td>
+              </tr>
+            <% end %>
+          <% else %>
             <tr>
-              <td><%= user.id %></td>
-              <td><%= user.login_id %></td>
-              <td><%= user.user_fullname %></td>
-              <td>
-                <% if user.operator? %>
-                  <span class="role-badge role-operator">運行管理者</span>
-                <% elsif user.staff? %>
-                  <span class="role-badge role-staff">駅員</span>
-                <% else %>
-                  <span class="role-badge role-user">利用者</span>
-                <% end %>
-              </td>
-              <td>
-                <%= link_to "詳細",
-                      staff_user_path(user),
-                      class: "btn btn-sm btn-ghost" %>
-              </td>
+              <td colspan="5">該当する利用者はいません。</td>
             </tr>
           <% end %>
         </tbody>
