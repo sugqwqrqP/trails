@@ -1,9 +1,71 @@
-<h1>便詳細（運行管理者）</h1>
+<div class="app-main">
+  <div class="container">
+    <div class="page-header">
+      <h2>運行管理者｜便詳細</h2>
+    </div>
 
-<p>日付：<%= @run.run_on %></p>
-<p>便番号：<%= @run.run_number %></p>
-<p>種別：<%= @run.run_type.name %></p>
-<p>方向：<%= @run.is_up ? "上り" : "下り" %></p>
-<p>始発時刻：<%= @run.first_station_departure_time.strftime("%H:%M") %></p>
+    <div class="panel run-detail">
+      <div class="detail-section">
+        <h3 class="section-title">運行情報</h3>
 
-<%= link_to "一覧に戻る", operator_runs_path %>
+        <div class="detail-row">
+          <span class="label">便名</span>
+          <span><%= @run.display_name %></span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">運行日</span>
+          <span><%= @run.run_on.strftime("%Y/%m/%d") %></span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">方向</span>
+          <span><%= @run.is_up ? "上り" : "下り" %></span>
+        </div>
+
+        <div class="detail-row">
+          <span class="label">始発時刻</span>
+          <span><%= @run.first_station_departure_time.strftime("%H:%M") %></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel run-stops">
+      <div class="detail-section">
+        <h3 class="section-title">停車時刻</h3>
+
+        <% sections = @run.run_type.sections.includes(:from_station, :to_station).order(:section_order) %>
+        <% stations = sections.map(&:from_station) + [sections.last.to_station] %>
+        <% stations.reverse! if @run.is_up %>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>駅</th>
+              <th>時刻</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% stations.each_with_index do |station, index| %>
+              <tr>
+                <td><%= station.station_name %></td>
+                <td>
+                  <%= @run.departure_time_at(station).strftime("%H:%M") %>
+                  <% if index == 0 %>
+                    （始発）
+                  <% elsif index == stations.length - 1 %>
+                    （終着）
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="between-panels">
+      <%= link_to "一覧に戻る", operator_runs_path, class: "back-link" %>
+    </div>
+  </div>
+</div>
