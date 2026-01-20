@@ -23,6 +23,11 @@
   margin-bottom: 12px;
 }
 
+.danger-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .btn-danger {
   background: #fff;
   border: 1px solid #e57373;

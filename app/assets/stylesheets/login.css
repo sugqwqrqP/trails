@@ -41,6 +41,13 @@
   color: var(--muted);
 }
 
+.form-card {
+  background: #f6f8f6;
+  border: 1px solid #dfe5df;
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
 .form-actions {
   margin-top: 24px;
   display: flex;

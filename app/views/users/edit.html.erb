@@ -74,11 +74,13 @@
         この操作は取り消せません。
       </p>
 
-      <%= button_to "退会する",
-        user_path(@user),
-        method: :delete,
-        data: { confirm: "本当に退会しますか？この操作は取り消せません。" },
-        class: "btn btn-danger" %>
+      <div class="danger-actions">
+        <%= button_to "退会する",
+          user_path(@user),
+          method: :delete,
+          data: { confirm: "本当に退会しますか？この操作は取り消せません。" },
+          class: "btn btn-danger" %>
+      </div>
     </div>
 
   </div>
