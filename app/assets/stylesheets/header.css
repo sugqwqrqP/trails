@@ -30,15 +30,35 @@
 
 /* ロゴ */
 .app-logo .logo-link {
-  font-size: 18px;
-  font-weight: 800;
   text-decoration: none;
   color: #222;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
 }
 
 /* 将来ロゴ画像にする時用 */
-.app-logo img {
-  height: 28px;
+.app-logo .logo-img {
+  height: 40px;
+  width: auto;
+  display: block;
+}
+
+.app-logo .logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.app-logo .logo-title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.app-logo .logo-subtitle {
+  font-size: 11px;
+  color: #666;
 }
 
 /* 右側ナビ */

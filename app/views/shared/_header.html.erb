@@ -7,14 +7,38 @@
       <% if logged_in? %>
         <% case current_user.role %>
         <% when "staff" %>
-          <%= link_to "新幹線予約", staff_root_path, class: "logo-link" %>
+          <%= link_to staff_root_path, class: "logo-link" do %>
+            <%= image_tag "logo_moji.svg", alt: "Trails", class: "logo-img" %>
+            <span class="logo-text">
+              <span class="logo-subtitle">新幹線予約</span>
+              <span class="logo-title">Trails</span>
+            </span>
+          <% end %>
         <% when "operator" %>
-          <%= link_to "新幹線予約", operator_root_path, class: "logo-link" %>
+          <%= link_to operator_root_path, class: "logo-link" do %>
+            <%= image_tag "logo_moji.svg", alt: "Trails", class: "logo-img" %>
+            <span class="logo-text">
+              <span class="logo-subtitle">新幹線予約</span>
+              <span class="logo-title">Trails</span>
+            </span>
+          <% end %>
         <% else %>
-          <%= link_to "新幹線予約", root_path, class: "logo-link" %>
+          <%= link_to root_path, class: "logo-link" do %>
+            <%= image_tag "logo_moji.svg", alt: "Trails", class: "logo-img" %>
+            <span class="logo-text">
+              <span class="logo-subtitle">新幹線予約</span>
+              <span class="logo-title">Trails</span>
+            </span>
+          <% end %>
         <% end %>
       <% else %>
-        <%= link_to "新幹線予約", root_path, class: "logo-link" %>
+        <%= link_to root_path, class: "logo-link" do %>
+          <%= image_tag "logo_moji.svg", alt: "Trails", class: "logo-img" %>
+          <span class="logo-text">
+              <span class="logo-subtitle">新幹線予約</span>
+              <span class="logo-title">Trails</span>
+          </span>
+        <% end %>
       <% end %>
     </div>
 
