@@ -3,7 +3,7 @@
 
     <!-- ===== ページヘッダ ===== -->
     <div class="page-header">
-      <h2>便詳細（駅員）</h2>
+      <h2>駅員｜便詳細</h2>
     </div>
 
     <!-- ===== 便情報 ===== -->
@@ -52,23 +52,57 @@
       </div>
     <% end %>
 
+    <% if @departure_station && @arrival_station %>
+      <!-- ===== 空席状況 ===== -->
+      <div class="panel seat-availability">
+        <div class="detail-section">
+          <div class="section-head">
+            <h3 class="section-title">空席状況</h3>
+          </div>
+
+          <div class="seat-type-grid">
+            <% seat_types = {
+              "reserved" => "指定席",
+              "green" => "グリーン",
+              "fabulous" => "ファビュラス"
+            } %>
+
+            <% seat_types.each do |type, label| %>
+              <% count = @run.available_count(
+                car_type_name: type,
+                departure_station: @departure_station,
+                arrival_station: @arrival_station
+              ) %>
+              <% mark = @run.availability_mark(type, count) %>
+
+              <% if mark == "×" %>
+                <div class="seat-type-card disabled">
+                  <div class="seat-type-label"><%= label %></div>
+                  <div class="seat-type-mark"><%= mark %></div>
+                </div>
+              <% else %>
+                <%= link_to run_cars_path(
+                  @run,
+                  departure_station_id: @departure_station.id,
+                  arrival_station_id: @arrival_station.id,
+                  seat_type: type
+                ), class: "seat-type-card" do %>
+                  <div class="seat-type-label"><%= label %></div>
+                  <div class="seat-type-mark"><%= mark %></div>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
     <!-- ===== 予約一覧 ===== -->
     <div class="panel reservation-list">
 
       <div class="detail-section">
         <div class="section-head">
           <h3 class="section-title">予約一覧</h3>
-
-          <div class="section-actions">
-            <%= link_to "新規予約",
-              run_cars_path(
-                @run,
-                departure_station_id: @departure_station.id,
-                arrival_station_id:   @arrival_station.id
-              ),
-              class: "btn btn-ghost btn-sm"
-            %>
-          </div>
         </div>
 
         <% if @reservations.any? %>
