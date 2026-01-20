@@ -5,24 +5,26 @@
 
     <div class="page-header">
       <h2>予約確認</h2>
-
-      <p class="run-summary run-inline">
-        <strong class="run-name"><%= @run.display_name %></strong>
-        <span class="run-car">
-          <%= @car.number %>号車（
-          <%=
-            case @car.car_type.name
-            when "reserved" then "指定席"
-            when "green"    then "グリーン車"
-            when "fabulous" then "ファビュラスルーム"
-            end
-          %>
-          ）
-        </span>
-      </p>
     </div>
 
     <div class="panel">
+      <div class="confirm-summary">
+        <p class="run-summary run-inline">
+          <strong class="run-name"><%= @run.display_name %></strong>
+          <span class="run-car">
+            <%= @car.number %>号車（
+            <%=
+              case @car.car_type.name
+              when "reserved" then "指定席"
+              when "green"    then "グリーン車"
+              when "fabulous" then "ファビュラスルーム"
+              end
+            %>
+            ）
+          </span>
+        </p>
+      </div>
+
       <div class="confirm-block">
         <div class="confirm-row">
           <span class="label">日付</span>

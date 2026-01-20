@@ -9,6 +9,18 @@
   margin-bottom: 12px;
 }
 
+.confirm-summary {
+  border-bottom: 1px solid #e0e5e0;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+.confirm-summary .run-summary {
+  color: #444;
+  font-size: 14px;
+  margin: 0;
+}
+
 .confirm-row {
   display: flex;
   justify-content: space-between;
