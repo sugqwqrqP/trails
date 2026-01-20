@@ -1,4 +1,5 @@
-<header class="app-header">
+<% role_class = logged_in? ? "is-#{current_user.role}" : "" %>
+<header class="app-header <%= role_class %>">
   <div class="app-header-inner">
 
     <!-- ロゴ -->
@@ -32,7 +33,7 @@
           <%= link_to "ログアウト", login_path, method: :delete %>
 
         <% else %>
-          <%= link_to current_user.user_fullname, user_path(current_user) %>
+          <%= link_to "マイページ", user_path(current_user) %>
           <span class="nav-sep">|</span>
           <%= link_to "ログアウト", login_path, method: :delete %>
         <% end %>
