@@ -21,7 +21,12 @@
         </p>
     </div>
 
-    <div id="seat-message" class="seat-message"></div>
+    <div
+      id="seat-message"
+      class="seat-message"
+      style="<%= @seat_error.present? ? 'display:block' : '' %>">
+      <%= @seat_error %>
+    </div>
 
     <% seat_map = @seats.index_by { |s| [s.row, s.column] } %>
 
@@ -96,7 +101,7 @@
       <% if current_user.staff? %>
         <div class="holder-name">
           <label>予約者名義</label><br>
-          <input type="text" name="holder_name" maxlength="20" required>
+          <input type="text" name="holder_name" required>
         </div>
       <% else %>
         <input type="hidden" name="holder_name" value="<%= current_user.user_fullname %>">

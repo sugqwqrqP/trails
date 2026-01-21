@@ -8,6 +8,24 @@ class ReservationsController < ApplicationController
     @departure_station = Station.find(params[:departure_station_id])
     @arrival_station   = Station.find(params[:arrival_station_id])
 
+    if current_user.staff?
+      holder_name = params[:holder_name].to_s
+      if holder_name.length > 20
+        redirect_to run_car_seats_path(
+          @run,
+          @car,
+          departure_station_id: params[:departure_station_id],
+          arrival_station_id: params[:arrival_station_id],
+          run_on: params[:run_on],
+          time: params[:time],
+          time_basis: params[:time_basis],
+          seat_type: params[:seat_type],
+          seat_error: "予約者名義は20文字以内で入力してください"
+        )
+        return
+      end
+    end
+
     seat_ids =
       case params[:seat_ids]
       when String

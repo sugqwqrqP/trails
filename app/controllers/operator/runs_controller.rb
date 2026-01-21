@@ -34,7 +34,6 @@ class Operator::RunsController < Operator::BaseController
 
   rescue ActiveRecord::RecordInvalid => e
     @run = e.record
-    flash.now[:alert] = @run.errors.full_messages.join(" / ")
     render :new
   end
 end

@@ -11,6 +11,9 @@ class Run < ApplicationRecord
   validate :departure_time_not_too_late, on: :manual_create
   validate :no_duplicate_run
 
+  validates :run_on, presence: { message: "を入力してください" }
+  validates :first_station_departure_time, presence: { message: "を入力してください" }
+
   # ---- バリデーション ----
 
   def run_on_must_be_future
