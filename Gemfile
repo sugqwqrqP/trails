@@ -35,4 +35,8 @@ end
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  
+  # Generates ER-diagrams using Graphviz, a visualization library
+  gem 'rails-erd'
+
 end
