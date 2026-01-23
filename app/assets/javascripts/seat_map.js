@@ -18,6 +18,22 @@ document.addEventListener("DOMContentLoaded", function () {
   const seats = document.querySelectorAll(".seat");
   const messageBox = document.getElementById("seat-message");
 
+  if (hiddenInput.value) {
+    hiddenInput.value
+      .split(",")
+      .filter(Boolean)
+      .forEach(function (seatId) {
+        selectedSeats.add(seatId);
+        const btn = document.querySelector(`.seat[data-seat="${seatId}"]`);
+        if (btn && !btn.classList.contains("unavailable")) {
+          btn.classList.add("selected");
+        }
+      });
+  }
+
+  updateDisabled(seats, selectedSeats, MAX);
+  updateForm(hiddenInput, confirmBtn, selectedSeats);
+
   function showMessage(text) {
     messageBox.textContent = text;
     messageBox.style.display = "block";

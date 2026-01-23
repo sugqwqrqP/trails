@@ -9,6 +9,7 @@ class SeatsController < ApplicationController
 
     @seats = @car.seats.order(:row, :column)
     @seat_error = params[:seat_error]
+    @selected_seat_ids = params[:seat_ids]
 
     @unavailable_seat_ids =
       @seats.reject { |seat|

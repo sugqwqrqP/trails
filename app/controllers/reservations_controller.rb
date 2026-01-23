@@ -14,6 +14,7 @@ class ReservationsController < ApplicationController
         redirect_to run_car_seats_path(
           @run,
           @car,
+          seat_ids: params[:seat_ids],
           departure_station_id: params[:departure_station_id],
           arrival_station_id: params[:arrival_station_id],
           run_on: params[:run_on],
