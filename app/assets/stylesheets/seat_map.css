@@ -114,6 +114,10 @@
   cursor: not-allowed;
 }
 
+#confirm-btn:hover:not(:disabled) {
+  background: #256b2b;
+}
+
 /* =========================
    戻るリンク
 ========================= */

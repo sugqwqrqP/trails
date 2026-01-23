@@ -46,6 +46,10 @@
   cursor: pointer;
 }
 
+.car:not(.disabled):hover {
+  filter: brightness(0.95);
+}
+
 .car-number {
   font-size: 20px;
 }

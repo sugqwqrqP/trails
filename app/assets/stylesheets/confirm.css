@@ -21,6 +21,17 @@
   margin: 0;
 }
 
+.btn-confirm {
+  width: 100%;
+  margin-top: 16px;
+  padding: 18px;
+  font-size: 20px;
+}
+
+.btn-confirm:hover {
+  background: #256b2b;
+}
+
 .confirm-row {
   display: flex;
   justify-content: space-between;
