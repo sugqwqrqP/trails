@@ -160,6 +160,11 @@ body {
   border: none;
   cursor: pointer;
   margin-top: 12px;
+  transition: background 0.2s ease;
+}
+
+.search-btn:hover {
+  background: #256b2b;
 }
 
 /* =========================
@@ -290,6 +295,12 @@ body {
   text-decoration: none;
   font-family: inherit;
   cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.seat-type-btn:not(.disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
 }
 
 .seat-label {

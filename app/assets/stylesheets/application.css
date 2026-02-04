@@ -114,10 +114,19 @@ a{ color: inherit; }
   color: #fff;
 }
 
+.btn-primary:hover{
+  background: #256b2b;
+}
+
 .btn-ghost{
   background: #fff;
   border-color: var(--border);
   color: var(--brand);
+}
+
+.btn-ghost:hover{
+  background: #f6f8f6;
+  border-color: #cfd6cf;
 }
 
 .btn-warn{
