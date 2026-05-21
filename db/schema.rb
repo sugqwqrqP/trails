@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_01_06_181739) do
+ActiveRecord::Schema[7.0].define(version: 2026_05_21_120433) do
   create_table "car_types", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -107,6 +107,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_01_06_181739) do
     t.integer "role", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["login_id"], name: "index_users_on_login_id", unique: true
   end
 
   add_foreign_key "cars", "car_types"
