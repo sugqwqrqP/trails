@@ -35,7 +35,34 @@ Ruby on Rails を用いて開発する、新幹線の座席予約を模した We
 
 ## Docker 起動方法
 
-本プロジェクトは、既存の Docker コンテナを起動し、その中で Rails サーバーを立ち上げる形で実行する。
+Docker が入っている環境で、以下のコマンドを実行する。
+
+```bash
+docker compose up --build
+```
+
+起動後、ブラウザで以下にアクセスする。
+
+```text
+http://localhost:3000
+```
+
+初回起動時は `db:prepare` により SQLite データベースの作成、マイグレーション、seed データ投入を行う。
+
+### 確認用アカウント
+
+| ロール | ログインID | パスワード |
+| --- | --- | --- |
+| 利用者 | `test_taro` | `Abc123!` |
+| 駅員 | `staff_admin` | `StaffAdmin1234$` |
+| 運行管理者 | `operator_admin` | `OperatorAdmin1234$` |
+
+### データを初期化したい場合
+
+```bash
+docker compose run --rm app bin/rails db:reset
+docker compose up
+```
 
 ---
 
