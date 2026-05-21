@@ -1,5 +1,7 @@
 class ReservationsController < ApplicationController
   before_action :require_login #ログイン要求
+  before_action :set_own_reservation, only: [:show, :destroy]
+  before_action :set_completed_reservation, only: [:complete]
 
   def confirm
     @run = Run.find(params[:run_id])
@@ -132,31 +134,44 @@ class ReservationsController < ApplicationController
   end
 
   def complete
-    @reservation = Reservation
-                    .includes(:run, :seats, :departure_station, :arrival_station)
-                    .find(params[:reservation_id])
-
     @run   = @reservation.run
     @seats = @reservation.seats
     @car   = @seats.first.car
   end
 
   def show
-    @user = User.find(params[:user_id])
-    @reservation = @user.reservations.find(params[:id])
   end
 
   def destroy
-    @user = User.find(params[:user_id])
-    reservation = @user.reservations.find(params[:id])
-
-    if reservation.is_issued?
-      redirect_to user_reservation_path(@user, reservation),
+    if @reservation.is_issued?
+      redirect_to user_reservation_path(@user, @reservation),
         alert: "発券済みの予約は削除できません"
     else
-      reservation.destroy
+      @reservation.destroy
       redirect_to user_path(@user),
         notice: "予約を削除しました"
+    end
+  end
+
+  private
+
+  def set_own_reservation
+    @user = current_user
+    @reservation = current_user.reservations.find_by(id: params[:id])
+
+    unless @reservation
+      redirect_to user_path(current_user), alert: "権限がありません"
+    end
+  end
+
+  def set_completed_reservation
+    @reservation = current_user
+      .reservations
+      .includes(:run, :seats, :departure_station, :arrival_station)
+      .find_by(id: params[:reservation_id])
+
+    unless @reservation
+      redirect_to user_path(current_user), alert: "権限がありません"
     end
   end
 
