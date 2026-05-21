@@ -24,10 +24,11 @@ base_numbers = {
   "こだま" => 701
 }
 
-# 0日目〜1日目だけデモ用の便を投入
-days = 2
-(0...days).each do |day_offset|
-  run_on = Date.today + day_offset
+demo_start_on = Date.new(2028, 5, 1)
+demo_end_on = Date.new(2028, 5, 14)
+
+# デモ環境で日付切れしないよう、2028年5月前半の便を固定で投入
+(demo_start_on..demo_end_on).each do |run_on|
 
   # 東京 → 新大阪（下り・奇数）
   counters_down = base_numbers.transform_values { |v| v }

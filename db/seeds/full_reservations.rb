@@ -91,8 +91,13 @@ eligible_users = User.where(role: 0)
   .where.not("login_id LIKE ?", "senshu_%")
   .to_a
 
+run_start_on = Run.minimum(:run_on)
+run_end_on = Run.maximum(:run_on)
+
+return if run_start_on.blank? || run_end_on.blank?
+
 runs = Run.includes(:run_type, cars: [:seats, :car_type])
-  .where(run_on: Date.today..Date.today + 2)
+  .where(run_on: run_start_on..run_end_on)
   .order(:run_on, :run_number, :is_up)
 
 run_type_stations = {}
@@ -137,12 +142,12 @@ def target_available_count_for_mark(mark, car_type_name, total_seats)
   end
 end
 
-# こだま713（東京→新大阪）の指定席 2号車 1A/1B/1C を3日分手動で予約
-(0..2).each do |day_offset|
+# デモ期間の先頭3日分だけ、指定席 2号車 1A/1B/1C を手動予約
+runs.map(&:run_on).uniq.sort.first(3).each do |run_on|
   manual_run = runs.find do |run|
-    run.run_on == Date.today + day_offset &&
+    run.run_on == run_on &&
       run.run_type.name == "こだま" &&
-      run.run_number == 713 &&
+      run.run_number == 703 &&
       run.is_up == false
   end
 

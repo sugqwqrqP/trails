@@ -71,13 +71,13 @@ end
 
 return if seed_users.empty?
 
-today = Date.today
+demo_start_on = Date.new(2028, 5, 1)
 
 # 指定席を満席にし、検索結果で「×」を確認できる便
 full_reserved_run = demo_run!(
   run_type_name: "のぞみ",
   run_number: 1,
-  run_on: today
+  run_on: demo_start_on
 )
 reserve_demo_seats!(
   run: full_reserved_run,
@@ -92,7 +92,7 @@ reserve_demo_seats!(
 mixed_availability_run = demo_run!(
   run_type_name: "ひかり",
   run_number: 503,
-  run_on: today
+  run_on: demo_start_on
 )
 reserve_demo_seats!(
   run: mixed_availability_run,
@@ -123,7 +123,7 @@ reserve_demo_seats!(
 segment_demo_run = demo_run!(
   run_type_name: "こだま",
   run_number: 703,
-  run_on: today
+  run_on: demo_start_on
 )
 demo_car = segment_demo_run.cars.find_by!(number: 2)
 demo_seats = %w[A B C].map { |column| demo_car.seats.find_by!(row: 1, column: column) }
