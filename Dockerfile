@@ -30,5 +30,5 @@ COPY . .
 
 EXPOSE 3000
 
-# コンテナ起動時にDB準備してRails起動
-CMD ["bash", "-lc", "bin/rails db:prepare && bin/rails s -b 0.0.0.0 -p 3000"]
+# コンテナ起動時にDB準備と初期データ投入をしてRails起動
+CMD ["bash", "-lc", "bin/rails db:prepare && bin/rails runner 'Rails.application.load_seed unless Station.exists?' && bin/rails s -b 0.0.0.0 -p 3000"]

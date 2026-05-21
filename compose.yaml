@@ -1,7 +1,7 @@
 services:
   app:
     build: .
-    command: bash -lc "rm -f tmp/pids/server.pid && bin/rails db:prepare && bin/rails s -b 0.0.0.0 -p 3000"
+    command: bash -lc "rm -f tmp/pids/server.pid && bin/rails db:prepare && bin/rails runner 'Rails.application.load_seed unless Station.exists?' && bin/rails s -b 0.0.0.0 -p 3000"
     ports:
       - "3000:3000"
     volumes:
