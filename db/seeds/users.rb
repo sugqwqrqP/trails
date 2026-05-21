@@ -23,6 +23,14 @@ User.create!(
 )
 
 User.create!(
+  login_id: "test_user1",
+  user_fullname: "テストユーザー",
+  password: "TestUser1!",
+  password_confirmation: "TestUser1!",
+  role: 0
+)
+
+User.create!(
   login_id: "senshu_1",
   user_fullname: "専修太郎",
   password: "Senshu1!",

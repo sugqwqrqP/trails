@@ -9,36 +9,13 @@ kodama  = RunType.find_by!(name: "こだま")
 
 schedule = [
   ["06:00", nozomi],
-  ["06:30", kodama],
-  ["07:00", nozomi],
   ["07:30", hikari],
-  ["08:00", nozomi],
-  ["08:30", kodama],
   ["09:00", nozomi],
-  ["09:30", hikari],
-  ["10:00", nozomi],
   ["10:30", kodama],
-  ["11:00", nozomi],
-  ["11:30", hikari],
   ["12:00", nozomi],
-  ["12:30", kodama],
-  ["13:00", nozomi],
-  ["13:30", hikari],
-  ["14:00", nozomi],
   ["14:30", kodama],
-  ["15:00", nozomi],
   ["15:30", hikari],
-  ["16:00", nozomi],
-  ["16:30", kodama],
-  ["17:00", nozomi],
-  ["17:30", hikari],
-  ["18:00", nozomi],
   ["18:30", kodama],
-  ["19:00", nozomi],
-  ["19:30", hikari],
-  ["20:00", nozomi],
-  ["20:30", kodama],
-  ["21:00", nozomi]
 ]
 
 base_numbers = {
@@ -47,8 +24,8 @@ base_numbers = {
   "こだま" => 701
 }
 
-# 0日目〜2日目だけフル便を投入
-days = 3
+# 0日目〜1日目だけデモ用の便を投入
+days = 2
 (0...days).each do |day_offset|
   run_on = Date.today + day_offset
 
