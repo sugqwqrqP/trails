@@ -14,6 +14,10 @@ class Run < ApplicationRecord
   validates :run_on, presence: { message: "を入力してください" }
   validates :first_station_departure_time, presence: { message: "を入力してください" }
 
+  def self.default_search_run_on
+    where("run_on >= ?", Date.current).minimum(:run_on) || minimum(:run_on)
+  end
+
   # ---- バリデーション ----
 
   def run_on_must_be_future

@@ -63,10 +63,13 @@ class RunSearchService
     end
 
     if run_on
-      if run_on < Date.current
-        errors << "過去の日付は指定できません"
-      elsif run_on > Date.current + 14
-        errors << "2週間後以降の便は検索できません"
+      min_run_on = Run.minimum(:run_on)
+      max_run_on = Run.maximum(:run_on)
+
+      if min_run_on.blank? || max_run_on.blank?
+        errors << "現在、検索可能な便データがありません"
+      elsif run_on < min_run_on || run_on > max_run_on
+        errors << "デモデータ期間内の日付を指定してください（#{min_run_on.strftime("%Y/%m/%d")}〜#{max_run_on.strftime("%Y/%m/%d")}）"
       end
 
       if run_on == Date.current && time_str.present?

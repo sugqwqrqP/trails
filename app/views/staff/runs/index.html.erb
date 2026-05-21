@@ -23,10 +23,19 @@
         params[:arrival_station_id] ||
         Station.find_by(station_name: "新大阪")&.id %>
 
-    <% default_run_on = params[:run_on] || Date.current %>
+    <% default_run_on = params[:run_on].presence || @default_run_date %>
     <% default_time   = params[:time]   || Time.current.strftime("%H:%M") %>
 
     <!-- 検索フォーム -->
+    <% if @min_run_date.present? && @max_run_date.present? %>
+      <div class="demo-period">
+        デモデータ期間：<%= @min_run_date.strftime("%Y/%m/%d") %> 〜 <%= @max_run_date.strftime("%Y/%m/%d") %>
+      </div>
+    <% else %>
+      <div class="demo-period">
+        現在、検索可能な便データがありません
+      </div>
+    <% end %>
 
     <%= form_with url: staff_runs_path, method: :get, local: true do |f| %>
 
@@ -59,7 +68,10 @@
       <!-- 日付 -->
       <div>
         <%= f.label :run_on, "日付" %>
-        <%= f.date_field :run_on, value: default_run_on %>
+        <%= f.date_field :run_on,
+              value: default_run_on,
+              min: @min_run_date,
+              max: @max_run_date %>
       </div>
 
       <!-- 時刻 -->

@@ -1,6 +1,7 @@
 class Staff::RunsController < Staff::BaseController
   before_action :require_login
   before_action :require_staff
+  before_action :set_run_search_date_options, only: :index
 
   def index
     result = RunSearchService.call(

@@ -42,6 +42,13 @@ body {
   margin: 0 auto 24px;
 }
 
+.demo-period {
+  color: #4f5f52;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 14px;
+}
+
 /* =========================
    出発 / 到着
 ========================= */

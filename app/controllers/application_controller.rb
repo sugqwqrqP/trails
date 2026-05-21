@@ -19,4 +19,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def set_run_search_date_options
+    @min_run_date = Run.minimum(:run_on)
+    @max_run_date = Run.maximum(:run_on)
+    @default_run_date = Run.default_search_run_on
+  end
+
 end

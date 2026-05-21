@@ -18,11 +18,21 @@
     params[:arrival_station_id] ||
     Station.find_by(station_name: "新大阪")&.id %>
 
-<% default_run_on = params[:run_on] || Date.current %>
+<% default_run_on = params[:run_on].presence || @default_run_date %>
 <% default_time   = params[:time]   || Time.current.strftime("%H:%M") %>
 
 <div class="container">
   <div class="search-panel">
+    <% if @min_run_date.present? && @max_run_date.present? %>
+      <div class="demo-period">
+        デモデータ期間：<%= @min_run_date.strftime("%Y/%m/%d") %> 〜 <%= @max_run_date.strftime("%Y/%m/%d") %>
+      </div>
+    <% else %>
+      <div class="demo-period">
+        現在、検索可能な便データがありません
+      </div>
+    <% end %>
+
     <%= form_with url: runs_path, method: :get, local: true,
       html: { id: "run-search-form" }, data: { turbo: false } do |f| %>
 
@@ -60,26 +70,23 @@
       </div>
 
       <div class="datetime-box">
-        <% default_run_on =
-            params[:run_on].present? ? Date.parse(params[:run_on]) : Date.current %>
-        <% min_run_on = Date.current %>
-        <% max_run_on = Date.current + 14 %>
+        <% selected_run_on = params[:run_on].presence || @default_run_date %>
+        <% display_run_on =
+            begin
+              Date.parse(selected_run_on.to_s) if selected_run_on.present?
+            rescue ArgumentError
+              nil
+            end %>
 
         <div class="datetime-click" id="date-display">
           📅
-          <span id="date-text"><%= default_run_on.strftime("%Y/%m/%d") %></span>
+          <span id="date-text"><%= display_run_on ? display_run_on.strftime("%Y/%m/%d") : "日付を選択" %></span>
         </div>
 
         <%= f.date_field :run_on,
-          value: default_run_on,
-          min: min_run_on,
-          max: max_run_on,
-          class: "date-input" %>
-
-        <%= f.date_field :run_on,
-              value: default_run_on,
-              min: min_run_on,
-              max: max_run_on,
+              value: selected_run_on,
+              min: @min_run_date,
+              max: @max_run_date,
               class: "date-input",
               id: "date-input" %>
 

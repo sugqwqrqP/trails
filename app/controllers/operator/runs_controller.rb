@@ -1,4 +1,6 @@
 class Operator::RunsController < Operator::BaseController
+  before_action :set_run_search_date_options, only: :index
+
   def index
     result = RunSearchService.call(
       params: params,

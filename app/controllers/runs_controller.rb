@@ -1,5 +1,6 @@
 class RunsController < ApplicationController
   DISPLAY_LIMIT = 5
+  before_action :set_run_search_date_options
 
   def index
     result = RunSearchService.call(
