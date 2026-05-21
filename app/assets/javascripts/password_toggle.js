@@ -1,4 +1,3 @@
-console.log("password_toggle.js is loaded");
 document.addEventListener("DOMContentLoaded", function () {
   var buttons = document.querySelectorAll(".password-toggle");
 
@@ -8,7 +7,6 @@ document.addEventListener("DOMContentLoaded", function () {
       var input = document.getElementById(targetId);
 
       if (!input) {
-        console.log("password input not found:", targetId);
         return;
       }
 
