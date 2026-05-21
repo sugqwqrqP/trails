@@ -22,6 +22,21 @@ Ruby on Rails を用いて開発する、新幹線の座席予約を模した We
 - 駅員：代理予約・利用者検索・予約の詳細確認・発券状態管理
 - 運行管理者：便追加・運行管理
 
+## 画面イメージ
+
+| 便検索 | 検索結果 |
+| --- | --- |
+| ![](docs/images/screenshots/1_top.png) | ![](docs/images/screenshots/2_run_search.png) |
+
+| 号車選択 | 座席選択 |
+| --- | --- |
+| ![](docs/images/screenshots/3_carmap.png) | ![](docs/images/screenshots/4_seatmap.png) |
+
+| 予約確認 | 駅員画面 |
+| --- | --- |
+| ![](docs/images/screenshots/5_reservation_confirm.png) | ![](docs/images/screenshots/7_staff.png) |
+
+
 ## 技術スタック
 
 - Ruby: 3.1.6
